@@ -394,5 +394,82 @@ int main(int argc, char** argv) {
 
   fit_info.band_range = { head.mus[1] * 0.9,head.mus[3] * 1.1 };
   print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "amu", fit_inter_MK, fit_inter_MK, 0, fit_info.myen.size() - 1, 0.0005);
-  
+
+
+
+
+  ///////////// structure for fits
+  data_all jackall_c;
+  jackall_c.resampling = argv[6];
+  jackall_c.ens = 3 * 4;
+  jackall_c.en = new data_single[jackall_c.ens];
+  for (int i = 0;i < jackall_c.ens;i++) {
+    jackall_c.en[i].header = head;
+    jackall_c.en[i].Nobs = 1;
+    jackall_c.en[i].Njack = head.Njack;
+    jackall_c.en[i].jack = (double**)malloc(sizeof(double*) * jackall_c.en[i].Nobs);
+  }
+
+  ///// KAON
+  int Ns = 3, Nc = 3;
+  for (int is = 0;is < Ns;is++) {
+    for (int ic = 0;ic < Nc;ic++) {
+      fit_info.Njack = Njack;
+      fit_info.N = 2;
+      fit_info.corr_id = { ids.return_id(ic + 5,is + 1,0,0,0,0), ids.return_id(ic + 5,is + 1,0,0,0,1),
+                           ids.return_id(ic + 5,is + 1,0,0,0,2), ids.return_id(ic + 5,is + 1,0,0,0,3) };//diag{ ll, ss}
+      fit_info.value_or_vector = 0; // 0= values
+      fit_info.t0_GEVP = 3;
+      fit_info.GEVP_ignore_warning_after_t = 1;
+      fit_info.verbosity = 0;
+
+      printf("GEVP_00\n");
+      add_correlators(option, ncorr_new, conf_jack, GEVP_matrix, fit_info);
+      printf(" ncorr after GEVP %d\n", ncorr_new);
+      int id_GEVP_l0 = ncorr_new - 2;
+      char name_obs[NAMESIZE];
+      mysprintf(name_obs, NAMESIZE, "M_{Ds}(c%d,s%d)", ic, is);
+      jackall_c.en[ic + is * 3].jack[0] = plateau_correlator_function(
+        option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+        namefile_plateaux, outfile, id_GEVP_l0, name_obs, M_eff_T, jack_file);
+      check_correlatro_counter(8 + ic + is * Nc);
+    }
+  }
+  // fit the kaon
+  fit_info.restore_default();
+  fit_info.Npar = 3;
+  fit_info.Nvar = 2;
+  fit_info.Njack = head.Njack;
+  fit_info.N = 1;
+  fit_info.myen = std::vector<int>(Ns * Nc);
+  for (int n = 0;n < fit_info.myen.size();n++) fit_info.myen[n] = n;
+  fit_info.x = double_malloc_3(fit_info.Nvar, fit_info.myen.size() * fit_info.N, fit_info.Njack);
+  count = 0;
+  for (int n = 0;n < fit_info.N;n++) {
+    for (int e : fit_info.myen) {
+      for (int j = 0;j < fit_info.Njack;j++) {
+        int ic = e % Nc;
+        int is = e / Nc;
+        fit_info.x[0][count][j] = head.mus[ic + 5]; // mus1
+        fit_info.x[1][count][j] = head.mus[is + 1]; // mus1
+      }
+      count++;
+    }
+  }
+  fit_info.corr_id = { 0 };
+  fit_info.function = rhs_M_Ds_linear;
+  fit_info.linear_fit = true;
+  fit_info.covariancey = false;
+  fit_info.verbosity = 0;
+  mysprintf(namefit, NAMESIZE, "fit_MDs_vs_mu");
+
+  fit_result fit_inter_MDs = fit_all_data(temp_argv, jackall_c, lhs_M_K_inter, fit_info, namefit);
+
+  fit_info.band_range = { head.mus[5] * 0.9,head.mus[7] * 1.1 };
+  for (int is = 0;is < Ns;is++) {
+    char name_band[NAMESIZE];
+    mysprintf(name_band, NAMESIZE, "amuc_%d", is);
+    print_fit_band(temp_argv, jackall_c, fit_info, fit_info, namefit, name_band, fit_inter_MDs, fit_inter_MDs, 0, 0 + is * Nc, 0.0005);
+  }
+
 }
