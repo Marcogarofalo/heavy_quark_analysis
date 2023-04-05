@@ -208,6 +208,9 @@ int main(int argc, char** argv) {
 
   ///////////////////// symmetrize
   symmetrise_jackboot(Njack, 0, head.T, conf_jack);
+  symmetrise_jackboot(Njack, 1, head.T, conf_jack);
+  symmetrise_jackboot(Njack, 2, head.T, conf_jack);
+  symmetrise_jackboot(Njack, 3, head.T, conf_jack);
   // symmetrise_jackboot(Njack, 1, head.T, conf_jack, -1);
 
   ////////////////////
@@ -241,7 +244,7 @@ int main(int argc, char** argv) {
   fit_info.function = constant_fit;
   fit_info.linear_fit = true;
   fit_info.T = head.T;
-  fit_info.corr_id = {0};
+  fit_info.corr_id = { 0 };
 
   // c++ 0 || r 1
   struct fit_result f_PS = fit_fun_to_fun_of_corr(
@@ -258,6 +261,8 @@ int main(int argc, char** argv) {
   ////////////////////////////////////////////
   int ncorr_new = head.ncorr;
   fit_info.N = 2;
+  fit_info.Njack = Njack;
+
   fit_info.corr_id = { ids.return_id(0,0,0,0,0,0), ids.return_id(0,0,0,0,0,1),
                        ids.return_id(0,0,0,0,0,2), ids.return_id(0,0,0,0,0,3) };//diag{ ll, ss}
   fit_info.value_or_vector = 0; // 0= values
@@ -276,7 +281,7 @@ int main(int argc, char** argv) {
   int id_GEVP_00_a0_1 = ncorr_new - 3; // gives <0|P5smeared|P5>
   int id_GEVP_00_a1_0 = ncorr_new - 2; // gives <0|P5|P5next-state>
   int id_GEVP_00_a1_1 = ncorr_new - 1; // gives <0|P5smeared|P5next-state>
-  
+
   fit_info.restore_default();
 
   double* lambda0 = plateau_correlator_function(
@@ -321,4 +326,73 @@ int main(int argc, char** argv) {
   // check_correlatro_counter(4);
 
   fit_info.restore_default();
+
+  ///////////// structure for fits
+  data_all jackall;
+  jackall.resampling = argv[6];
+  jackall.ens = 3;
+  jackall.en = new data_single[jackall.ens];
+  for (int i = 0;i < jackall.ens;i++) {
+    jackall.en[i].header = head;
+    jackall.en[i].Nobs = 1;
+    jackall.en[i].Njack = head.Njack;
+    jackall.en[i].jack = (double**)malloc(sizeof(double*) * jackall.en[i].Nobs);
+  }
+
+  ///// KAON
+
+  for (int is = 0;is < 3;is++) {
+    fit_info.Njack = Njack;
+    fit_info.N = 2;
+    fit_info.corr_id = { ids.return_id(is + 1,0,0,0,0,0), ids.return_id(is + 1,0,0,0,0,1),
+                         ids.return_id(is + 1,0,0,0,0,2), ids.return_id(is + 1,0,0,0,0,3) };//diag{ ll, ss}
+    fit_info.value_or_vector = 0; // 0= values
+    fit_info.t0_GEVP = 3;
+    fit_info.GEVP_ignore_warning_after_t = 1;
+    fit_info.verbosity = 0;
+
+    printf("GEVP_00\n");
+    add_correlators(option, ncorr_new, conf_jack, GEVP_matrix, fit_info);
+    printf(" ncorr after GEVP %d\n", ncorr_new);
+    int id_GEVP_l0 = ncorr_new - 2;
+    char name_obs[NAMESIZE];
+    mysprintf(name_obs, NAMESIZE, "M_{K}(s%d)", is);
+    jackall.en[is].jack[0] = plateau_correlator_function(
+      option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+      namefile_plateaux, outfile, id_GEVP_l0, name_obs, M_eff_T, jack_file);
+    check_correlatro_counter(5 + is);
+  }
+  // fit the kaon
+  fit_info.restore_default();
+  fit_info.Npar = 2;
+  fit_info.Nvar = 1;
+  fit_info.Njack = head.Njack;
+  fit_info.N = 1;
+  fit_info.myen = { 0,1,2 };
+  fit_info.x = double_malloc_3(fit_info.Nvar, fit_info.myen.size() * fit_info.N, fit_info.Njack);
+  int count = 0;
+  for (int n = 0;n < fit_info.N;n++) {
+    for (int e : fit_info.myen) {
+      for (int j = 0;j < fit_info.Njack;j++) {
+        fit_info.x[0][count][j] = head.mus[e + 1]; // mus1
+      }
+      count++;
+    }
+  }
+  fit_info.corr_id = { 0 };
+  fit_info.function = rhs_M_K_linear;
+  fit_info.linear_fit = true;
+  fit_info.covariancey = false;
+  fit_info.verbosity = 0;
+  char namefit[NAMESIZE];
+  mysprintf(namefit, NAMESIZE, "fit_MK_vs_mu");
+  char** temp_argv = malloc_2<char>(5, NAMESIZE);
+  mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
+  mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// resampling
+
+  fit_result fit_inter_MK = fit_all_data(temp_argv, jackall, lhs_M_K_inter, fit_info, namefit);
+
+  fit_info.band_range = { head.mus[1] * 0.9,head.mus[3] * 1.1 };
+  print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "amu", fit_inter_MK, fit_inter_MK, 0, fit_info.myen.size() - 1, 0.0005);
+  
 }

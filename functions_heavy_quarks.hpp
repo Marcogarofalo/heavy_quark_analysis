@@ -20,4 +20,6 @@ public:
     int Ngamma;
 };
 
+double lhs_M_K_inter(int n, int e, int j, data_all gjack, struct fit_type fit_info);
+double rhs_M_K_linear(int n, int Nvar, double* x, int Npar, double* P);
 #endif

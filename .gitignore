@@ -66,3 +66,7 @@ tests/phi4/jackknife/jack_G2t_T48_L20_msq0-4.925000_msq1-4.850000_l02.500000_l12
 #external/qc3
 external/qc3.backup
 tests/phi4/jackknife/jack_G2t_T48_L20_msq0-4.925000_msq1-4.850000_l02.500000_l12.500000_mu5.000000_g0.000000_rep0_reference_20.08.22
+.Rproj.user
+
+#R
+_book
