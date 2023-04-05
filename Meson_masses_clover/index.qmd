@@ -28,6 +28,16 @@ df<-add_corr_to_df(string = "M_{PS}",all_obs=all_obs,mt=mt,df = NULL,
 df<-add_corr_to_df("M_{K}(s0)",all_obs,mt,df)
 df<-add_corr_to_df("M_{K}(s1)",all_obs,mt,df)
 df<-add_corr_to_df("M_{K}(s2)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c0,s0)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c0,s1)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c0,s2)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c1,s0)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c1,s1)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c1,s2)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c2,s0)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c2,s1)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}(c2,s2)",all_obs,mt,df)
+
 # fit<-get_full_res(string="E3_0_vev",all_obs,mt,number=NULL)
 # fit
 # n<- which(all_obs[,"corr"]=="E3_0_vev")
@@ -42,7 +52,7 @@ fig<- myplotly(gg,paste0("meff"),"t", "$M_{eff}$", to_print=TRUE )
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 df<-read_fit_P_file("../../data_bin/cB211ab.07.64/out/fit_MK_vs_mu_fit_P.dat")
-make_table_fit_result(df)
+ make_table_fit_result(df)
 ```
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
@@ -76,7 +86,53 @@ for (n in c(1:1)){
           
         
 }
-fig<- myplotly(gg,title,"$a^2(\\mbox{fm})$", "$a_{\\mu}$",
+fig<- myplotly(gg,title,"$a\\mu_s$", "$M_{K}$",
+                       to_print = FALSE, output="HTML", legend_position = c(0.8,0.9)) %>%
+          config( displayModeBar = FALSE)    
+fig
+```
+
+
+
+## Fit the $D_s$
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df<-read_fit_P_file("../../data_bin/cB211ab.07.64/out/fit_MDs_vs_mu_fit_P.dat")
+make_table_fit_result(df)
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+file<-"../../data_bin/cB211ab.07.64/out/fit_MDs_vs_mu_fit_data.txt"
+df<- read.table(file, header=FALSE, fill=TRUE)
+        
+        
+        gg<- myggplot(fill=FALSE)
+        idy<-ncol(df)-2
+        gg<-gg+  geom_point(data=df, mapping=aes(x=df[,1] , y=df[,idy],
+                                                 color=as.factor(df[,idy+2]), shape=as.factor(df[,idy+2])) 
+                            ,width=1e-4)  +labs(color = "", shape="")
+        gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] , ymin=df[,idy]-df[,idy+1],
+                                                    ymax=df[,idy]+df[,idy+1],color=as.factor(df[,idy+2]),shape=as.factor(df[,idy+2]) ) 
+                               ,width=1e-4)
+datalist = list()
+for (n in c(1:3)){
+          
+          file=sprintf("../../data_bin/cB211ab.07.64/out/fit_MDs_vs_mu_fit_out_n0_amuc_%d.txt",n-1)
+          #if(!file.exists(file)){next}
+          datalist[[n]]<- read.table(file, header=FALSE, fill=TRUE,   
+                                     col.names=c(paste0("x",n),paste0("fit",n),paste0("fiterr",n)))
+          
+          gg<-gg + geom_ribbon(data=datalist[[n]], 
+                               mapping=aes_string(x=datalist[[n]][,1] ,
+                                                  ymin=datalist[[n]][,2]-datalist[[n]][,3],
+                                                  ymax=datalist[[n]][,2]+datalist[[n]][,3]),alpha=0.5, fill="red")
+          gg<-gg + geom_line(data=datalist[[n]],
+                             mapping=aes_string(x=datalist[[n]][,1] ,
+                                                y=datalist[[n]][,2]  ),color="red" )
+          
+        
+}
+fig<- myplotly(gg,title,"$a\\mu_c$", "$M_{D_s}$",
                        to_print = FALSE, output="HTML", legend_position = c(0.8,0.9)) %>%
           config( displayModeBar = FALSE)    
 fig
