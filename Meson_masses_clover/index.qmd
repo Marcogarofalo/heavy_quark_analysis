@@ -19,7 +19,7 @@ ggp   # Let knit handle the plot
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 
-mt<-read_df("../../data_bin/cB211ab.07.64/out/bin_cB211ab.07.64_output")
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_bin/cB211ab.07.64/out/bin_cB211ab.07.64_output")
 all_obs<- get_all_corr(mt)
 
 
@@ -53,6 +53,8 @@ fig<- myplotly(gg,paste0("meff"),"t", "$M_{eff}$", to_print=TRUE )
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 df<-read_fit_P_file("../../data_bin/cB211ab.07.64/out/fit_MK_vs_mu_fit_P.dat")
  make_table_fit_result(df)
+dfi<-read.table("../../data_bin/cB211ab.07.64/out/fit_MK_vs_mu_fit_out_n0_MK_interpolated.txt")
+kable(dfi,col.names = c("$a\\mu_s$", "$aM_K$","err"))
 ```
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
@@ -60,12 +62,16 @@ file<-"../../data_bin/cB211ab.07.64/out/fit_MK_vs_mu_fit_data.txt"
 df<- read.table(file, header=FALSE, fill=TRUE)
         
         
-        gg<- myggplot(fill=FALSE)
-        idy<-ncol(df)-2
-        gg<-gg+  geom_point(data=df, mapping=aes(x=df[,1] , y=df[,idy],
-                                                 color=as.factor(df[,idy+2]), shape=as.factor(df[,idy+2])) 
-                            ,width=1e-4)  +labs(color = "", shape="")
-        gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] , ymin=df[,idy]-df[,idy+1],
+gg<- myggplot(fill=FALSE)
+gg<- gg +geom_point(aes(x=dfi[,1], y=dfi[,2], color="intepolated"))      
+gg<- gg +geom_errorbar(aes(x=dfi[,1], ymax=dfi[,2]+dfi[,3],
+                            ymin=dfi[,2]-dfi[,3],
+                           , color="intepolated"), width=1e-4)      
+idy<-ncol(df)-2
+gg<-gg+  geom_point(data=df, mapping=aes(x=df[,1] , y=df[,idy],
+                                         color=as.factor(df[,idy+2]), shape=as.factor(df[,idy+2])) 
+                    ,width=1e-4)  +labs(color = "", shape="")
+gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] , ymin=df[,idy]-df[,idy+1],
                                                     ymax=df[,idy]+df[,idy+1],color=as.factor(df[,idy+2]),shape=as.factor(df[,idy+2]) ) 
                                ,width=1e-4)
 datalist = list()
@@ -87,7 +93,7 @@ for (n in c(1:1)){
         
 }
 fig<- myplotly(gg,title,"$a\\mu_s$", "$M_{K}$",
-                       to_print = FALSE, output="HTML", legend_position = c(0.8,0.9)) %>%
+                       to_print = FALSE, output="HTML", legend_position = c(0.8,0.1)) %>%
           config( displayModeBar = FALSE)    
 fig
 ```
@@ -99,6 +105,8 @@ fig
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 df<-read_fit_P_file("../../data_bin/cB211ab.07.64/out/fit_MDs_vs_mu_fit_P.dat")
 make_table_fit_result(df)
+dfi<-read.table("../../data_bin/cB211ab.07.64/out/fit_MDs_vs_mu_fit_out_n0_MDs_interpolated.txt")
+kable(dfi,col.names = c("$a\\mu_c$", "$aM_{D_s}$","err"))
 ```
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
@@ -106,13 +114,17 @@ file<-"../../data_bin/cB211ab.07.64/out/fit_MDs_vs_mu_fit_data.txt"
 df<- read.table(file, header=FALSE, fill=TRUE)
         
         
-        gg<- myggplot(fill=FALSE)
-        idy<-ncol(df)-2
-        gg<-gg+  geom_point(data=df, mapping=aes(x=df[,1] , y=df[,idy],
-                                                 color=as.factor(df[,idy+2]), shape=as.factor(df[,idy+2])) 
-                            ,width=1e-4)  +labs(color = "", shape="")
-        gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] , ymin=df[,idy]-df[,idy+1],
-                                                    ymax=df[,idy]+df[,idy+1],color=as.factor(df[,idy+2]),shape=as.factor(df[,idy+2]) ) 
+gg<- myggplot(fill=FALSE)
+idy<-ncol(df)-2
+gg<- gg +geom_point(aes(x=dfi[,1], y=dfi[,2], color="intepolated"))      
+gg<- gg +geom_errorbar(aes(x=dfi[,1], ymax=dfi[,2]+dfi[,3],
+                            ymin=dfi[,2]-dfi[,3],
+                           , color="intepolated"), width=1e-4)      
+gg<-gg+  geom_point(data=df, mapping=aes(x=df[,1] , y=df[,idy],
+                                         color=as.factor(df[,idy+2]), shape=as.factor(df[,idy+2])) 
+                    ,width=1e-4)  +labs(color = "", shape="")
+gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] , ymin=df[,idy]-df[,idy+1],
+                                            ymax=df[,idy]+df[,idy+1],color=as.factor(df[,idy+2]),shape=as.factor(df[,idy+2]) ) 
                                ,width=1e-4)
 datalist = list()
 for (n in c(1:3)){
