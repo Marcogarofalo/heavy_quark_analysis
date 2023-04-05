@@ -1,0 +1,25 @@
+project:
+  type: book
+
+book:
+  title: "Meson_masses_clover"
+  author: "Marco Garofalo"
+  date: today
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    html-math-method: katex
+    #include-in-header: mathjax.html
+  pdf:
+    documentclass: scrreprt
+
+
+

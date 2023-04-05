@@ -1,0 +1,83 @@
+# cB211.072.64
+
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+df <- data.frame(x = 1:5, y = 1:5)    
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+mt<-read_df("../../data_bin/cB211ab.07.64/out/bin_cB211ab.07.64_output")
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "M_{PS}",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+df<-add_corr_to_df("M_{K}(s0)",all_obs,mt,df)
+df<-add_corr_to_df("M_{K}(s1)",all_obs,mt,df)
+df<-add_corr_to_df("M_{K}(s2)",all_obs,mt,df)
+# fit<-get_full_res(string="E3_0_vev",all_obs,mt,number=NULL)
+# fit
+# n<- which(all_obs[,"corr"]=="E3_0_vev")
+# all_obs[n,"chi2.dof"]
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,paste0("meff"),"t", "$M_{eff}$", to_print=TRUE )
+
+```
+
+## Fit the Kaon
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df<-read_fit_P_file("../../data_bin/cB211ab.07.64/out/fit_MK_vs_mu_fit_P.dat")
+make_table_fit_result(df)
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+file<-"../../data_bin/cB211ab.07.64/out/fit_MK_vs_mu_fit_data.txt"
+df<- read.table(file, header=FALSE, fill=TRUE)
+        
+        
+        gg<- myggplot(fill=FALSE)
+        idy<-ncol(df)-2
+        gg<-gg+  geom_point(data=df, mapping=aes(x=df[,1] , y=df[,idy],
+                                                 color=as.factor(df[,idy+2]), shape=as.factor(df[,idy+2])) 
+                            ,width=1e-4)  +labs(color = "", shape="")
+        gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] , ymin=df[,idy]-df[,idy+1],
+                                                    ymax=df[,idy]+df[,idy+1],color=as.factor(df[,idy+2]),shape=as.factor(df[,idy+2]) ) 
+                               ,width=1e-4)
+datalist = list()
+for (n in c(1:1)){
+          
+          file=sprintf("../../data_bin/cB211ab.07.64/out/fit_MK_vs_mu_fit_out_n%d_amu.txt",n-1)
+          #if(!file.exists(file)){next}
+          datalist[[n]]<- read.table(file, header=FALSE, fill=TRUE,   
+                                     col.names=c(paste0("x",n),paste0("fit",n),paste0("fiterr",n)))
+          
+          gg<-gg + geom_ribbon(data=datalist[[n]], 
+                               mapping=aes_string(x=datalist[[n]][,1] ,
+                                                  ymin=datalist[[n]][,2]-datalist[[n]][,3],
+                                                  ymax=datalist[[n]][,2]+datalist[[n]][,3]),alpha=0.5, fill="red")
+          gg<-gg + geom_line(data=datalist[[n]],
+                             mapping=aes_string(x=datalist[[n]][,1] ,
+                                                y=datalist[[n]][,2]  ),color="red" )
+          
+        
+}
+fig<- myplotly(gg,title,"$a^2(\\mbox{fm})$", "$a_{\\mu}$",
+                       to_print = FALSE, output="HTML", legend_position = c(0.8,0.9)) %>%
+          config( displayModeBar = FALSE)    
+fig
+```
