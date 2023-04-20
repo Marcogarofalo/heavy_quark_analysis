@@ -207,10 +207,10 @@ int main(int argc, char** argv) {
   corr_counter = -1;
 
   ///////////////////// symmetrize
-  symmetrise_jackboot(Njack, 0, head.T, conf_jack);
-  symmetrise_jackboot(Njack, 1, head.T, conf_jack);
-  symmetrise_jackboot(Njack, 2, head.T, conf_jack);
-  symmetrise_jackboot(Njack, 3, head.T, conf_jack);
+  for (int i =0; i<head.ncorr;i++){
+    symmetrise_jackboot(Njack, i, head.T, conf_jack);
+  }
+  
   // symmetrise_jackboot(Njack, 1, head.T, conf_jack, -1);
 
   ////////////////////
@@ -395,7 +395,7 @@ int main(int argc, char** argv) {
   fit_info.band_range = { head.mus[1] * 0.9,head.mus[3] * 1.1 };
   print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "amu", fit_inter_MK, fit_inter_MK, 0, fit_info.myen.size() - 1, 0.0005);
 
-  fit_info.band_range = { 0.01692 ,0.01692*1.1 }; 
+  fit_info.band_range = { 0.01954 ,0.01954*1.1 }; 
   print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "MK_interpolated", fit_inter_MK, fit_inter_MK, 0, 0, 100);
 
   ///////////// structure for fits
@@ -471,8 +471,8 @@ int main(int argc, char** argv) {
     mysprintf(name_band, NAMESIZE, "amuc_%d", is);
     print_fit_band(temp_argv, jackall_c, fit_info, fit_info, namefit, name_band, fit_inter_MDs, fit_inter_MDs, 0, 0 + is * Nc, 0.0005);
   }
-  fit_info.band_range = { 0.2368 ,0.2368*1.1 };
-  std::vector<double> xcont = { 0.2368, 0.01692 };
+  fit_info.band_range = { 0.2277 ,0.2277*1.1 };
+  std::vector<double> xcont = { 0.2368, 0.01954 };
   print_fit_band(temp_argv, jackall_c, fit_info, fit_info, namefit, "MDs_interpolated", fit_inter_MDs, fit_inter_MDs, 0, 0, 100, xcont);
 
 }
