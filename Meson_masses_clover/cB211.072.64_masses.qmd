@@ -1,0 +1,41 @@
+# cB211.072.64 Inclusive runs
+
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+df <- data.frame(x = 1:5, y = 1:5)    
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64.dat_output")
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "M_{Ds}_sl",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+
+df<-add_corr_to_df("M_{Ds}_ss",all_obs,mt,df)
+df<-add_corr_to_df("M_{K}_sl",all_obs,mt,df)
+df<-add_corr_to_df("M_{K}_ss",all_obs,mt,df)
+
+# fit<-get_full_res(string="E3_0_vev",all_obs,mt,number=NULL)
+# fit
+# n<- which(all_obs[,"corr"]=="E3_0_vev")
+# all_obs[n,"chi2.dof"]
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,paste0("meff"),"t", "$M_{eff}$", to_print=TRUE )
+
+```

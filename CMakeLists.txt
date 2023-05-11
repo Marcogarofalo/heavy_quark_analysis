@@ -49,3 +49,7 @@ target_include_directories(functions_heavy_quarks PUBLIC "${CMAKE_CURRENT_SOURCE
 add_executable(heavy_quarks heavy_quarks.cpp)
 target_link_libraries(heavy_quarks PUBLIC functions_heavy_quarks)
 target_link_libraries(heavy_quarks PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
+
+add_executable(inclusive_decay inclusive_decay.cpp)
+target_link_libraries(inclusive_decay PUBLIC functions_heavy_quarks)
+target_link_libraries(inclusive_decay PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})

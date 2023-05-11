@@ -7,6 +7,7 @@ book:
   date: today
   chapters:
     - index.qmd
+    - cB211.072.64_masses.qmd
     - intro.qmd
     - summary.qmd
     - references.qmd
@@ -18,8 +19,8 @@ format:
     theme: cosmo
     html-math-method: katex
     #include-in-header: mathjax.html
-  pdf:
-    documentclass: scrreprt
+  #pdf:
+  #  documentclass: scrreprt
 
 
 
