@@ -207,11 +207,15 @@ int main(int argc, char** argv) {
     corr_counter = -1;
 
     ///////////////////// symmetrize
-    for (int i = 0; i < head.ncorr;i++) {
-        symmetrise_jackboot(Njack, i, head.T, conf_jack);
-    }
+    // for (int i = 0; i < head.ncorr;i++) {
+    //     symmetrise_jackboot(Njack, i, head.T, conf_jack);
+    // }
 
-    // symmetrise_jackboot(Njack, 1, head.T, conf_jack, -1);
+    symmetrise_jackboot(Njack, 0, head.T, conf_jack, 1);
+    symmetrise_jackboot(Njack, 0 + 1 * head.gammas.size(), head.T, conf_jack, 1);
+    symmetrise_jackboot(Njack, 0 + 2 * head.gammas.size(), head.T, conf_jack, 1);
+    symmetrise_jackboot(Njack, 0 + 3 * head.gammas.size(), head.T, conf_jack, 1);
+
 
     ////////////////////
 
@@ -220,31 +224,112 @@ int main(int argc, char** argv) {
     // start fitting
     /////////////////////////////
     corr_counter = -1;
-    double* M_PS;
+    double* M_PS, * M_Ds;
     M_PS = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
         namefile_plateaux, outfile, 0, "M_{Ds}_sl", M_eff_T, jack_file);
     check_correlatro_counter(0);
     free(M_PS);
 
-    M_PS = plateau_correlator_function(
+    M_Ds = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-        namefile_plateaux, outfile, 1, "M_{Ds}_ss", M_eff_T, jack_file);
+        namefile_plateaux, outfile, 0 + head.gammas.size(), "M_{Ds}_ss", M_eff_T, jack_file);
     check_correlatro_counter(1);
-    free(M_PS);
 
 
     M_PS = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-        namefile_plateaux, outfile, 2, "M_{K}_sl", M_eff_T, jack_file);
+        namefile_plateaux, outfile, 0 + 2 * head.gammas.size(), "M_{K}_sl", M_eff_T, jack_file);
     check_correlatro_counter(2);
     free(M_PS);
 
     M_PS = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-        namefile_plateaux, outfile, 3, "M_{K}_ss", M_eff_T, jack_file);
+        namefile_plateaux, outfile, 0 + 3 * head.gammas.size(), "M_{K}_ss", M_eff_T, jack_file);
     check_correlatro_counter(3);
     free(M_PS);
+
+    int id_Ds_ss_2pt = 0 + head.gammas.size();
+    ///////////////////////////////////////////////
+    /// compute ZDs smeared smeared
+    struct fit_type fit_info;
+    struct fit_result fit_out;
+
+    fit_info.Nvar = 1;
+    fit_info.Npar = 1;
+    fit_info.N = 1;
+    fit_info.Njack = Njack;
+    fit_info.n_ext_P = 1;
+    fit_info.ext_P = (double**)malloc(sizeof(double*) * fit_info.n_ext_P);
+    fit_info.ext_P[0] = M_Ds;
+    // for (int j = 0; j < fit_info.Njack; j++) {
+    //     fit_info.ext_P[0][j] = M_Ds[j];
+    // }
+    fit_info.function = constant_fit;
+    fit_info.linear_fit = true;
+    fit_info.T = head.T;
+    fit_info.corr_id = { id_Ds_ss_2pt };
+
+    // c++ 0 || r 1
+    struct fit_result ZDs = fit_fun_to_fun_of_corr(
+        option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+        outfile, lhs_function_ZPS, "Z_{Ds}_ss", fit_info, jack_file);
+    // free_fit_result(fit_info, fit_out);
+    check_correlatro_counter(4);
+    fit_info.restore_default();
+
+    //////////////////////
+    int ncorr_new = head.ncorr;
+    int TJW, TDs, myerr, myseed;
+    line_read_param(option, "TJW", TJW, myerr, myseed, namefile_plateaux);
+    line_read_param(option, "TDs", TDs, myerr, myseed, namefile_plateaux);
+    for (int mu = 0; mu < 4;mu++) {  // C_munu   mu runs faster // mu is given by the gamma // nu by the insertion
+        for (int nu = 0; nu < 4;nu++) {
+
+
+            fit_info.N = 1;
+            fit_info.Njack = Njack;
+
+            fit_info.T = head.T;
+            fit_info.t0_GEVP = TDs - TJW;
+            fit_info.n_ext_P = 1;
+            fit_info.ext_P = (double**)malloc(sizeof(double*) * fit_info.n_ext_P);
+            fit_info.ext_P[0] = ZDs.P[0];
+
+            //                  2pt_files      +   A_4pt              +  gamma=Vmu + insertions Vmu     
+            int id_VV = 4 * head.gammas.size() + 4 * head.gammas.size() + (mu + 5) + nu * head.gammas.size();
+            //                   2pt_files       +  gamma=Amu + insertions Amu     
+            int id_AA = 4 * head.gammas.size() + 0 + (mu + 1) + nu * head.gammas.size();
+            //                  2pt_files      +A_4pt+  gamma=Vmu + insertions Vmu     
+            int id_VA = 4 * head.gammas.size() + 0 + (mu + 5) + nu * head.gammas.size();
+            //                  2pt_files      +   A_4pt                +  gamma=Amu + insertions Vmu     
+            int id_AV = 4 * head.gammas.size() + 4 * head.gammas.size() + (mu + 1) + nu * head.gammas.size();
+            fit_info.corr_id = { id_VV, id_AA, id_VA, id_AV, id_Ds_ss_2pt };//diag{ ll, ss}
+
+
+
+            fit_info.verbosity = 0;
+            printf("C_%d,%d\n", mu, nu);
+            add_correlators(option, ncorr_new, conf_jack, compute_Mmunu, fit_info);
+            printf(" ncorr after C_munu %d\n", ncorr_new);
+            char name[NAMESIZE];
+            mysprintf(name, NAMESIZE, "M_{%d,%d}", mu, nu);
+
+            double* Mmunu = plateau_correlator_function(
+                option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+                namefile_plateaux, outfile, ncorr_new - 1, name, identity, jack_file);
+            check_correlatro_counter(5 + (nu + mu * 4) * 2);
+            free(Mmunu);
+            mysprintf(name, NAMESIZE, "ImM_{%d,%d}", mu, nu);
+            double* Mmunu_im = plateau_correlator_function(
+                option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+                namefile_plateaux, outfile, ncorr_new - 1, name, identity_im, jack_file);
+            check_correlatro_counter(5 + (nu + mu * 4) * 2 + 1);
+            free(Mmunu_im);
+
+            fit_info.restore_default();
+        }
+    }
 
     // eg of fit to correlator
   //   struct fit_type fit_info;

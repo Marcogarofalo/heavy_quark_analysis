@@ -23,4 +23,9 @@ public:
 double lhs_M_K_inter(int n, int e, int j, data_all gjack, struct fit_type fit_info);
 double rhs_M_K_linear(int n, int Nvar, double* x, int Npar, double* P);
 double rhs_M_Ds_linear(int n, int Nvar, double* x, int Npar, double* P);
+
+double** compute_Mmunu(int j, double**** in, int t, struct fit_type fit_info);
+
+double lhs_function_ZPS(int j, double**** in, int t, struct fit_type fit_info);
+
 #endif
