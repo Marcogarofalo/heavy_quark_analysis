@@ -6,15 +6,15 @@ library(Rose)
 library(ggplot2)
 library(plotly)
 library(knitr)
-df <- data.frame(x = 1:5, y = 1:5)    
-f1 <- function(df) {
-  gg <- ggplot(df, aes(x,y)) + geom_point()
-  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
-  #ggp
-  df    # NOT returning a plot
-}
-res1 <- f1(df)
-ggp   # Let knit handle the plot
+# df <- data.frame(x = 1:5, y = 1:5)    
+# f1 <- function(df) {
+#   gg <- ggplot(df, aes(x,y)) + geom_point()
+#   assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+#   #ggp
+#   df    # NOT returning a plot
+# }
+# res1 <- f1(df)
+# ggp   # Let knit handle the plot
 ```
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
@@ -44,7 +44,7 @@ df<-add_corr_to_df("M_{Ds}(c2,s2)",all_obs,mt,df)
 # all_obs[n,"chi2.dof"]
 gg<- plot_df_corr_ggplot(df)
 
-fig<- myplotly(gg,paste0("meff"),"t", "$M_{eff}$", to_print=TRUE )
+fig<- myplotly(gg,paste0("meff"),"t", 'M_{eff}', to_print=TRUE )
 
 ```
 
