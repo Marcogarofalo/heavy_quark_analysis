@@ -25,6 +25,11 @@ double rhs_M_K_linear(int n, int Nvar, double* x, int Npar, double* P);
 double rhs_M_Ds_linear(int n, int Nvar, double* x, int Npar, double* P);
 
 double** compute_Mmunu(int j, double**** in, int t, struct fit_type fit_info);
+double** compute_Y1(int j, double**** in, int t, struct fit_type fit_info);
+double** compute_Y2(int j, double**** in, int t, struct fit_type fit_info);
+double** compute_Y3(int j, double**** in, int t, struct fit_type fit_info);
+double** compute_Y4(int j, double**** in, int t, struct fit_type fit_info);
+double** compute_Y5(int j, double**** in, int t, struct fit_type fit_info);
 
 double lhs_function_ZPS(int j, double**** in, int t, struct fit_type fit_info);
 

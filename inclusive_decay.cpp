@@ -279,6 +279,7 @@ int main(int argc, char** argv) {
     fit_info.restore_default();
 
     //////////////////////
+    std::vector<std::vector<int>> id_Mmunu(4, std::vector<int>(4));
     int ncorr_new = head.ncorr;
     int TJW, TDs, myerr, myseed;
     line_read_param(option, "TJW", TJW, myerr, myseed, namefile_plateaux);
@@ -309,6 +310,7 @@ int main(int argc, char** argv) {
 
 
             fit_info.verbosity = 0;
+            id_Mmunu[mu][nu] = ncorr_new;
             printf("C_%d,%d\n", mu, nu);
             add_correlators(option, ncorr_new, conf_jack, compute_Mmunu, fit_info);
             printf(" ncorr after C_munu %d\n", ncorr_new);
@@ -330,6 +332,53 @@ int main(int argc, char** argv) {
             fit_info.restore_default();
         }
     }
+
+    std::vector<int> id_Y(6);
+    id_Y[0] = -1;
+
+    // Y1
+    id_Y[1] = ncorr_new;
+    fit_info.N = 1;
+    fit_info.Njack = Njack;
+    fit_info.T = head.T;
+    fit_info.corr_id = { id_Mmunu[1][1],id_Mmunu[2][2] };
+    add_correlators(option, ncorr_new, conf_jack, compute_Y1, fit_info);
+
+    // Y2
+    id_Y[2] = ncorr_new;
+    fit_info.N = 1;
+    fit_info.Njack = Njack;
+    fit_info.T = head.T;
+    fit_info.corr_id = { id_Mmunu[0][0] };
+    add_correlators(option, ncorr_new, conf_jack, compute_Y2, fit_info);
+
+    // Y3
+    id_Y[3] = ncorr_new;
+    fit_info.N = 1;
+    fit_info.Njack = Njack;
+    fit_info.T = head.T;
+    fit_info.corr_id = { id_Mmunu[3][3] };
+    add_correlators(option, ncorr_new, conf_jack, compute_Y3, fit_info);
+
+    // Y4
+    id_Y[4] = ncorr_new;
+    fit_info.N = 1;
+    fit_info.Njack = Njack;
+    fit_info.T = head.T;
+    fit_info.corr_id = { id_Mmunu[0][3],id_Mmunu[3][0] };
+    add_correlators(option, ncorr_new, conf_jack, compute_Y4, fit_info);
+
+    // Y5
+    id_Y[5] = ncorr_new;
+    fit_info.N = 1;
+    fit_info.Njack = Njack;
+    fit_info.T = head.T;
+    fit_info.corr_id = { id_Mmunu[1][2],id_Mmunu[2][1] };
+    add_correlators(option, ncorr_new, conf_jack, compute_Y1, fit_info);
+
+    std::vector<int> id_Z(3);
+    id_Z[0] = ncorr_new;
+
 
     // eg of fit to correlator
   //   struct fit_type fit_info;

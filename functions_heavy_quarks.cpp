@@ -1,6 +1,7 @@
 #define functions_heavy_quarks_C
 #include "functions_heavy_quarks.hpp"
 #include "tower.hpp"
+#include "mutils.hpp"
 
 double lhs_function_heavy_quarks_eg(int j, double**** in, int t, struct fit_type fit_info) {
     double r = in[j][0][t][0];
@@ -90,11 +91,67 @@ double** compute_Mmunu(int j, double**** in, int t, struct fit_type fit_info) {
     r[0][1] = in[j][VV][t][1] + in[j][AA][t][1] - in[j][VA][t][1] - in[j][AV][t][1];
     r[0][1] /= in[j][C2][t][0] * in[j][C2][fit_info.t0_GEVP][0];
     r[0][1] *= ZDs;
-    
+
 
     return r;
 }
 
+
+double** compute_Y1(int j, double**** in, int t, struct fit_type fit_info) {
+    double** Y1 = malloc_2<double>(1, 2);
+    int W11 = fit_info.corr_id[0];
+    int W22 = fit_info.corr_id[1];
+    int id_input = 2;
+    error(fit_info.corr_id.size() != id_input, 1, "compute Y1", "fit_info.corr_id.size() must be %d, intead it is %d",
+        id_input, fit_info.corr_id.size());
+    Y1[0][0] = -(in[j][W11][t][0] + in[j][W22][t][0]);
+    Y1[0][1] = -(in[j][W11][t][1] + in[j][W22][t][1]);
+    return Y1;
+}
+
+double** compute_Y2(int j, double**** in, int t, struct fit_type fit_info) {
+    double** Y = malloc_2<double>(1, 2);
+    int W00 = fit_info.corr_id[0];
+    int id_input = 1;
+    error(fit_info.corr_id.size() != id_input, 1, "compute Y2", "fit_info.corr_id.size() must be %d, intead it is %d",
+        id_input, fit_info.corr_id.size());
+    Y[0][0] = -(in[j][W00][t][0]);
+    Y[0][1] = -(in[j][W00][t][1]);
+    return Y;
+}
+double** compute_Y3(int j, double**** in, int t, struct fit_type fit_info) {
+    double** Y = malloc_2<double>(1, 2);
+    int W33 = fit_info.corr_id[0];
+    int id_input = 1;
+    error(fit_info.corr_id.size() != id_input, 1, "compute Y3", "fit_info.corr_id.size() must be %d, intead it is %d",
+        id_input, fit_info.corr_id.size());
+    Y[0][0] = -(in[j][W33][t][0]);
+    Y[0][1] = -(in[j][W33][t][1]);
+    return Y;
+}
+double** compute_Y4(int j, double**** in, int t, struct fit_type fit_info) {
+    double** Y = malloc_2<double>(1, 2);
+    int W03 = fit_info.corr_id[0];
+    int W30 = fit_info.corr_id[1];
+    int id_input = 2;
+    error(fit_info.corr_id.size() != id_input, 1, "compute Y4", "fit_info.corr_id.size() must be %d, intead it is %d",
+        id_input, fit_info.corr_id.size());
+    Y[0][0] = (in[j][W03][t][0]+in[j][W30][t][0]);
+    Y[0][1] = (in[j][W03][t][1]+in[j][W30][t][1]);
+    return Y;
+}
+double** compute_Y5(int j, double**** in, int t, struct fit_type fit_info) {
+    double** Y = malloc_2<double>(1, 2);
+    int W12 = fit_info.corr_id[0];
+    int W21 = fit_info.corr_id[1];
+    int id_input = 2;
+    error(fit_info.corr_id.size() != id_input, 1, "compute Y5", "fit_info.corr_id.size() must be %d, intead it is %d",
+        id_input, fit_info.corr_id.size());
+    // there is an i in front
+    Y[0][0] =- (in[j][W12][t][1]+in[j][W21][t][1])/2.0;
+    Y[0][1] =  (in[j][W12][t][0]+in[j][W21][t][0])/2.0;
+    return Y;
+}
 
 double lhs_function_ZPS(int j, double**** in, int t, struct fit_type fit_info) {
     int id = fit_info.corr_id[0];
