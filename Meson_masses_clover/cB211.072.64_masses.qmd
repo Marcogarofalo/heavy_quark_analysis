@@ -96,3 +96,34 @@ gg<- plot_df_corr_ggplot(df)
 fig<- myplotly(gg,paste0("meff"),"t", "$Im(M_{\\mu,\\nu})$", to_print=TRUE ,
                xrange=c(0,48), yrange=c(-1,1))
 ```
+
+
+### Z
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th0.dat_output")
+all_obs<- get_all_corr(mt)
+
+df<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+for (i in c(1:2)){
+    name<-paste0("Z_{",i,"}")
+    df<-add_corr_to_df(name,all_obs,mt,df)
+}
+# for (i in c(0:2)){
+#     name<-paste0("ImZ_{",i,"}")
+#     df<-add_corr_to_df(name,all_obs,mt,df)
+# }
+# df[,2]<--log10(-(df[,2]))
+# df[,3]<-(df[,3]/abs(df[,2]))
+
+# fit<-get_full_res(string="E3_0_vev",all_obs,mt,number=NULL)
+# fit
+# n<- which(all_obs[,"corr"]=="E3_0_vev")
+# all_obs[n,"chi2.dof"]
+gg<- plot_df_corr_ggplot(df)+xlim(0,48)
+
+fig<- myplotly(gg,paste0("meff"),"t", "$Re(M_{\\mu,\\nu})$", to_print=TRUE , 
+               xrange=c(0,48))
+```

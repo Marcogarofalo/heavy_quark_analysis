@@ -376,8 +376,33 @@ int main(int argc, char** argv) {
     fit_info.corr_id = { id_Mmunu[1][2],id_Mmunu[2][1] };
     add_correlators(option, ncorr_new, conf_jack, compute_Y1, fit_info);
 
-    std::vector<int> id_Z(3);
-    id_Z[0] = ncorr_new;
+    // Z0 Z1 Z2
+    std::vector<int> id_Z = { ncorr_new, ncorr_new + 1, ncorr_new + 2 };
+    fit_info.N = 3;
+    fit_info.Njack = Njack;
+    fit_info.T = head.T;
+    fit_info.corr_id = id_Y;
+    add_correlators(option, ncorr_new, conf_jack, compute_Z_factors, fit_info);
+
+    fit_info.restore_default();
+
+    for (int i = 0;i < 3;i++) {
+        char name[NAMESIZE];
+        mysprintf(name, NAMESIZE, "Z_{%d}", i);
+        double* Z = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Z[i], name, identity, jack_file);
+        check_correlatro_counter(37 + i * 2);
+        free(Z);
+        mysprintf(name, NAMESIZE, "ImZ_{%d}", i);
+        Z = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Z[i], name, identity_im, jack_file);
+        check_correlatro_counter(37 + i * 2 + 1);
+        free(Z);
+    }
+
+
 
 
     // eg of fit to correlator

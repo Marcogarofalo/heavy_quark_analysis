@@ -30,6 +30,7 @@ double** compute_Y2(int j, double**** in, int t, struct fit_type fit_info);
 double** compute_Y3(int j, double**** in, int t, struct fit_type fit_info);
 double** compute_Y4(int j, double**** in, int t, struct fit_type fit_info);
 double** compute_Y5(int j, double**** in, int t, struct fit_type fit_info);
+double** compute_Z_factors(int j, double**** in, int t, struct fit_type fit_info);
 
 double lhs_function_ZPS(int j, double**** in, int t, struct fit_type fit_info);
 
