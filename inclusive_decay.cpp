@@ -211,10 +211,15 @@ int main(int argc, char** argv) {
     //     symmetrise_jackboot(Njack, i, head.T, conf_jack);
     // }
 
-    symmetrise_jackboot(Njack, 0, head.T, conf_jack, 1);
-    symmetrise_jackboot(Njack, 0 + 1 * head.gammas.size(), head.T, conf_jack, 1);
-    symmetrise_jackboot(Njack, 0 + 2 * head.gammas.size(), head.T, conf_jack, 1);
-    symmetrise_jackboot(Njack, 0 + 3 * head.gammas.size(), head.T, conf_jack, 1);
+    int id_Ds_ss_2pt = 0;
+    int id_Ds_ls_2pt = 0 + head.gammas.size();
+    int id_K_ss_2pt = 0 + 2 * head.gammas.size();
+    int id_K_ls_2pt = 0 + 3 * head.gammas.size();
+
+    symmetrise_jackboot(Njack, id_Ds_ss_2pt, head.T, conf_jack, 1);
+    symmetrise_jackboot(Njack, id_Ds_ls_2pt, head.T, conf_jack, 1);
+    symmetrise_jackboot(Njack, id_K_ss_2pt, head.T, conf_jack, 1);
+    symmetrise_jackboot(Njack, id_K_ls_2pt, head.T, conf_jack, 1);
 
 
     ////////////////////
@@ -227,29 +232,29 @@ int main(int argc, char** argv) {
     double* M_PS, * M_Ds;
     M_PS = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-        namefile_plateaux, outfile, 0, "M_{Ds}_sl", M_eff_T, jack_file);
+        namefile_plateaux, outfile, id_Ds_ls_2pt, "M_{Ds}_sl", M_eff_T, jack_file);
     check_correlatro_counter(0);
     free(M_PS);
 
     M_Ds = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-        namefile_plateaux, outfile, 0 + head.gammas.size(), "M_{Ds}_ss", M_eff_T, jack_file);
+        namefile_plateaux, outfile, id_Ds_ss_2pt, "M_{Ds}_ss", M_eff_T, jack_file);
     check_correlatro_counter(1);
 
 
     M_PS = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-        namefile_plateaux, outfile, 0 + 2 * head.gammas.size(), "M_{K}_sl", M_eff_T, jack_file);
+        namefile_plateaux, outfile, id_K_ss_2pt, "M_{K}_sl", M_eff_T, jack_file);
     check_correlatro_counter(2);
     free(M_PS);
 
     M_PS = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-        namefile_plateaux, outfile, 0 + 3 * head.gammas.size(), "M_{K}_ss", M_eff_T, jack_file);
+        namefile_plateaux, outfile, id_K_ls_2pt, "M_{K}_ss", M_eff_T, jack_file);
     check_correlatro_counter(3);
     free(M_PS);
 
-    int id_Ds_ss_2pt = 0 + head.gammas.size();
+
     ///////////////////////////////////////////////
     /// compute ZDs smeared smeared
     struct fit_type fit_info;
@@ -277,6 +282,26 @@ int main(int argc, char** argv) {
     // free_fit_result(fit_info, fit_out);
     check_correlatro_counter(4);
     fit_info.restore_default();
+
+    // getting the Z factor with a 2 parameters fit
+    fit_info.Nvar = 1;
+    fit_info.Npar = 2;
+    fit_info.N = 1;
+    fit_info.Njack = Njack;
+
+    fit_info.function = rhs_2fit_par;
+    fit_info.linear_fit = false;
+    fit_info.T = head.T;
+    fit_info.corr_id = { id_Ds_ss_2pt };
+
+    // c++ 0 || r 1
+    struct fit_result f2parZ = fit_fun_to_fun_of_corr(
+        option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+        outfile, lhs_2fit_par, "2parZ_{Ds}_ss", fit_info, jack_file);
+    free_fit_result(fit_info, f2parZ);
+    check_correlatro_counter(5);
+    fit_info.restore_default();
+
 
     //////////////////////
     std::vector<std::vector<int>> id_Mmunu(4, std::vector<int>(4));
@@ -320,13 +345,13 @@ int main(int argc, char** argv) {
             double* Mmunu = plateau_correlator_function(
                 option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
                 namefile_plateaux, outfile, ncorr_new - 1, name, identity, jack_file);
-            check_correlatro_counter(5 + (nu + mu * 4) * 2);
+            check_correlatro_counter(6 + (nu + mu * 4) * 2);
             free(Mmunu);
             mysprintf(name, NAMESIZE, "ImM_{%d,%d}", mu, nu);
             double* Mmunu_im = plateau_correlator_function(
                 option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
                 namefile_plateaux, outfile, ncorr_new - 1, name, identity_im, jack_file);
-            check_correlatro_counter(5 + (nu + mu * 4) * 2 + 1);
+            check_correlatro_counter(7 + (nu + mu * 4) * 2);
             free(Mmunu_im);
 
             fit_info.restore_default();
@@ -392,13 +417,13 @@ int main(int argc, char** argv) {
         double* Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Z[i], name, identity, jack_file);
-        check_correlatro_counter(37 + i * 2);
+        check_correlatro_counter(38 + i * 2);
         free(Z);
         mysprintf(name, NAMESIZE, "ImZ_{%d}", i);
         Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Z[i], name, identity_im, jack_file);
-        check_correlatro_counter(37 + i * 2 + 1);
+        check_correlatro_counter(39 + i * 2);
         free(Z);
     }
 

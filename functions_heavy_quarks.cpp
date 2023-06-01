@@ -177,9 +177,17 @@ double lhs_function_ZPS(int j, double**** in, int t, struct fit_type fit_info) {
     int id = fit_info.corr_id[0];
     double corr = in[j][id][t][0];
     double M = fit_info.ext_P[0][j];
-    double mu1 = fit_info.ext_P[1][j];
-    double mu2 = fit_info.ext_P[2][j];
+
 
     double me = corr / (exp(-t * M) + exp(-(fit_info.T - t) * M));
     return me;
+}
+
+double lhs_2fit_par(int j, double**** in, int t, struct fit_type fit_info) {
+    int id = fit_info.corr_id[0];
+    return in[j][id][t][0];
+}
+double rhs_2fit_par(int n, int Nvar, double* x, int Npar, double* P) {
+    int t = x[0];
+    return 0.5 * P[1] * P[1] * (exp(-(P[0] * t)) + exp(-(P[0] * (file_head.l0 - t))));
 }
