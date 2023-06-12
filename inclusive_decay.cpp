@@ -317,10 +317,15 @@ int main(int argc, char** argv) {
             fit_info.Njack = Njack;
 
             fit_info.T = head.T;
-            fit_info.t0_GEVP = TDs - TJW;
+            fit_info.myen = { TDs, TJW };
             fit_info.n_ext_P = 1;
             fit_info.ext_P = (double**)malloc(sizeof(double*) * fit_info.n_ext_P);
-            fit_info.ext_P[0] = ZDs.P[0];
+            fit_info.ext_P[0] = M_Ds;
+            // fit_info.ext_P[1] = (double*)malloc(sizeof(double) * Njack);
+            // for (size_t j = 0; j < Njack; j++) {
+            //     fit_info.ext_P[1][j] = 
+            // }
+
 
             //                  2pt_files      +   A_4pt              +  gamma=Vmu + insertions Vmu     
             int id_VV = 4 * head.gammas.size() + 4 * head.gammas.size() + (mu + 5) + nu * head.gammas.size();
@@ -360,44 +365,38 @@ int main(int argc, char** argv) {
 
     std::vector<int> id_Y(6);
     id_Y[0] = -1;
-
-    // Y1
-    id_Y[1] = ncorr_new;
     fit_info.N = 1;
     fit_info.Njack = Njack;
     fit_info.T = head.T;
+    // fit_info.n_ext_P = 1;
+    // fit_info.ext_P = malloc_2<double>(fit_info.n_ext_P, Njack);
+    // for (size_t j = 0; j < Njack; j++) {
+    //     fit_info.ext_P[0] = head.thetas[0];
+    // }
+
+
+    // Y1
+    id_Y[1] = ncorr_new;
     fit_info.corr_id = { id_Mmunu[1][1],id_Mmunu[2][2] };
     add_correlators(option, ncorr_new, conf_jack, compute_Y1, fit_info);
 
     // Y2
     id_Y[2] = ncorr_new;
-    fit_info.N = 1;
-    fit_info.Njack = Njack;
-    fit_info.T = head.T;
     fit_info.corr_id = { id_Mmunu[0][0] };
     add_correlators(option, ncorr_new, conf_jack, compute_Y2, fit_info);
 
     // Y3
     id_Y[3] = ncorr_new;
-    fit_info.N = 1;
-    fit_info.Njack = Njack;
-    fit_info.T = head.T;
     fit_info.corr_id = { id_Mmunu[3][3] };
     add_correlators(option, ncorr_new, conf_jack, compute_Y3, fit_info);
 
     // Y4
     id_Y[4] = ncorr_new;
-    fit_info.N = 1;
-    fit_info.Njack = Njack;
-    fit_info.T = head.T;
     fit_info.corr_id = { id_Mmunu[0][3],id_Mmunu[3][0] };
     add_correlators(option, ncorr_new, conf_jack, compute_Y4, fit_info);
 
     // Y5
     id_Y[5] = ncorr_new;
-    fit_info.N = 1;
-    fit_info.Njack = Njack;
-    fit_info.T = head.T;
     fit_info.corr_id = { id_Mmunu[1][2],id_Mmunu[2][1] };
     add_correlators(option, ncorr_new, conf_jack, compute_Y1, fit_info);
 
