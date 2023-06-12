@@ -151,8 +151,8 @@ double** compute_Y5(int j, double**** in, int t, struct fit_type fit_info) {
     error(fit_info.corr_id.size() != id_input, 1, "compute Y5", "fit_info.corr_id.size() must be %d, intead it is %d",
         id_input, fit_info.corr_id.size());
     // there is an i in front
-    Y[0][0] = (in[j][W12][t][1] ) - in[j][W21][t][1])/ 2.0;
-    Y[0][1] = -(in[j][W12][t][0] ) - in[j][W21][t][0])/ 2.0;
+    Y[0][0] = (in[j][W12][t][1]  - in[j][W21][t][1])/ 2.0;
+    Y[0][1] = -(in[j][W12][t][0] - in[j][W21][t][0])/ 2.0;
     return Y;
 }
 
@@ -171,8 +171,8 @@ double** compute_Z_factors(int j, double**** in, int t, struct fit_type fit_info
     Z[1][0] = 2.0 * (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0] - in[j][Y4][t][0]);
     Z[1][1] = 2.0 * (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1] - in[j][Y4][t][1]);
 
-    Z[2][0] = (in[j][Y2][t][0] + in[j][Y3][t][0] - 2.0 * in[j][Y4][t][0]);
-    Z[2][1] = (in[j][Y2][t][1] + in[j][Y3][t][1] - 2.0 * in[j][Y4][t][1]);
+    Z[2][0] = (in[j][Y3][t][0] + 2.0*in[j][Y1][t][0]) ;
+    Z[2][1] = (in[j][Y3][t][1] + 2.0*in[j][Y1][t][1]) ;
     return Z;
 }
 
