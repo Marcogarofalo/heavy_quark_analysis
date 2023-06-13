@@ -6,6 +6,7 @@ library(Rose)
 library(ggplot2)
 library(plotly)
 library(knitr)
+library(katex)
 df <- data.frame(x = 1:5, y = 1:5)    
 f1 <- function(df) {
   gg <- ggplot(df, aes(x,y)) + geom_point()
@@ -38,7 +39,6 @@ df<-add_corr_to_df("Z_{Ds}_ss",all_obs,mt,df)
 gg<- plot_df_corr_ggplot(df)
 
 fig<- myplotly(gg,paste0("meff"),"t", "$M_{eff}$", to_print=TRUE )
-
 ```
 
 ## $M_{\mu,\nu}$
@@ -102,7 +102,7 @@ fig<- myplotly(gg,paste0("meff"),"t", "$Im(M_{\\mu,\\nu})$", to_print=TRUE ,
 
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
-mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th0.dat_output")
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins40_ins56_th6.dat_output")
 all_obs<- get_all_corr(mt)
 
 df<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
@@ -122,8 +122,55 @@ for (i in c(1:2)){
 # fit
 # n<- which(all_obs[,"corr"]=="E3_0_vev")
 # all_obs[n,"chi2.dof"]
+dfa<-read.table("/home/garofalo/Downloads/z0_iset0_ab110.dat")
 gg<- plot_df_corr_ggplot(df)+xlim(0,48)
+# gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,2], color="Antonio"  ,shape="Antonio"   ,fill="Antonio"      ))
+# gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3]
+#                          , ymax=dfa[,2]+dfa[,3]
+#                          , color="Antonio"  ,shape="Antonio"   ,fill="Antonio"      ))
+dfa<-dfa[-1,]
+#gg<-gg+ geom_point(aes(x=dfa[,1], y=df[c(1:40),2]/dfa[,2] ), color="blue")
+# gg<-gg+geom_error(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3],
+#                     ymax=dfa[,2]+dfa[,3]
+#                                                ),color="green")
+gg<- gg+  scale_y_continuous(trans='log')
 
-fig<- myplotly(gg,paste0("meff"),"t", "$Re(M_{\\mu,\\nu})$", to_print=TRUE , 
+fig<- myplotly(gg,"","t", "", to_print=TRUE , 
+               xrange=c(0,48))
+```
+
+### Comparing with Antonio 
+
+$t_{sink}=64$ , $t_W=48$
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th0.dat_output")
+all_obs<- get_all_corr(mt)
+
+df<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+
+dfa<-read.table("/home/garofalo/Downloads/z0_iset0.dat")
+gg<- plot_df_corr_ggplot(df)+xlim(0,48)
+dfa<-dfa[-1,]
+gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,2], color="Antonio"  ,shape="Antonio"   ,fill="Antonio"      ))
+gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3]
+                         , ymax=dfa[,2]+dfa[,3]
+                         , color="Antonio"  ,shape="Antonio"   ,fill="Antonio"      ))
+l<-df[c(1:40),2]/dfa[,2]
+dfc<-read.table("/home/garofalo/Downloads/datacorr_t1_16_t2_42.csv", header = TRUE)
+#gg<-gg+geom_point(aes(x=dfc[,1], y=dfc[,4], color="Christiane"  ,shape="Christiane"   ,fill="Christiane"      ))
+#gg<-gg+geom_errorbar(aes(x=dfc[,1], ymin=dfc[,4]-dfc[,5]
+#                         , ymax=dfc[,4]+dfc[,5]
+#                         , color="Christiane"  ,shape="Christiane"   ,fill="Christiane"      ))
+
+
+ #gg<-gg+ geom_point(aes(x=dfa[,1], y=l, color="ratio" ,shape="ratio"   ,fill="ratio") )
+# gg<-gg+geom_error(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3],
+#                     ymax=dfa[,2]+dfa[,3]
+#                                                ),color="green")
+gg<- gg+  scale_y_continuous(trans='log')
+
+fig<- myplotly(gg,"","t", "$\\log(Z_0)$", to_print=TRUE , 
                xrange=c(0,48))
 ```

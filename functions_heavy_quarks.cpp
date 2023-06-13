@@ -171,8 +171,8 @@ double** compute_Z_factors(int j, double**** in, int t, struct fit_type fit_info
     Z[1][0] = 2.0 * (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0] - in[j][Y4][t][0]);
     Z[1][1] = 2.0 * (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1] - in[j][Y4][t][1]);
 
-    Z[2][0] = (in[j][Y3][t][0] + 2.0*in[j][Y1][t][0]) ;
-    Z[2][1] = (in[j][Y3][t][1] + 2.0*in[j][Y1][t][1]) ;
+    Z[2][0] = (in[j][Y3][t][0] - 2.0*in[j][Y1][t][0]) ;
+    Z[2][1] = (in[j][Y3][t][1] - 2.0*in[j][Y1][t][1]) ;
     return Z;
 }
 
