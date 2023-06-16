@@ -2,12 +2,13 @@ project:
   type: book
 
 book:
-  title: "Meson_masses_clover"
+  title: "heavy_quarks"
   author: "Marco Garofalo"
   date: today
   chapters:
     - index.qmd
-    - cB211.072.64_masses.qmd
+    - cB211.072.64_PRACE.qmd
+    - cB211.072.64_inclusive.qmd
     - intro.qmd
     - summary.qmd
     - references.qmd
