@@ -1,20 +1,22 @@
 # cB211.072.64
 
+This are data generated in the PRACE project plnugamma. The smearing parameters 
+where: 30 iteration with parameter 4
 
 ```{r ,include=FALSE}
 library(Rose)
 library(ggplot2)
 library(plotly)
 library(knitr)
-# df <- data.frame(x = 1:5, y = 1:5)    
-# f1 <- function(df) {
-#   gg <- ggplot(df, aes(x,y)) + geom_point()
-#   assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
-#   #ggp
-#   df    # NOT returning a plot
-# }
-# res1 <- f1(df)
-# ggp   # Let knit handle the plot
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
 ```
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
@@ -28,15 +30,15 @@ df<-add_corr_to_df(string = "M_{PS}",all_obs=all_obs,mt=mt,df = NULL,
 df<-add_corr_to_df("M_{K}(s0)",all_obs,mt,df)
 df<-add_corr_to_df("M_{K}(s1)",all_obs,mt,df)
 df<-add_corr_to_df("M_{K}(s2)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c0,s0)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c0,s1)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c0,s2)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c1,s0)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c1,s1)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c1,s2)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c2,s0)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c2,s1)",all_obs,mt,df)
-df<-add_corr_to_df("M_{Ds}(c2,s2)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c0,s0)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c0,s1)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c0,s2)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c1,s0)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c1,s1)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c1,s2)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c2,s0)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c2,s1)",all_obs,mt,df)
+df<-add_corr_to_df("M_{Ds}^{GEVP}(c2,s2)",all_obs,mt,df)
 
 # fit<-get_full_res(string="E3_0_vev",all_obs,mt,number=NULL)
 # fit
@@ -44,7 +46,7 @@ df<-add_corr_to_df("M_{Ds}(c2,s2)",all_obs,mt,df)
 # all_obs[n,"chi2.dof"]
 gg<- plot_df_corr_ggplot(df)
 
-fig<- myplotly(gg,paste0("meff"),"t", 'M_{eff}', to_print=TRUE )
+fig<- myplotly(gg,paste0("meff"),"t", '$M_{eff}$', to_print=TRUE )
 
 ```
 
@@ -149,3 +151,63 @@ fig<- myplotly(gg,title,"$a\\mu_c$", "$M_{D_s}$",
           config( displayModeBar = FALSE)    
 fig
 ```
+
+## Plateau $D_s$
+
+here we compare the effective mass obtained with smeared or local operator with the 
+one obtained by the GEVP
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_bin/cB211ab.07.64/out/bin_cB211ab.07.64_output")
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "M_{Ds}^{GEVP}(c0,s0)",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df("M_{Ds}^{ll}(c0,s0)",all_obs,mt,df,print_res = FALSE)
+df<-add_corr_to_df("M_{Ds}^{sl}(c0,s0)",all_obs,mt,df,print_res = FALSE)
+df<-add_corr_to_df("M_{Ds}^{ss}(c0,s0)",all_obs,mt,df,print_res = FALSE)
+
+
+# fit<-get_full_res(string="E3_0_vev",all_obs,mt,number=NULL)
+# fit
+# n<- which(all_obs[,"corr"]=="E3_0_vev")
+# all_obs[n,"chi2.dof"]
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","t", '$M_{eff}^{Ds}$', to_print=TRUE, 
+               xrange=c(0,48), yrange=c(0.71,0.75)  )
+
+```
+
+Here we compare $f_{D_s}$ computed from the local-local correlator,  
+projecting the operator according to the leading GEVP eigenvector and using the 
+smeared-smeared and local-smeared correlators
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_bin/cB211ab.07.64/out/bin_cB211ab.07.64_output")
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "f_{Ds-00-GEVP}",all_obs=all_obs,mt=mt,df = NULL,
+                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df("f_{Ds}_ll(c0,s0)",all_obs,mt,df,print_res = FALSE,nudge=0.1)
+#df<-add_corr_to_df("f_{Ds}_sl(c0,s0)",all_obs,mt,df,print_res = FALSE)
+df<-add_corr_to_df("me_{Ds}_ss(c0,s0)",all_obs,mt,df,print_res = FALSE)
+df<-add_corr_to_df("f_{Ds-00-ss-ls}",all_obs,mt,df,print_res = FALSE,nudge=0.2)
+
+# fit<-get_full_res(string="E3_0_vev",all_obs,mt,number=NULL)
+# fit
+# n<- which(all_obs[,"corr"]=="E3_0_vev")
+# all_obs[n,"chi2.dof"]
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","t", TeX('f_{Ds}'), to_print=TRUE
+               # ,xrange=c(0,48)
+               #, yrange=c(0.0,0.14) 
+               )
+
+```
+

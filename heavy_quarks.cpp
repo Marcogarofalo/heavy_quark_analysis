@@ -207,10 +207,10 @@ int main(int argc, char** argv) {
   corr_counter = -1;
 
   ///////////////////// symmetrize
-  for (int i =0; i<head.ncorr;i++){
+  for (int i = 0; i < head.ncorr;i++) {
     symmetrise_jackboot(Njack, i, head.T, conf_jack);
   }
-  
+
   // symmetrise_jackboot(Njack, 1, head.T, conf_jack, -1);
 
   ////////////////////
@@ -252,6 +252,7 @@ int main(int argc, char** argv) {
     outfile, lhs_function_f_PS, "f_{PS}", fit_info, jack_file);
   // free_fit_result(fit_info, fit_out);
   check_correlatro_counter(1);
+  free(fit_info.ext_P[0]);free(fit_info.ext_P[1]);free(fit_info.ext_P[2]);
   fit_info.restore_default();
 
 
@@ -274,7 +275,7 @@ int main(int argc, char** argv) {
   printf(" ncorr after GEVP %d\n", ncorr_new);
   int id_GEVP_00 = ncorr_new - 2;
 
-  fit_info.value_or_vector = 2; // 0= values
+  fit_info.value_or_vector = 2; // 2= Amplitudes
   fit_info.N = 2 * 2;
   add_correlators(option, ncorr_new, conf_jack, GEVP_matrix, fit_info);
   int id_GEVP_00_a0_0 = ncorr_new - 4; // gives <0|P5|P5>
@@ -395,7 +396,7 @@ int main(int argc, char** argv) {
   fit_info.band_range = { head.mus[1] * 0.9,head.mus[3] * 1.1 };
   print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "amu", fit_inter_MK, fit_inter_MK, 0, fit_info.myen.size() - 1, 0.0005);
 
-  fit_info.band_range = { .01692 ,0.01692*1.1 }; 
+  fit_info.band_range = { .01692 ,0.01692 * 1.1 };
   print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "MK_interpolated", fit_inter_MK, fit_inter_MK, 0, 0, 100);
 
   ///////////// structure for fits
@@ -410,7 +411,7 @@ int main(int argc, char** argv) {
     jackall_c.en[i].jack = (double**)malloc(sizeof(double*) * jackall_c.en[i].Nobs);
   }
 
-  ///// KAON
+  ///// Ds
   int Ns = 3, Nc = 3;
   for (int is = 0;is < Ns;is++) {
     for (int ic = 0;ic < Nc;ic++) {
@@ -428,14 +429,14 @@ int main(int argc, char** argv) {
       printf(" ncorr after GEVP %d\n", ncorr_new);
       int id_GEVP_l0 = ncorr_new - 2;
       char name_obs[NAMESIZE];
-      mysprintf(name_obs, NAMESIZE, "M_{Ds}(c%d,s%d)", ic, is);
+      mysprintf(name_obs, NAMESIZE, "M_{Ds}^{GEVP}(c%d,s%d)", ic, is);
       jackall_c.en[ic + is * 3].jack[0] = plateau_correlator_function(
         option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
         namefile_plateaux, outfile, id_GEVP_l0, name_obs, M_eff_T, jack_file);
       check_correlatro_counter(8 + ic + is * Nc);
     }
   }
-  // fit the kaon
+  // fit the Ds
   fit_info.restore_default();
   fit_info.Npar = 3;
   fit_info.Nvar = 2;
@@ -471,8 +472,137 @@ int main(int argc, char** argv) {
     mysprintf(name_band, NAMESIZE, "amuc_%d", is);
     print_fit_band(temp_argv, jackall_c, fit_info, fit_info, namefit, name_band, fit_inter_MDs, fit_inter_MDs, 0, 0 + is * Nc, 0.0005);
   }
-  fit_info.band_range = { 0.2368 ,0.2368*1.1 };
+  fit_info.band_range = { 0.2368 ,0.2368 * 1.1 };
   std::vector<double> xcont = { 0.2368, 0.01692 };
   print_fit_band(temp_argv, jackall_c, fit_info, fit_info, namefit, "MDs_interpolated", fit_inter_MDs, fit_inter_MDs, 0, 0, 100, xcont);
+
+
+  double* M_Ds_ll_c0s0 = plateau_correlator_function(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+    namefile_plateaux, outfile, ids.return_id(5, 1, 0, 0, 0, 0), "M_{Ds}^{ll}(c0,s0)", M_eff_T, jack_file);
+  check_correlatro_counter(17);
+
+  double* M_Ds_sl_c0s0 = plateau_correlator_function(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+    namefile_plateaux, outfile, ids.return_id(5, 1, 0, 0, 0, 1), "M_{Ds}^{sl}(c0,s0)", M_eff_T, jack_file);
+  check_correlatro_counter(18);
+
+  double* M_Ds_ss_c0s0 = plateau_correlator_function(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+    namefile_plateaux, outfile, ids.return_id(5, 1, 0, 0, 0, 3), "M_{Ds}^{ss}(c0,s0)", M_eff_T, jack_file);
+  check_correlatro_counter(19);
+  /////////////////////////////////////
+
+
+  fit_info.Nvar = 1;
+  fit_info.Npar = 1;
+  fit_info.N = 1;
+  fit_info.Njack = Njack;
+  fit_info.n_ext_P = 3;
+  fit_info.malloc_ext_P();
+  for (int j = 0; j < fit_info.Njack; j++) {
+    fit_info.ext_P[0][j] = M_Ds_ll_c0s0[j];
+    fit_info.ext_P[1][j] = head.mus[5];
+    fit_info.ext_P[2][j] = head.mus[1];
+  }
+  fit_info.function = constant_fit;
+  fit_info.linear_fit = true;
+  fit_info.T = head.T;
+
+  fit_info.corr_id = { ids.return_id(5, 1, 0, 0, 0, 0) };
+  for (int j = 0; j < fit_info.Njack; j++)     fit_info.ext_P[0][j] = M_Ds_ll_c0s0[j];
+  struct fit_result f_PS_Ds = fit_fun_to_fun_of_corr(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+    outfile, lhs_function_f_PS, "f_{Ds}_ll(c0,s0)", fit_info, jack_file);
+  free_fit_result(fit_info, f_PS_Ds);
+  check_correlatro_counter(20);
+
+  fit_info.corr_id = { ids.return_id(5, 1, 0, 0, 0, 1) };
+  for (int j = 0; j < fit_info.Njack; j++)     fit_info.ext_P[0][j] = M_Ds_sl_c0s0[j];
+  f_PS_Ds = fit_fun_to_fun_of_corr(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+    outfile, lhs_function_f_PS, "f_{Ds}_sl(c0,s0)", fit_info, jack_file);
+  free_fit_result(fit_info, f_PS_Ds);
+  check_correlatro_counter(21);
+
+  fit_info.corr_id = { ids.return_id(5, 1, 0, 0, 0, 3) };
+  for (int j = 0; j < fit_info.Njack; j++)     fit_info.ext_P[0][j] = M_Ds_ss_c0s0[j];
+  struct fit_result f_PS_Ds_ss = fit_fun_to_fun_of_corr(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+    outfile, lhs_function_f_PS, "f_{Ds}_ss(c0,s0)", fit_info, jack_file);
+  free_fit_result(fit_info, f_PS_Ds_ss);
+  check_correlatro_counter(22);
+
+
+  struct fit_result me_Ds_ss = fit_fun_to_fun_of_corr(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+    outfile, lhs_function_me, "me_{Ds}_ss(c0,s0)", fit_info, jack_file);
+  check_correlatro_counter(23);
+  fit_info.restore_default();
+
+
+  ///////////////////////////////////////////////////// GEVP Ds operator
+  fit_info.value_or_vector = 2; // 2= Amplitudes
+  fit_info.N = 2 * 2;
+  int ic = 0, is = 0;
+  fit_info.corr_id = { ids.return_id(ic + 5,is + 1,0,0,0,0), ids.return_id(ic + 5,is + 1,0,0,0,1),
+                           ids.return_id(ic + 5,is + 1,0,0,0,2), ids.return_id(ic + 5,is + 1,0,0,0,3) };//diag{ ll, ss}
+
+  fit_info.t0_GEVP = 3;
+  fit_info.GEVP_ignore_warning_after_t = 1;
+  fit_info.verbosity = 0;
+  add_correlators(option, ncorr_new, conf_jack, GEVP_matrix, fit_info);
+  int id_GEVP_Ds_a0_0 = ncorr_new - 4;
+
+  fit_info.Nvar = 1;
+  fit_info.Npar = 1;
+  fit_info.N = 1;
+  fit_info.Njack = Njack;
+  fit_info.n_ext_P = 3;
+  fit_info.ext_P = malloc_2<double>(fit_info.n_ext_P, fit_info.Njack);
+  for (int j = 0; j < fit_info.Njack; j++) {
+    fit_info.ext_P[0][j] = jackall_c.en[ic + is * 3].jack[0][j];
+    fit_info.ext_P[1][j] = head.mus[5];
+    fit_info.ext_P[2][j] = head.mus[1];
+  }
+  fit_info.function = constant_fit;
+  fit_info.linear_fit = true;
+  fit_info.T = head.T;
+  fit_info.corr_id = { id_GEVP_Ds_a0_0 };
+
+
+  struct fit_result f_Ds_00_GEVP = fit_fun_to_fun_of_corr(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+    outfile, lhs_function_f_PS_GEVP, "f_{Ds-00-GEVP}", fit_info, jack_file);
+  check_correlatro_counter(24);
+  fit_info.restore_default();
+  for (int i = 0; i < fit_info.n_ext_P; i++) free(fit_info.ext_P[i]);
+
+  ///////////////////////////////////////////////////// ss and sl for matrix element
+  fit_info.Nvar = 1;
+  fit_info.Npar = 1;
+  fit_info.N = 1;
+  fit_info.Njack = Njack;
+  fit_info.n_ext_P = 4;
+  fit_info.malloc_ext_P();
+  for (int j = 0; j < fit_info.Njack; j++) {
+    fit_info.ext_P[0][j] = M_Ds_ss_c0s0[j];
+    fit_info.ext_P[1][j] = me_Ds_ss.P[0][j];
+    fit_info.ext_P[2][j] = head.mus[5];
+    fit_info.ext_P[3][j] = head.mus[1];
+  }
+  fit_info.function = constant_fit;
+  fit_info.linear_fit = true;
+  fit_info.T = head.T;
+  fit_info.corr_id = { ids.return_id(ic + 5,is + 1,0,0,0,1), ids.return_id(ic + 5,is + 1,0,0,0,3) };
+
+
+  struct fit_result f_Ds_00_ss_ls = fit_fun_to_fun_of_corr(
+    option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
+    outfile, lhs_function_f_PS_ss_ls, "f_{Ds-00-ss-ls}", fit_info, jack_file);
+  check_correlatro_counter(25);
+  
+  fit_info.restore_default();
+
 
 }

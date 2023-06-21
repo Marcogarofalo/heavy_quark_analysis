@@ -1,13 +1,11 @@
 # cB211.072.64 Inclusive runs
 
-
 ```{r ,include=FALSE}
 library(Rose)
 library(ggplot2)
 library(plotly)
 library(knitr)
-library(katex)
-df <- data.frame(x = 1:5, y = 1:5)    
+df <- data.frame(x = 1:5, y = 1:5)
 f1 <- function(df) {
   gg <- ggplot(df, aes(x,y)) + geom_point()
   assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
@@ -16,6 +14,7 @@ f1 <- function(df) {
 }
 res1 <- f1(df)
 ggp   # Let knit handle the plot
+widgetframe::frameableWidget(ggplotly(ggp)%>%config(mathjax = "cdn") )
 ```
 
 ## Masses from the run with tins=48-64
@@ -40,7 +39,7 @@ df<-add_corr_to_df("Z_{Ds}_ss",all_obs,mt,df)
 # all_obs[n,"chi2.dof"]
 gg<- plot_df_corr_ggplot(df)
 
-fig<- myplotly(gg,paste0("meff"),"t", "$M_{eff}$", to_print=TRUE )
+fig<- myplotly(gg,"","t", TeX("M_{eff}"), to_print=TRUE )
 ```
 
 ## tins 40-56
@@ -52,12 +51,12 @@ mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins4
 all_obs<- get_all_corr(mt)
 
 df<-add_corr_to_df(string = "M_{0,0}",all_obs=all_obs,mt=mt,df = NULL,
-                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+                   log = FALSE, number = NULL,nudge = 0, print_res=FALSE)
 for (mu in c(0:3)){
   for (nu in c(0:3)){
     if (mu==0 & nu==0 ) next
     name<-paste0("M_{",mu,",",nu,"}")
-    df<-add_corr_to_df(name,all_obs,mt,df)
+    df<-add_corr_to_df(name,all_obs,mt,df, print_res=FALSE)
   }
 }
 
@@ -79,12 +78,12 @@ mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins4
 all_obs<- get_all_corr(mt)
 
 df<-add_corr_to_df(string = "ImM_{0,0}",all_obs=all_obs,mt=mt,df = NULL,
-                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 for (mu in c(0:3)){
   for (nu in c(0:3)){
     if (mu==0 & nu==0 ) next
     name<-paste0("ImM_{",mu,",",nu,"}")
-    df<-add_corr_to_df(name,all_obs,mt,df)
+    df<-add_corr_to_df(name,all_obs,mt,df, print_res=FALSE)
   }
 }
 
@@ -113,16 +112,16 @@ for (th in ths){
   all_obs<- get_all_corr(mt)
 
   dft<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
-                   log = TRUE, number = NULL,nudge = 0,print_res = TRUE)
+                   log = TRUE, number = NULL,nudge = 0,print_res = FALSE)
   dft$th<- th
   df<- rbind (df,dft)
   
   dft<-add_corr_to_df(string = "Z_{1}",all_obs=all_obs,mt=mt,df = NULL,
-                   log = TRUE, number = NULL,nudge = 0.1,print_res = TRUE)
+                   log = TRUE, number = NULL,nudge = 0.1,print_res = FALSE)
   dft$th<- th
   df<- rbind (df,dft)
   dft<-add_corr_to_df(string = "Z_{2}",all_obs=all_obs,mt=mt,df = NULL,
-                   log = TRUE, number = NULL,nudge = 0.2,print_res = TRUE)
+                   log = TRUE, number = NULL,nudge = 0.2,print_res = FALSE)
   dft$th<- th
   df<- rbind (df,dft)
 }
@@ -133,7 +132,7 @@ gg<- gg +  geom_errorbar(data=df , mapping=aes(x=x,ymax=y+err,ymin=y-err,
                                                           color=as.factor(th),
                                                           shape=label), width=0.55)
 
-fig<- myplotly(gg,"","t", "$\\log(Z_0)$", to_print=TRUE , 
+fig<- myplotly(gg,"","t", "$\\log(Z_i)$", to_print=TRUE , 
                xrange=c(0,40), yrange=c(-7,1))
 ```
 
@@ -149,29 +148,101 @@ mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins4
 all_obs<- get_all_corr(mt)
 
 df<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
-                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Z_{1}",all_obs=all_obs,mt=mt,df ,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Z_{2}",all_obs=all_obs,mt=mt,df ,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
 dfa<-read.table("/home/garofalo/Downloads/z0_iset0.dat")
 gg<- plot_df_corr_ggplot(df)+xlim(0,48)
 dfa<-dfa[-1,]
-gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,2], color="Antonio"  ,shape="Antonio"   ,fill="Antonio"      ))
+
+name_Z0<- "Antoni Z0"
+gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,2], color=name_Z0  ,shape=name_Z0   ,fill=name_Z0      ))
 gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3]
                          , ymax=dfa[,2]+dfa[,3]
-                         , color="Antonio"  ,shape="Antonio"   ,fill="Antonio"      ))
+                         ,color=name_Z0  ,shape=name_Z0   ,fill=name_Z0      ))
+name_Z1<- "Antoni Z1"
+gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,4], color=name_Z1  ,shape=name_Z1   ,fill=name_Z1     ))
+gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,4]-dfa[,5]
+                         , ymax=dfa[,4]+dfa[,5]
+                         , color=name_Z1  ,shape=name_Z1   ,fill=name_Z1      ))
+name_Z2<- "Antoni Z2"
+gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,6], color=name_Z2  ,shape=name_Z2   ,fill=name_Z2      ))
+gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,6]-dfa[,7]
+                         , ymax=dfa[,6]+dfa[,7]
+                         ,  color=name_Z2  ,shape=name_Z2   ,fill=name_Z2      ))
+
+
+
 l<-df[c(1:40),2]/dfa[,2]
 dfc<-read.table("/home/garofalo/Downloads/datacorr_t1_16_t2_42.csv", header = TRUE)
-#gg<-gg+geom_point(aes(x=dfc[,1], y=dfc[,4], color="Christiane"  ,shape="Christiane"   ,fill="Christiane"      ))
-#gg<-gg+geom_errorbar(aes(x=dfc[,1], ymin=dfc[,4]-dfc[,5]
-#                         , ymax=dfc[,4]+dfc[,5]
-#                         , color="Christiane"  ,shape="Christiane"   ,fill="Christiane"      ))
-
-
- #gg<-gg+ geom_point(aes(x=dfa[,1], y=l, color="ratio" ,shape="ratio"   ,fill="ratio") )
-# gg<-gg+geom_error(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3],
-#                     ymax=dfa[,2]+dfa[,3]
-#                                                ),color="green")
 gg<- gg+  scale_y_continuous(trans='log')
 
 fig<- myplotly(gg,"","t", "$\\log(Z_0)$", to_print=TRUE , 
-               xrange=c(0,48))
+               xrange=c(0,32))
+```
+
+## Comparison of the insertions time
+
+The quantity $Z_0$ is proportional to 
+
+$$
+C_{\mu,\nu}= \langle D_s(t_{sink}) J^\dagger(t_2) J^\dagger(t_1)  D_s(0)  \rangle
+$$
+
+the comparison is done on 193 Confs:
+```{.r}
+a0572 a0564 a0556 a0548 a0540 a0532 a0524 a0516 a0508 a0500 b0008 b0016 b0032 
+b0040 b0048 b0056 b0064 b0072 b0080 b0088 b0096 b0104 b0112 b0120 b0128 b0136 
+b0144 b0152 b0160 b0168 b0176 b0184 b0192 b0200 b0208 b0216 b0224 b0232 b0240 
+b0248 b0256 b0264 b0272 b0280 b0288 b0296 b0304 b0312 b0320 b0328 b0336 b0344 
+b0352 b0360 b0368 b0376 b0384 b0392 b0400 b0408 b0416 b0424 b0432 b0440 b0448 
+b0456 b0472 b0480 b0488 b0496 b0504 b0512 b0520 b0528 b0536 b0544 b0552 b0560 
+b0568 b0576 b0584 b0592 b0600 b0608 b0616 b0624 b0632 b0640 b0648 b0656 b0664 
+b0672 b0680 b0688 b0696 b0704 b0720 b0728 b0736 b0744 b0752 b0760 b0768 b0776 
+b0784 b0792 b0800 b0808 b0816 b0824 b0832 b0840 b0848 b0856 b0864 b0872 b0880 
+b0888 b0896 b0904 b0912 b0920 b0928 b0936 b0944 b0952 b0960 b0968 b0976 b0984 
+b0992 b1000 b1008 b1016 b1024 b1032 b1040 b1048 b1056 b1064 b1072 b1088 b1096 
+b1104 b1112 b1120 b1128 b1136 b1144 b1152 b1160 b1168 b1176 b1184 b1192 b1200 
+b1208 b1216 b1232 b1240 b1248 b1264 b1272 b1280 b1288 b1296 b1304 b1312 b1320 
+b1328 b1336 b1344 b1352 b1360 b1368 b1376 b1384 b1392 b1400 b1408 b1416 b1424 
+b1432 b1440 b1448 b1456 b1464 b1472 b1480 b1488 b1496 b1504 b1512
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| warning: false
+  th<-6
+df<-data.frame()
+
+  file<- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins40_ins56_th",th,"_200.dat_output")
+  mt<-read_df(file)
+  all_obs<- get_all_corr(mt)
+
+  dft<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
+                   log = TRUE, number = NULL,nudge = 0,print_res = FALSE)
+  dft$ins<- "t2=40 tsink=56"
+  df<- rbind (df,dft)
+  file<- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th",th,"_200.dat_output")
+  mt<-read_df(file)
+  all_obs<- get_all_corr(mt)
+
+  dft<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
+                   log = TRUE, number = NULL,nudge = 0.2,print_res = FALSE)
+  dft$ins<- "t2=48 tsink=64"
+  df<- rbind (df,dft)
+  
+  gg<- myggplot(fill = FALSE)+ geom_point(data=df , mapping=aes(x=x,y=y,
+                                                          color=as.factor(ins),
+                                                          shape=as.factor(ins)))
+gg<- gg +  geom_errorbar(data=df , mapping=aes(x=x,ymax=y+err,ymin=y-err,
+                                                          color=as.factor(ins),
+                                                          shape=as.factor(ins)), width=0.55)
+
+fig<- myplotly(gg,"","$t_2-t_1$", "$\\log(Z_0)$", to_print=TRUE , 
+               xrange=c(0,40), yrange=c(-7,1))
+  
 ```

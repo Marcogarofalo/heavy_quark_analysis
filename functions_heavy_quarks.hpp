@@ -33,8 +33,8 @@ double** compute_Y5(int j, double**** in, int t, struct fit_type fit_info);
 double** compute_Z_factors(int j, double**** in, int t, struct fit_type fit_info);
 
 double lhs_function_ZPS(int j, double**** in, int t, struct fit_type fit_info);
-
-
+double lhs_function_f_PS_ss_ls(int j, double**** in, int t, struct fit_type fit_info);
+double lhs_function_me(int j, double**** in, int t, struct fit_type fit_info);
 
 double lhs_2fit_par(int j, double**** in, int t, struct fit_type fit_info) ;
 double rhs_2fit_par(int n, int Nvar, double* x, int Npar, double* P);

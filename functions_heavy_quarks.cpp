@@ -83,17 +83,17 @@ double** compute_Mmunu(int j, double**** in, int t, struct fit_type fit_info) {
     int VA = fit_info.corr_id[2];
     int AV = fit_info.corr_id[3];
     int C2 = fit_info.corr_id[4];
-    int dt = fit_info.myen[0]-fit_info.myen[1];
+    int dt = fit_info.myen[0] - fit_info.myen[1];
 
     double M = fit_info.ext_P[0][j];
-    int t1= (fit_info.myen[1]-t);
-    if (t1<0 ) {r[0][0]=0; r[0][1]=0; return r;}
-    r[0][0] = in[j][VV][t1][0] + in[j][AA][t1][0] ;//- in[j][VA][t][0] - in[j][AV][t][0];
-    r[0][0] /= in[j][C2][t1][0] * exp(-M*dt );
+    int t1 = (fit_info.myen[1] - t);
+    if (t1 < 0) { r[0][0] = 0; r[0][1] = 0; return r; }
+    r[0][0] = in[j][VV][t1][0] + in[j][AA][t1][0];//- in[j][VA][t][0] - in[j][AV][t][0];
+    r[0][0] /= in[j][C2][t1][0] * exp(-M * dt);
     r[0][0] *= M;
 
-    r[0][1] = in[j][VV][t1][1] + in[j][AA][t1][1] ;//- in[j][VA][t][0] - in[j][AV][t][0];
-    r[0][1] /= in[j][C2][t1][0] * exp(-M*dt );
+    r[0][1] = in[j][VV][t1][1] + in[j][AA][t1][1];//- in[j][VA][t][0] - in[j][AV][t][0];
+    r[0][1] /= in[j][C2][t1][0] * exp(-M * dt);
     r[0][1] *= M;
 
     return r;
@@ -151,8 +151,8 @@ double** compute_Y5(int j, double**** in, int t, struct fit_type fit_info) {
     error(fit_info.corr_id.size() != id_input, 1, "compute Y5", "fit_info.corr_id.size() must be %d, intead it is %d",
         id_input, fit_info.corr_id.size());
     // there is an i in front
-    Y[0][0] = (in[j][W12][t][1]  - in[j][W21][t][1])/ 2.0;
-    Y[0][1] = -(in[j][W12][t][0] - in[j][W21][t][0])/ 2.0;
+    Y[0][0] = (in[j][W12][t][1] - in[j][W21][t][1]) / 2.0;
+    Y[0][1] = -(in[j][W12][t][0] - in[j][W21][t][0]) / 2.0;
     return Y;
 }
 
@@ -171,8 +171,8 @@ double** compute_Z_factors(int j, double**** in, int t, struct fit_type fit_info
     Z[1][0] = 2.0 * (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0] - in[j][Y4][t][0]);
     Z[1][1] = 2.0 * (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1] - in[j][Y4][t][1]);
 
-    Z[2][0] = (in[j][Y3][t][0] - 2.0*in[j][Y1][t][0]) ;
-    Z[2][1] = (in[j][Y3][t][1] - 2.0*in[j][Y1][t][1]) ;
+    Z[2][0] = (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0]);
+    Z[2][1] = (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1]);
     return Z;
 }
 
@@ -193,4 +193,29 @@ double lhs_2fit_par(int j, double**** in, int t, struct fit_type fit_info) {
 double rhs_2fit_par(int n, int Nvar, double* x, int Npar, double* P) {
     int t = x[0];
     return 0.5 * P[1] * P[1] * (exp(-(P[0] * t)) + exp(-(P[0] * (file_head.l0 - t))));
+}
+
+
+double lhs_function_f_PS_ss_ls(int j, double**** in, int t, struct fit_type fit_info) {
+    int id = fit_info.corr_id[0];
+    double amp = 0;
+    double M = fit_info.ext_P[0][j];
+    double me_ss = fit_info.ext_P[1][j];
+    double mu1 = fit_info.ext_P[2][j];
+    double mu2 = fit_info.ext_P[3][j];
+
+
+    double me = me_ss * in[j][fit_info.corr_id[0]][t][0] / in[j][fit_info.corr_id[1]][t][0];
+    return (mu1 + mu2) * me / (M * sinh(M));
+}
+
+
+double lhs_function_me(int j, double**** in, int t, struct fit_type fit_info) {
+    int id = fit_info.corr_id[0];
+    double amp = 0;
+    double M = fit_info.ext_P[0][j];
+
+
+    double me = in[j][fit_info.corr_id[0]][t][0] * 2 * M / (exp(-t * M) + exp(-(fit_info.T - t) * M));
+    return sqrt(me);
 }
