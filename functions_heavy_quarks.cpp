@@ -84,6 +84,8 @@ double** compute_Mmunu(int j, double**** in, int t, struct fit_type fit_info) {
     int AV = fit_info.corr_id[3];
     int C2 = fit_info.corr_id[4];
     int dt = fit_info.myen[0] - fit_info.myen[1];
+    int mu = fit_info.myen[2];
+    int nu = fit_info.myen[3];
 
     double M = fit_info.ext_P[0][j];
     int t1 = (fit_info.myen[1] - t);
@@ -95,6 +97,17 @@ double** compute_Mmunu(int j, double**** in, int t, struct fit_type fit_info) {
     r[0][1] = in[j][VV][t1][1] + in[j][AA][t1][1];//- in[j][VA][t][0] - in[j][AV][t][0];
     r[0][1] /= in[j][C2][t1][0] * exp(-M * dt);
     r[0][1] *= M;
+    
+    if ((mu == 1 && nu == 2) || (mu == 2 && nu == 1)) {
+        
+        r[0][0] = - in[j][VA][t][0] - in[j][AV][t][0];
+        r[0][0] /= in[j][C2][t1][0] * exp(-M * dt);
+        r[0][0] *= M;
+
+        r[0][1] = - in[j][VA][t][0] - in[j][AV][t][0];
+        r[0][1] /= in[j][C2][t1][0] * exp(-M * dt);
+        r[0][1] *= M;
+    }
 
     return r;
 }
@@ -107,8 +120,8 @@ double** compute_Y1(int j, double**** in, int t, struct fit_type fit_info) {
     int id_input = 2;
     error(fit_info.corr_id.size() != id_input, 1, "compute Y1", "fit_info.corr_id.size() must be %d, intead it is %d",
         id_input, fit_info.corr_id.size());
-    Y1[0][0] = (in[j][W11][t][0] + in[j][W22][t][0]);
-    Y1[0][1] = (in[j][W11][t][1] + in[j][W22][t][1]);
+    Y1[0][0] = (in[j][W11][t][0] + in[j][W22][t][0])/2.0 ;
+    Y1[0][1] = (in[j][W11][t][1] + in[j][W22][t][1])/2.0 ;
     return Y1;
 }
 
@@ -139,8 +152,8 @@ double** compute_Y4(int j, double**** in, int t, struct fit_type fit_info) {
     int id_input = 2;
     error(fit_info.corr_id.size() != id_input, 1, "compute Y4", "fit_info.corr_id.size() must be %d, intead it is %d",
         id_input, fit_info.corr_id.size());
-    Y[0][0] = -(in[j][W03][t][1]);// + in[j][W30][t][1]);
-    Y[0][1] = (in[j][W03][t][0]);// + in[j][W30][t][0]);
+    Y[0][0] = -(in[j][W03][t][1] + in[j][W30][t][1])/2.0;
+    Y[0][1] = (in[j][W03][t][0] + in[j][W30][t][0])/2.0;
     return Y;
 }
 double** compute_Y5(int j, double**** in, int t, struct fit_type fit_info) {
