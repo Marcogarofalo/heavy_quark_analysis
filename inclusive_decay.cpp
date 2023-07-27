@@ -116,7 +116,8 @@ int main(int argc, char** argv) {
         Njack = 0;
         error(1 == 1, 1, "main", "argv[7]= %s is not jack or boot", argv[7]);
     }
-
+    // now Njack need to be the number of jacks
+    head.Njack=Njack;
     //////////////////////////////////// setup output files
     mysprintf(namefile, NAMESIZE, "%s/out/%s_output", option[3], option[6]);
     printf("writing output in :\n %s \n", namefile);
