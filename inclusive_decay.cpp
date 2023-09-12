@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
         error(1 == 1, 1, "main", "argv[7]= %s is not jack or boot", argv[7]);
     }
     // now Njack need to be the number of jacks
-    head.Njack=Njack;
+    head.Njack = Njack;
     //////////////////////////////////// setup output files
     mysprintf(namefile, NAMESIZE, "%s/out/%s_output", option[3], option[6]);
     printf("writing output in :\n %s \n", namefile);
@@ -310,6 +310,13 @@ int main(int argc, char** argv) {
     int TJW, TDs, myerr, myseed;
     line_read_param(option, "TJW", TJW, myerr, myseed, namefile_plateaux);
     line_read_param(option, "TDs", TDs, myerr, myseed, namefile_plateaux);
+    double ZA, ZV, dZA, dZV;
+
+    line_read_param(option, "ZA", ZA, dZA, myseed, namefile_plateaux);
+    double* ZA_jack = myres->create_fake(ZA, dZA, myseed);
+    line_read_param(option, "ZV", ZV, dZV, myseed, namefile_plateaux);
+    double* ZV_jack = myres->create_fake(ZV, dZV, myseed);
+
     for (int mu = 0; mu < 4;mu++) {  // C_munu   mu runs faster // mu is given by the gamma // nu by the insertion
         for (int nu = 0; nu < 4;nu++) {
 
@@ -319,9 +326,11 @@ int main(int argc, char** argv) {
 
             fit_info.T = head.T;
             fit_info.myen = { TDs, TJW ,mu, nu };
-            fit_info.n_ext_P = 1;
+            fit_info.n_ext_P = 3;
             fit_info.ext_P = (double**)malloc(sizeof(double*) * fit_info.n_ext_P);
             fit_info.ext_P[0] = M_Ds;
+            fit_info.ext_P[1] = ZA_jack;
+            fit_info.ext_P[2] = ZV_jack;
             // fit_info.ext_P[1] = (double*)malloc(sizeof(double) * Njack);
             // for (size_t j = 0; j < Njack; j++) {
             //     fit_info.ext_P[1][j] = 
@@ -401,6 +410,22 @@ int main(int argc, char** argv) {
     fit_info.corr_id = { id_Mmunu[1][2],id_Mmunu[2][1] };
     add_correlators(option, ncorr_new, conf_jack, compute_Y1, fit_info);
 
+    for (int i = 1;i < 6;i++) {
+        char name[NAMESIZE];
+        mysprintf(name, NAMESIZE, "Y_{%d}", i);
+        double* Y = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Y[i], name, identity, jack_file);
+        check_correlatro_counter(38 + (i-1) * 2);
+        free(Y);
+        mysprintf(name, NAMESIZE, "ImY_{%d}", i);
+        Y = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Y[i], name, identity_im, jack_file);
+        check_correlatro_counter(39 + (i-1) * 2);
+        free(Y);
+    }
+
     // Z0 Z1 Z2
     std::vector<int> id_Z = { ncorr_new, ncorr_new + 1, ncorr_new + 2 };
     fit_info.N = 3;
@@ -417,13 +442,13 @@ int main(int argc, char** argv) {
         double* Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Z[i], name, identity, jack_file);
-        check_correlatro_counter(38 + i * 2);
+        check_correlatro_counter(48 + i * 2);
         free(Z);
         mysprintf(name, NAMESIZE, "ImZ_{%d}", i);
         Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Z[i], name, identity_im, jack_file);
-        check_correlatro_counter(39 + i * 2);
+        check_correlatro_counter(50 + i * 2);
         free(Z);
     }
 

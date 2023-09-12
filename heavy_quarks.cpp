@@ -601,7 +601,7 @@ int main(int argc, char** argv) {
     option, kinematic_2pt, (char*)"P5P5", conf_jack, namefile_plateaux,
     outfile, lhs_function_f_PS_ss_ls, "f_{Ds-00-ss-ls}", fit_info, jack_file);
   check_correlatro_counter(25);
-  
+
   fit_info.restore_default();
 
 
