@@ -450,18 +450,24 @@ int main(int argc, char** argv) {
         Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Z[i], name, identity_im, jack_file);
-        check_correlatro_counter(50 + i * 2);
+        check_correlatro_counter(49 + i * 2);
         free(Z);
     }
 
     double prec = 50 * 3.33;
-    int tmax = 48;
+    int tmax = 32;
     double E0 = 0.5;
     HLT_type HLT_space(tmax, head.T, E0, HLT_EXP_b, prec);
-    std::vector<double>  theta_p = { 1 };
-    wrapper_smearing Delta(theta_s1_HLT, theta_p, &HLT_space);
+    std::vector<double>  theta_p = {0, 1};
+    wrapper_smearing Delta(theta_s_HLT, theta_p, &HLT_space);
     HLT_space.compute_f_EXP_b(Delta);
 
+    fit_type_HLT fit_info_HLT;
+    fit_info_HLT.Njack = Njack;
+    fit_info_HLT.T = head.T;
+    fit_info_HLT.corr_id = { id_Z[0] };
+    fit_info_HLT.lambdas = { 0 , 0.5, 1 };
+    double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, outfile, "HLT_Z0", Delta, jack_file, fit_info_HLT);
 
 
     // eg of fit to correlator
