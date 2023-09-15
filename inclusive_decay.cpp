@@ -21,6 +21,8 @@
 #include "fit_all.hpp"
 #include "functions_heavy_quarks.hpp"
 #include "tower.hpp"
+#include "HLT.hpp"
+
 struct kinematic kinematic_2pt;
 
 char** argv_to_options(char** argv) {
@@ -416,13 +418,13 @@ int main(int argc, char** argv) {
         double* Y = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Y[i], name, identity, jack_file);
-        check_correlatro_counter(38 + (i-1) * 2);
+        check_correlatro_counter(38 + (i - 1) * 2);
         free(Y);
         mysprintf(name, NAMESIZE, "ImY_{%d}", i);
         Y = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Y[i], name, identity_im, jack_file);
-        check_correlatro_counter(39 + (i-1) * 2);
+        check_correlatro_counter(39 + (i - 1) * 2);
         free(Y);
     }
 
@@ -452,6 +454,13 @@ int main(int argc, char** argv) {
         free(Z);
     }
 
+    double prec = 50 * 3.33;
+    int tmax = 48;
+    double E0 = 0.5;
+    HLT_type HLT_space(tmax, head.T, E0, HLT_EXP_b, prec);
+    std::vector<double>  theta_p = { 1 };
+    wrapper_smearing Delta(theta_s1_HLT, theta_p, &HLT_space);
+    HLT_space.compute_f_EXP_b(Delta);
 
 
 
