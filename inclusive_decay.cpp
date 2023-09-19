@@ -454,19 +454,22 @@ int main(int argc, char** argv) {
         free(Z);
     }
 
-    double prec = 50 * 3.33;
-    int tmax = 32;
-    double E0 = 0.5;
-    HLT_type HLT_space(tmax, head.T, E0, HLT_EXP_b, prec);
-    std::vector<double>  theta_p = {0, 1};
-    wrapper_smearing Delta(theta_s_HLT, theta_p, &HLT_space);
+    HLT_type_input HLT_info;
+    HLT_info.tmax = 32;
+    HLT_info.T = head.T;
+    HLT_info.E0 = 0.1;
+    HLT_info.type_b = HLT_EXP_b;
+    HLT_info.prec = 50 * 3.33;
+    HLT_type HLT_space(HLT_info);
+    std::vector<double>  theta_p = { 0.5, 0.1 };
+    // wrapper_smearing Delta(theta_s_HLT, theta_p, &HLT_space);
+    wrapper_smearing Delta(gaussian_for_HLT, theta_p, &HLT_space);
     HLT_space.compute_f_EXP_b(Delta);
 
     fit_type_HLT fit_info_HLT;
     fit_info_HLT.Njack = Njack;
-    fit_info_HLT.T = head.T;
     fit_info_HLT.corr_id = { id_Z[0] };
-    fit_info_HLT.lambdas = { 0 , 0.5, 1 };
+    fit_info_HLT.lambdas = { 0.01, 0.5 };
     double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, outfile, "HLT_Z0", Delta, jack_file, fit_info_HLT);
 
 
