@@ -126,5 +126,62 @@ df<-rbind(df,tmp)
 
 gg<- plot_df_corr_ggplot(df, noribbon = TRUE)
 
-fig<- myplotly(gg,"","t", "$M_{eff}$", to_print=TRUE )
+fig<- myplotly(gg,"","t", "$Y$", to_print=TRUE )
+```
+
+
+
+
+
+#  Z
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+
+df<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Z_{1}",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Z_{2}",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+
+######################################################
+
+Ylog<-read_df("/home/garofalo/analysis/heavy_quarks/data_htl_format/cB211ab.07.64/t48_64/outputDGammaDq2/Z.dat")
+##############################
+dfY<- get_block_n(Ylog,1)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Z0_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+dfY<- get_block_n(Ylog,1.5)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Z1_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+dfY<- get_block_n(Ylog,2)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Z2_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+
+
+
+
+gg<- plot_df_corr_ggplot(df, noribbon = TRUE)
+
+fig<- myplotly(gg,"","t", "$Z$", to_print=TRUE )
 ```

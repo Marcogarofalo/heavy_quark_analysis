@@ -441,6 +441,10 @@ int main(int argc, char** argv) {
     fit_info.Njack = Njack;
     fit_info.T = head.T;
     fit_info.corr_id = id_Y;
+    fit_info.n_ext_P = 1;
+    fit_info.ext_P = (double**)malloc(sizeof(double*) * fit_info.n_ext_P); // pass only the pointer
+    fit_info.ext_P[0] = M_Ds;
+
     add_correlators(option, ncorr_new, conf_jack, compute_Z_factors, fit_info);
 
     fit_info.restore_default();

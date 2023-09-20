@@ -182,14 +182,16 @@ double** compute_Z_factors(int j, double**** in, int t, struct fit_type fit_info
     int id_input = 6;
     error(fit_info.corr_id.size() != id_input, 1, "compute Y1", "fit_info.corr_id.size() must be %d, intead it is %d",
         id_input, fit_info.corr_id.size());
-    Z[0][0] = (in[j][Y2][t][0] + in[j][Y3][t][0] - 2 * in[j][Y4][t][0]);
-    Z[0][1] = (in[j][Y2][t][1] + in[j][Y3][t][1] - 2 * in[j][Y4][t][1]);
+    double M = fit_info.ext_P[0][j];
+    double norm = 2 * M_PI / M;
+    Z[0][0] = norm * (in[j][Y2][t][0] + in[j][Y3][t][0] - 2 * in[j][Y4][t][0]);
+    Z[0][1] = norm * (in[j][Y2][t][1] + in[j][Y3][t][1] - 2 * in[j][Y4][t][1]);
 
-    Z[1][0] = 2.0 * (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0] - in[j][Y4][t][0]);
-    Z[1][1] = 2.0 * (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1] - in[j][Y4][t][1]);
+    Z[1][0] = norm * 2.0 * (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0] - in[j][Y4][t][0]);
+    Z[1][1] = norm * 2.0 * (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1] - in[j][Y4][t][1]);
 
-    Z[2][0] = (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0]);
-    Z[2][1] = (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1]);
+    Z[2][0] = norm * (in[j][Y3][t][0] - 2.0 * in[j][Y1][t][0]);
+    Z[2][1] = norm * (in[j][Y3][t][1] - 2.0 * in[j][Y1][t][1]);
     return Z;
 }
 
