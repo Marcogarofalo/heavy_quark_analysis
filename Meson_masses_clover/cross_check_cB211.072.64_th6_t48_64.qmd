@@ -1,0 +1,130 @@
+# cross check cB211.072.64 th6 t48-64
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+require(tikzDevice)
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
+myplotly(ggplot())
+```
+
+## Effective mass $D_s$
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_output")
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "M_{Ds}_ss",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+
+######################################################à
+
+Ylog<-read_df("/home/garofalo/analysis/heavy_quarks/data_htl_format/cB211ab.07.64/t48_64/outputY/Y.log")
+dfY<- get_block_n(Ylog,5)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,2],
+                "y"=dfY[,5],
+                "err"=dfY[,6],
+                "xfit"=dfY[,2],
+                "fit"=dfY[,7],
+                "errfit"=dfY[,8],
+                "label"="meff_hlt",
+                "tmin"=tmin,
+                "tmax"=tmax
+                )
+df<-rbind(df,tmp)
+
+
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","t", "$M_{eff}$", to_print=TRUE )
+```
+
+
+#  Y
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+
+df<-add_corr_to_df(string = "Y_{1}",all_obs=all_obs,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Y_{2}",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Y_{3}",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Y_{4}",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df<-add_corr_to_df(string = "Y_{5}",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+
+######################################################
+
+Ylog<-read_df("/home/garofalo/analysis/heavy_quarks/data_htl_format/cB211ab.07.64/t48_64/outputY/Y.dat")
+##############################
+dfY<- get_block_n(Ylog,1)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Y1_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+dfY<- get_block_n(Ylog,1.5)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Y2_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+dfY<- get_block_n(Ylog,2)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Y3_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+dfY<- get_block_n(Ylog,2.5)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Y4_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+dfY<- get_block_n(Ylog,3)
+list<-which(dfY[,7]!=0)
+tmin<- dfY[list[1],2]
+tmax<- dfY[list[length(list)],2][]
+tmp<-data.frame("x"=dfY[,6], "y"=dfY[,7], "err"=dfY[,8], "xfit"=dfY[,2],
+                "fit"=dfY[,7], "errfit"=dfY[,8], "label"="Y5_hlt",
+                "tmin"=tmin, "tmax"=tmax          )
+df<-rbind(df,tmp)
+##############################
+
+
+
+gg<- plot_df_corr_ggplot(df, noribbon = TRUE)
+
+fig<- myplotly(gg,"","t", "$M_{eff}$", to_print=TRUE )
+```

@@ -163,6 +163,13 @@ int main(int argc, char** argv) {
     mysprintf(namefile, NAMESIZE, "%s/out/%s_gamma", option[3], option[6]);
     FILE* out_gamma = open_file(namefile, "w+");
 
+    mysprintf(namefile, NAMESIZE, "%s/out/%s_HLT_kernel", option[3],
+        option[6]);
+    FILE* outfile_HLT_kernel = open_file(namefile, "w+");
+    mysprintf(namefile, NAMESIZE, "%s/out/%s_HLT_AoverB", option[3],
+        option[6]);
+    FILE* outfile_HLT_AoverB = open_file(namefile, "w+");
+
     char save_option[NAMESIZE];
     sprintf(save_option, "%s", option[1]);
     sprintf(option[1], "blind");
@@ -410,7 +417,7 @@ int main(int argc, char** argv) {
     // Y5
     id_Y[5] = ncorr_new;
     fit_info.corr_id = { id_Mmunu[1][2],id_Mmunu[2][1] };
-    add_correlators(option, ncorr_new, conf_jack, compute_Y1, fit_info);
+    add_correlators(option, ncorr_new, conf_jack, compute_Y5, fit_info);
 
     for (int i = 1;i < 6;i++) {
         char name[NAMESIZE];
@@ -470,7 +477,9 @@ int main(int argc, char** argv) {
     fit_info_HLT.Njack = Njack;
     fit_info_HLT.corr_id = { id_Z[0] };
     fit_info_HLT.lambdas = { 0.01, 0.5 };
-    double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, outfile, "HLT_Z0", Delta, jack_file, fit_info_HLT);
+    fit_info_HLT.outfile_kernel = outfile_HLT_kernel;
+    fit_info_HLT.outfile_AoverB = outfile_HLT_AoverB;
+    double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0", Delta, jack_file, fit_info_HLT);
 
 
     // eg of fit to correlator
