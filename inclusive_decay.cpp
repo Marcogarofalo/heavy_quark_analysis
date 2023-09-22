@@ -480,9 +480,11 @@ int main(int argc, char** argv) {
     fit_type_HLT fit_info_HLT;
     fit_info_HLT.Njack = Njack;
     fit_info_HLT.corr_id = { id_Z[0] };
-    fit_info_HLT.lambdas = { 0.01, 0.5 };
+    fit_info_HLT.lambdas = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9  };
     fit_info_HLT.outfile_kernel = outfile_HLT_kernel;
     fit_info_HLT.outfile_AoverB = outfile_HLT_AoverB;
+    fit_info_HLT.maxE_check_reconstuct =2;
+    fit_info_HLT.stepsE_check_reconstuct=100;
     double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0", Delta, jack_file, fit_info_HLT);
 
 
