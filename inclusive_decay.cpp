@@ -468,23 +468,33 @@ int main(int argc, char** argv) {
     HLT_type_input HLT_info;
     HLT_info.tmax = 32;
     HLT_info.T = head.T;
-    HLT_info.E0 = 0.1;
     HLT_info.type_b = HLT_EXP_b;
-    HLT_info.prec = 50 * 3.33;
+    HLT_info.prec = 100 * 3.33;
+    double omega = head.thetas[0] * M_PI / (head.L * M_Ds[Njack - 1]);
+    double sigma1, dsigma1, E0_HLT;
+    line_read_param(option, "sigma1", sigma1, dsigma1, myseed, namefile_plateaux);
+    line_read_param(option, "E0_HLT", E0_HLT, dsigma1, myseed, namefile_plateaux);
+    std::vector<double>  theta_p(3);
+    theta_p[0] = (1 - omega) * M_Ds[Njack - 1];
+    theta_p[1] = sigma1 * M_Ds[Njack - 1];
+    theta_p[2] = pow(omega, 3);
+    HLT_info.E0 = E0_HLT * M_Ds[Njack - 1];
     HLT_type HLT_space(HLT_info);
-    std::vector<double>  theta_p = { 0.5, 0.1 };
-    // wrapper_smearing Delta(theta_s_HLT, theta_p, &HLT_space);
-    wrapper_smearing Delta(gaussian_for_HLT, theta_p, &HLT_space);
+
+    wrapper_smearing Delta(c_theta_s_HLT, theta_p, &HLT_space);
+    // wrapper_smearing Delta(gaussian_for_HLT, theta_p, &HLT_space);
     HLT_space.compute_f_EXP_b(Delta);
 
     fit_type_HLT fit_info_HLT;
     fit_info_HLT.Njack = Njack;
     fit_info_HLT.corr_id = { id_Z[0] };
-    fit_info_HLT.lambdas = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9  };
+    fit_info_HLT.lambdas = { 0.001, 0.004, 0.005,  0.01, 0.015, 0.02, 0.025, 0.03 ,0.04 , 0.05 , 0.06    };
+    // fit_info_HLT.lambdas = {0.0, 0.1};
     fit_info_HLT.outfile_kernel = outfile_HLT_kernel;
     fit_info_HLT.outfile_AoverB = outfile_HLT_AoverB;
-    fit_info_HLT.maxE_check_reconstuct =2;
-    fit_info_HLT.stepsE_check_reconstuct=100;
+    fit_info_HLT.outfile = outfile;
+    fit_info_HLT.maxE_check_reconstuct = 2;
+    fit_info_HLT.stepsE_check_reconstuct = 100;
     double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0", Delta, jack_file, fit_info_HLT);
 
 
