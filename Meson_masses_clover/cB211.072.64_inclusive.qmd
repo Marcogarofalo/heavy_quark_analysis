@@ -154,30 +154,30 @@ df<-add_corr_to_df(string = "Z_{1}",all_obs=all_obs,mt=mt,df ,
 df<-add_corr_to_df(string = "Z_{2}",all_obs=all_obs,mt=mt,df ,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
-dfa<-read.table("/home/garofalo/Downloads/z0_iset0.dat")
-gg<- plot_df_corr_ggplot(df)+xlim(0,48)
-dfa<-dfa[-1,]
+# dfa<-read.table("/home/garofalo/Downloads/z0_iset0.dat")
+# gg<- plot_df_corr_ggplot(df)+xlim(0,48)
+# dfa<-dfa[-1,]
+# 
+# name_Z0<- "Antoni Z0"
+# gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,2], color=name_Z0  ,shape=name_Z0   ,fill=name_Z0      ))
+# gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3]
+#                          , ymax=dfa[,2]+dfa[,3]
+#                          ,color=name_Z0  ,shape=name_Z0   ,fill=name_Z0      ))
+# name_Z1<- "Antoni Z1"
+# gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,4], color=name_Z1  ,shape=name_Z1   ,fill=name_Z1     ))
+# gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,4]-dfa[,5]
+#                          , ymax=dfa[,4]+dfa[,5]
+#                          , color=name_Z1  ,shape=name_Z1   ,fill=name_Z1      ))
+# name_Z2<- "Antoni Z2"
+# gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,6], color=name_Z2  ,shape=name_Z2   ,fill=name_Z2      ))
+# gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,6]-dfa[,7]
+#                          , ymax=dfa[,6]+dfa[,7]
+#                          ,  color=name_Z2  ,shape=name_Z2   ,fill=name_Z2      ))
 
-name_Z0<- "Antoni Z0"
-gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,2], color=name_Z0  ,shape=name_Z0   ,fill=name_Z0      ))
-gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,2]-dfa[,3]
-                         , ymax=dfa[,2]+dfa[,3]
-                         ,color=name_Z0  ,shape=name_Z0   ,fill=name_Z0      ))
-name_Z1<- "Antoni Z1"
-gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,4], color=name_Z1  ,shape=name_Z1   ,fill=name_Z1     ))
-gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,4]-dfa[,5]
-                         , ymax=dfa[,4]+dfa[,5]
-                         , color=name_Z1  ,shape=name_Z1   ,fill=name_Z1      ))
-name_Z2<- "Antoni Z2"
-gg<-gg+geom_point(aes(x=dfa[,1], y=dfa[,6], color=name_Z2  ,shape=name_Z2   ,fill=name_Z2      ))
-gg<-gg+geom_errorbar(aes(x=dfa[,1], ymin=dfa[,6]-dfa[,7]
-                         , ymax=dfa[,6]+dfa[,7]
-                         ,  color=name_Z2  ,shape=name_Z2   ,fill=name_Z2      ))
 
 
-
-l<-df[c(1:40),2]/dfa[,2]
-dfc<-read.table("/home/garofalo/Downloads/datacorr_t1_16_t2_42.csv", header = TRUE)
+# l<-df[c(1:40),2]/dfa[,2]
+# dfc<-read.table("/home/garofalo/Downloads/datacorr_t1_16_t2_42.csv", header = TRUE)
 gg<- gg+  scale_y_continuous(trans='log')
 
 fig<- myplotly(gg,"","t", "$\\log(Z_0)$", to_print=TRUE , 

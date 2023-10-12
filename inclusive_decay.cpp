@@ -111,8 +111,8 @@ int main(int argc, char** argv) {
         myres = new resampling_jack(Neff);
     }
     else if (strcmp(argv[6], "boot") == 0) {
-        Njack = (Neff * 2 + 1);
-        myres = new resampling_boot(Neff * 2);
+        Njack = 1000;//(Neff * 2 + 1);
+        myres = new resampling_boot(Njack - 1);
     }
     else {
         Njack = 0;
@@ -466,36 +466,99 @@ int main(int argc, char** argv) {
     }
 
     HLT_type_input HLT_info;
-    HLT_info.tmax = 32;
+    HLT_info.tmax = 33;
+    HLT_info.tmin = 1;
     HLT_info.T = head.T;
     HLT_info.type_b = HLT_EXP_b;
     HLT_info.prec = 100 * 3.33;
+    HLT_info.integration_maxE = 1e+4;
+    HLT_info.integration_deg_limit = 1e+3;
+    HLT_info.integration_eval_limit = 1e+6;
+    HLT_info.integration_depth_limit = 1e+6;
     double omega = head.thetas[0] * M_PI / (head.L * M_Ds[Njack - 1]);
     double sigma1, dsigma1, E0_HLT;
     line_read_param(option, "sigma1", sigma1, dsigma1, myseed, namefile_plateaux);
     line_read_param(option, "E0_HLT", E0_HLT, dsigma1, myseed, namefile_plateaux);
     std::vector<double>  theta_p(3);
+    // theta_p[0] = 5.739387e-01;//(1 - omega) * M_Ds[Njack - 1];
+    // theta_p[1] = 9.598966e-02;//sigma1 * M_Ds[Njack - 1];
+    // theta_p[2] = 2.254511e-02;//pow(omega, 3);
+    // HLT_info.E0 = 3.9995692470e-02;//E0_HLT * M_Ds[Njack - 1];
+
     theta_p[0] = (1 - omega) * M_Ds[Njack - 1];
     theta_p[1] = sigma1 * M_Ds[Njack - 1];
     theta_p[2] = pow(omega, 3);
     HLT_info.E0 = E0_HLT * M_Ds[Njack - 1];
+
+    printf("T=%d\n", HLT_info.T);
+    printf("sigma=%g\n", theta_p[0]);
+    printf("omega0=%g\n", theta_p[1]);
+    printf("c_0=%g\n", theta_p[2]);
+    printf("E_0=%g\n", HLT_info.E0);
     HLT_type HLT_space(HLT_info);
 
-    wrapper_smearing Delta(c_theta_s_HLT, theta_p, &HLT_space);
-    // wrapper_smearing Delta(gaussian_for_HLT, theta_p, &HLT_space);
-    HLT_space.compute_f_EXP_b(Delta);
 
     fit_type_HLT fit_info_HLT;
     fit_info_HLT.Njack = Njack;
     fit_info_HLT.corr_id = { id_Z[0] };
-    fit_info_HLT.lambdas = { 0.001, 0.004, 0.005,  0.01, 0.015, 0.02, 0.025, 0.03 ,0.04 , 0.05 , 0.06    };
-    // fit_info_HLT.lambdas = {0.0, 0.1};
     fit_info_HLT.outfile_kernel = outfile_HLT_kernel;
     fit_info_HLT.outfile_AoverB = outfile_HLT_AoverB;
     fit_info_HLT.outfile = outfile;
     fit_info_HLT.maxE_check_reconstuct = 2;
     fit_info_HLT.stepsE_check_reconstuct = 100;
-    double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0", Delta, jack_file, fit_info_HLT);
+    fit_info_HLT.lambda_start = pow(2, 14);//3.09454500212;
+    fit_info_HLT.nsame = 6;
+    fit_info_HLT.nlambda_max = 20;
+    fit_info_HLT.reduce_lambda = 0.5;
+    fit_info_HLT.diag_cov = false;
+
+    {
+        HLT_info.alpha = 2.0;
+        HLT_type HLT_space(HLT_info);
+        wrapper_smearing Delta(c_theta_s_HLT, theta_p, &HLT_space);
+        HLT_space.compute_f_EXP_b(Delta);
+        double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0-alpha0", Delta, jack_file, fit_info_HLT);
+
+        HLT_info.alpha = 0.0;
+        HLT_type HLT_space1(HLT_info);
+        wrapper_smearing Delta1(c_theta_s_HLT, theta_p, &HLT_space1);
+        HLT_space1.compute_f_EXP_b(Delta1);
+        double** tmp1 = HLT_space1.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0-alpha1", Delta1, jack_file, fit_info_HLT);
+
+        // {
+        //     HLT_info.E0 = E0_HLT * M_Ds[Njack - 1];
+        //     HLT_info.alpha = 20.0;
+        //     HLT_type HLT_space(HLT_info);
+        //     wrapper_smearing Delta(c_theta_s_HLT, theta_p, &HLT_space);
+        //     HLT_space.compute_f_EXP_b(Delta);
+        //     double** tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0-alpha1-E0o2", Delta, jack_file, fit_info_HLT);
+        //     HLT_info.E0 = E0_HLT * M_Ds[Njack - 1];
+        // }
+
+        HLT_info.alpha = -1.99;
+        HLT_info.integration_deg_limit = 1e+4;
+        HLT_info.integration_eval_limit = 1e+7;
+        HLT_info.integration_depth_limit = 1e+7;
+        HLT_type HLT_space2(HLT_info);
+        wrapper_smearing Delta2(c_theta_s_HLT, theta_p, &HLT_space2);
+        HLT_space2.compute_f_EXP_b(Delta2);
+        double** tmp2 = HLT_space2.HLT_of_corr(option, conf_jack, namefile_plateaux, "HLT_Z0-alpha2", Delta2, jack_file, fit_info_HLT);
+
+
+    }
+
+
+
+    /// Z1
+    theta_p.resize(4);
+    theta_p[0] = 5.739387e-01;//(1 - omega) * M_Ds[Njack - 1];  // omega_0^max
+    theta_p[1] = 9.598966e-02;//sigma1 * M_Ds[Njack - 1];
+    theta_p[2] = 5.726078e-02;//2*pow(omega, 2)*(1 - omega);// 2*pow(omega, 2) omega_0^max
+    theta_p[3] = -9.976810e-02;//-2*pow(omega, 2)/M_Ds[Njack - 1];//
+    HLT_info.E0 = 3.9995692470e-02;//E0_HLT * M_Ds[Njack - 1];
+
+
+
 
 
     // eg of fit to correlator
