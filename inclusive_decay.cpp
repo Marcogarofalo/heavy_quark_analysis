@@ -470,7 +470,7 @@ int main(int argc, char** argv) {
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
     HLT_info.type_b = HLT_EXP_b;
-    HLT_info.prec = 100 * 3.33;
+    HLT_info.prec = 20 * 3.33;
     HLT_info.integration_maxE = 1e+4;
     HLT_info.integration_deg_limit = 1e+3;
     HLT_info.integration_eval_limit = 1e+6;
