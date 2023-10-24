@@ -238,3 +238,9 @@ double lhs_function_me(int j, double**** in, int t, struct fit_type fit_info) {
     double me = in[j][fit_info.corr_id[0]][t][0] * 2 * M / (exp(-t * M) + exp(-(fit_info.T - t) * M));
     return sqrt(me);
 }
+
+//
+double sigma2_fit(int n, int Nvar, double* x, int Npar, double* P) {
+    return P[0]+P[1]*x[0]*x[0];
+}
+
