@@ -467,6 +467,7 @@ int main(int argc, char** argv) {
 
     ///////////// structure for fits alpha
     std::vector<double> alphas = { 2.0,0,-1.99 };
+    // std::vector<double> alphas = { 2.0 };
     data_all jackall;
     jackall.resampling = argv[6];
     jackall.ens = alphas.size();
@@ -478,7 +479,10 @@ int main(int argc, char** argv) {
         jackall.en[i].jack = (double**)malloc(sizeof(double*) * jackall.en[i].Nobs);
     }
     ///////////// structure for fits alpha
-    std::vector<double> sigmas = { 0.12 ,   0.06 , 0.02, 0.05, 0.02 };
+    // std::vector<double> sigmas = { 0.12 ,   0.06 , 0.02, 0.05, 0.02 };
+    std::vector<double> sigmas = {0.120, 0.100, 0.075, 0.050, 0.037, 0.025, 0.017, 0.010, 0.005, 0.0035, 0.002, 0.0005};
+    // std::vector<double> sigmas = { 0.0005 };
+
     data_all jackall_sigma;
     jackall_sigma.resampling = argv[6];
     jackall_sigma.ens = sigmas.size();
@@ -491,18 +495,25 @@ int main(int argc, char** argv) {
 
     }
 
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// HLT
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Z0
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     HLT_type_input HLT_info;
     HLT_info.tmax = 33;
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
     HLT_info.type_b = HLT_EXP_b;
-    HLT_info.prec = 30 * 3.33;
+    HLT_info.prec = 50 * 3.33;
     HLT_info.integration_maxE = 1e+4;
-    HLT_info.integration_deg_limit = 1e+3;
-    HLT_info.integration_eval_limit = 1e+6;
-    HLT_info.integration_depth_limit = 1e+6;
+    HLT_info.integration_deg_limit = 1e+6;//1e+3;
+    HLT_info.integration_eval_limit = 1e+9;//1e+6;
+    HLT_info.integration_depth_limit = 1e+9;//1e+6;
     double omega = head.thetas[0] * M_PI / (head.L * M_Ds[Njack - 1]);
     double sigma1, dsigma1, E0_HLT;
     line_read_param(option, "sigma1", sigma1, dsigma1, myseed, namefile_plateaux);
@@ -518,11 +529,11 @@ int main(int argc, char** argv) {
     HLT_info.E0 = E0_HLT * M_Ds[Njack - 1];
 
     printf("T=%d\n", HLT_info.T);
-    printf("sigma=%g\n", theta_p[0]);
-    printf("omega0=%g\n", theta_p[1]);
+    printf("omega0=%g\n", theta_p[0]);
+    printf("sigma=%g\n", theta_p[1]);
     printf("c_0=%g\n", theta_p[2]);
     printf("E_0=%g\n", HLT_info.E0);
-    HLT_type HLT_space(HLT_info);
+    // HLT_type HLT_space(HLT_info);
 
 
     fit_type_HLT fit_info_HLT;
@@ -539,18 +550,40 @@ int main(int argc, char** argv) {
     fit_info_HLT.reduce_lambda = 0.5;
     fit_info_HLT.diag_cov = false;
 
+    double Max = 0;
+    for (int t = HLT_info.tmin;t < HLT_info.tmax;t++) {
+        theta_p[1] = sigmas[0] * M_Ds[Njack - 1];
+        double a = alphas[0] + t + 1 / theta_p[1];
+        printf("a=%g\n", a);
+        double precision = pow(10, -50);
+        double b = log(precision * a/theta_p[2]);
+        double max = (theta_p[0] / theta_p[1] - b) / a;
+        if (max > Max) Max = max;
+        printf("maxE %d =%g\n", t, max);
+
+    }
+    printf("maxE all t =%g\n",  Max);
+    HLT_info.integration_maxE = 100;//Max*10;
+
+    std::vector<HLT_type*> HLT_space;
+    for (int ai = 0; ai < alphas.size();ai++) {
+        HLT_info.alpha = alphas[ai];
+
+        HLT_space.emplace_back(new HLT_type(HLT_info));
+    }
+
     for (int si = 0;si < sigmas.size(); si++) {
         theta_p[1] = sigmas[si] * M_Ds[Njack - 1];
         for (int ai = 0; ai < alphas.size();ai++) {
-            HLT_info.alpha = alphas[ai];
-            HLT_type HLT_space(HLT_info);
-            wrapper_smearing Delta(c_theta_s_HLT, theta_p, &HLT_space);
-            HLT_space.compute_f_EXP_b(Delta);
+            // HLT_info.alpha = alphas[ai];
+            // HLT_type HLT_space(HLT_info);
+            wrapper_smearing Delta(c_theta_s_HLT, theta_p, HLT_space[ai]);
+            HLT_space[ai]->compute_f_EXP_b(Delta);
             char namefit[NAMESIZE];
-            mysprintf(namefit, NAMESIZE, "HLT_Z0-sig%.3f-alpha%2.2f", sigmas[si], alphas[ai]);
-            fit_result tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
+            mysprintf(namefit, NAMESIZE, "HLT_Z0-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
+            fit_result tmp = HLT_space[ai]->HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
             jackall.en[ai].jack[0] = tmp.P[0];
-            check_correlatro_counter(54 + ai + (alphas.size() + 1) * si);
+            // check_correlatro_counter(54 + ai + (alphas.size() + 1) * si);
         }
         ///// fit in alpha
         fit_info.restore_default();
@@ -578,7 +611,7 @@ int main(int argc, char** argv) {
         fit_info.covariancey = false;
         fit_info.verbosity = 0;
         char namefit[NAMESIZE];
-        mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z0-sig%.3f-alpha", option[6], sigmas[si]);
+        mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z0-sig%f-alpha", option[6], sigmas[si]);
         char** temp_argv = malloc_2<char>(5, NAMESIZE);
         mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
         mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// resampling
@@ -587,13 +620,13 @@ int main(int argc, char** argv) {
 
         fit_info.band_range = { -2,2.1 };
         print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "alpha", fit_inter_alpha, fit_inter_alpha, 0, fit_info.myen.size() - 1, 0.5);
-        write_jack(fit_inter_alpha.P[0], Njack, jack_file);
-        check_correlatro_counter(57 + (alphas.size() + 1) * si);
+        // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
+        // check_correlatro_counter(57 + (alphas.size() + 1) * si);
         jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
     }
     // fit in sigma
     fit_info.restore_default();
-    fit_info.Npar = 1;
+    fit_info.Npar = 2;
     fit_info.Nvar = 1;
     fit_info.Njack = head.Njack;
     fit_info.N = 1;
@@ -612,7 +645,7 @@ int main(int argc, char** argv) {
         }
     }
     fit_info.corr_id = { 0 };
-    fit_info.function = constant_fit;
+    fit_info.function = sigma2_fit;//constant_fit;
     fit_info.linear_fit = true;
     fit_info.covariancey = false;
     fit_info.verbosity = 0;
@@ -627,18 +660,20 @@ int main(int argc, char** argv) {
     fit_info.band_range = { 0,0.15 };
     print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_inter_sigma, fit_inter_sigma, 0, fit_info.myen.size() - 1, 0.01);
     write_jack(fit_inter_sigma.P[0], Njack, jack_file);
-    check_correlatro_counter(74);
+    check_correlatro_counter(54);
 
 
 
-    //////////////////////////////
-
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Z1
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     theta_p.resize(4);
-    theta_p[0] = (1 - omega) * M_Ds[Njack - 1];;//5.739387e-01;//(1 - omega) * M_Ds[Njack - 1];  // omega_0^max
-    // theta_p[1] = 9.598966e-02;//sigma1 * M_Ds[Njack - 1];
-    theta_p[2] = pow(omega, 2) * (1 - omega);// 5.726078e-02;//2*pow(omega, 2)*(1 - omega);// 2*pow(omega, 2) omega_0^max
-    theta_p[3] = -pow(omega, 2) / M_Ds[Njack - 1]; -9.976810e-02;//-2*pow(omega, 2)/M_Ds[Njack - 1];//
+    theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega_0^max
+    // Poly
+    theta_p[2] = pow(omega, 2) * (1 - omega);//  const
+    theta_p[3] = -pow(omega, 2) / M_Ds[Njack - 1]; // \omega_0
     HLT_info.E0 = E0_HLT * M_Ds[Njack - 1];// 3.9995692470e-02;//E0_HLT * M_Ds[Njack - 1];
     printf("T=%d\n", HLT_info.T);
     printf("omega0=%g\n", theta_p[0]);
@@ -650,15 +685,16 @@ int main(int argc, char** argv) {
     for (int si = 0;si < sigmas.size(); si++) {
         theta_p[1] = sigmas[si] * M_Ds[Njack - 1];
         for (int ai = 0; ai < alphas.size();ai++) {
-            HLT_info.alpha = alphas[ai];
-            HLT_type HLT_space(HLT_info);
-            wrapper_smearing Delta(c1_theta_s_HLT, theta_p, &HLT_space);
-            HLT_space.compute_f_EXP_b(Delta);
+            // HLT_info.alpha = alphas[ai];
+            // HLT_type HLT_space(HLT_info);
+            wrapper_smearing Delta(c1_theta_s_HLT, theta_p, HLT_space[ai]);
+            HLT_space[ai]->compute_f_EXP_b(Delta);
             char namefit[NAMESIZE];
-            mysprintf(namefit, NAMESIZE, "HLT_Z1-sig%.3f-alpha%2.2f", sigmas[si], alphas[ai]);
-            fit_result tmp = HLT_space.HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
+            mysprintf(namefit, NAMESIZE, "HLT_Z1-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
+            fit_result tmp = HLT_space[ai]->HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
             jackall.en[ai].jack[0] = tmp.P[0];
-            check_correlatro_counter(75 + ai + (alphas.size() + 1) * si);
+            // check_correlatro_counter(75 + ai + (alphas.size() + 1) * si);
+            // if (si==0 && ai==1) exit(1);
         }
 
         fit_info.restore_default();
@@ -686,7 +722,7 @@ int main(int argc, char** argv) {
         fit_info.covariancey = false;
         fit_info.verbosity = 0;
         char namefit[NAMESIZE];
-        mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z1-sig%.3f-alpha", option[6], sigmas[si]);
+        mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z1-sig%f-alpha", option[6], sigmas[si]);
         char** temp_argv = malloc_2<char>(5, NAMESIZE);
         mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
         mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// resampling
@@ -695,13 +731,153 @@ int main(int argc, char** argv) {
 
         fit_info.band_range = { -2,2.1 };
         print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "alpha", fit_inter_alpha, fit_inter_alpha, 0, fit_info.myen.size() - 1, 0.5);
-        write_jack(fit_inter_alpha.P[0], Njack, jack_file);
-        check_correlatro_counter(78 + (alphas.size() + 1) * si);
+        // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
+        // check_correlatro_counter(78 + (alphas.size() + 1) * si);
 
         jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
 
     }
 
+    // fit in sigma
+    fit_info.restore_default();
+    fit_info.Npar = 2;
+    fit_info.Nvar = 1;
+    fit_info.Njack = head.Njack;
+    fit_info.N = 1;
+    fit_info.myen = std::vector<int>(sigmas.size());
+    for (int n = 0;n < fit_info.myen.size();n++) fit_info.myen[n] = n;
+    fit_info.entot = fit_info.myen.size() * fit_info.N;
+    fit_info.malloc_x();
+    count = 0;
+    for (int n = 0;n < fit_info.N;n++) {
+        // for (int e : fit_info.myen) {
+        for (int e = 0; e < fit_info.myen.size(); e++) {
+            for (int j = 0;j < fit_info.Njack;j++) {
+                fit_info.x[0][count][j] = sigmas[e]; // mus1
+            }
+            count++;
+        }
+    }
+    fit_info.corr_id = { 0 };
+    fit_info.function = sigma2_fit;//constant_fit;
+    fit_info.linear_fit = true;
+    fit_info.covariancey = false;
+    fit_info.verbosity = 0;
+    mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z1-sigma", option[6]);
+   
+    fit_result fit_Z1_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+
+    fit_info.band_range = { 0,0.15 };
+    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_Z1_sigma, fit_Z1_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    write_jack(fit_Z1_sigma.P[0], Njack, jack_file);
+    check_correlatro_counter(55);
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Z2
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    theta_p.resize(5);
+    theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega_0^max
+    // Poly
+    theta_p[2] = omega * (1 - omega)*(1 - omega);//  const= |omega| * omega0max^2
+    theta_p[3] = -2.0*omega * (1 - omega)/ M_Ds[Njack - 1]; // -2 |omega| * omega0max    omega0
+    theta_p[4] = omega / (M_Ds[Njack - 1]*M_Ds[Njack - 1]); //  |omega|  omega0^2
+    printf("T=%d\n", HLT_info.T);
+    printf("omega0=%g\n", theta_p[0]);
+    printf("c_0=%g\n", theta_p[2]);
+    printf("c_1=%g\n", theta_p[3]);
+    printf("c_2=%g\n", theta_p[4]);
+    printf("E_0=%g\n", HLT_info.E0);
+
+    fit_info_HLT.corr_id = { id_Z[2] };
+    for (int si = 0;si < sigmas.size(); si++) {
+        theta_p[1] = sigmas[si] * M_Ds[Njack - 1];
+        for (int ai = 0; ai < alphas.size();ai++) {
+           
+            wrapper_smearing Delta(c2_theta_s_HLT, theta_p, HLT_space[ai]);
+            HLT_space[ai]->compute_f_EXP_b(Delta);
+            char namefit[NAMESIZE];
+            mysprintf(namefit, NAMESIZE, "HLT_Z2-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
+            fit_result tmp = HLT_space[ai]->HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
+            jackall.en[ai].jack[0] = tmp.P[0];
+            // check_correlatro_counter(75 + ai + (alphas.size() + 1) * si);
+            // if (si==0 && ai==1) exit(1);
+        }
+
+        fit_info.restore_default();
+        fit_info.Npar = 1;
+        fit_info.Nvar = 1;
+        fit_info.Njack = head.Njack;
+        fit_info.N = 1;
+        fit_info.myen = std::vector<int>(alphas.size());
+        for (int n = 0;n < fit_info.myen.size();n++) fit_info.myen[n] = n;
+        fit_info.entot = fit_info.myen.size() * fit_info.N;
+        fit_info.malloc_x();
+        int count = 0;
+        for (int n = 0;n < fit_info.N;n++) {
+            // for (int e : fit_info.myen) {
+            for (int e = 0; e < fit_info.myen.size(); e++) {
+                for (int j = 0;j < fit_info.Njack;j++) {
+                    fit_info.x[0][count][j] = alphas[e]; // mus1
+                }
+                count++;
+            }
+        }
+        fit_info.corr_id = { 0 };
+        fit_info.function = constant_fit;
+        fit_info.linear_fit = true;
+        fit_info.covariancey = false;
+        fit_info.verbosity = 0;
+        char namefit[NAMESIZE];
+        mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z2-sig%f-alpha", option[6], sigmas[si]);
+        char** temp_argv = malloc_2<char>(5, NAMESIZE);
+        mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
+        mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// resampling
+
+        fit_result fit_inter_alpha = fit_all_data(temp_argv, jackall, lhs_identity, fit_info, namefit);
+
+        fit_info.band_range = { -2,2.1 };
+        print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "alpha", fit_inter_alpha, fit_inter_alpha, 0, fit_info.myen.size() - 1, 0.5);
+        // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
+        // check_correlatro_counter(78 + (alphas.size() + 1) * si);
+
+        jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
+
+    }
+
+    // fit in sigma
+    fit_info.restore_default();
+    fit_info.Npar = 2;
+    fit_info.Nvar = 1;
+    fit_info.Njack = head.Njack;
+    fit_info.N = 1;
+    fit_info.myen = std::vector<int>(sigmas.size());
+    for (int n = 0;n < fit_info.myen.size();n++) fit_info.myen[n] = n;
+    fit_info.entot = fit_info.myen.size() * fit_info.N;
+    fit_info.malloc_x();
+    count = 0;
+    for (int n = 0;n < fit_info.N;n++) {
+        // for (int e : fit_info.myen) {
+        for (int e = 0; e < fit_info.myen.size(); e++) {
+            for (int j = 0;j < fit_info.Njack;j++) {
+                fit_info.x[0][count][j] = sigmas[e]; // mus1
+            }
+            count++;
+        }
+    }
+    fit_info.corr_id = { 0 };
+    fit_info.function = sigma2_fit;//constant_fit;
+    fit_info.linear_fit = true;
+    fit_info.covariancey = false;
+    fit_info.verbosity = 0;
+    mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z2-sigma", option[6]);
+   
+    fit_result fit_Z2_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+
+    fit_info.band_range = { 0,0.15 };
+    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_Z2_sigma, fit_Z2_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    write_jack(fit_Z2_sigma.P[0], Njack, jack_file);
+    check_correlatro_counter(56);
 
 
 }
