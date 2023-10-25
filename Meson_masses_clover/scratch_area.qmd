@@ -1,0 +1,166 @@
+# scratch area
+
+
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+require(tikzDevice)
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
+myplotly(ggplot())
+```
+
+
+<!-- ## Z0 -->
+
+
+
+<!-- ```{r, echo=FALSE, results='asis', warning=FALSE} -->
+
+<!-- df<-NULL -->
+
+<!-- ##############################  MG -->
+
+
+<!-- ###################### MG -->
+<!-- mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_AoverB") -->
+<!-- all_obs_AB<- get_all_corr(mt) -->
+<!-- # dfY<- get_block_n(mt,1) -->
+<!-- # dfY<- rbind(dfY, get_block_n(mt,2)) -->
+<!-- dfY<-add_corr_to_df(string ="HLT_Z0-sig0-alpha2.00", all_obs=all_obs_AB,mt=mt,df = NULL, -->
+<!--                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE,  -->
+<!--                    ,reshape = FALSE) -->
+
+
+<!-- mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_output") -->
+<!-- all_obs<- get_all_corr(mt1) -->
+<!-- df1<-add_corr_to_df(string ="HLT_Z0-sig0-alpha2.00", all_obs=all_obs,mt=mt1,df = NULL, -->
+<!--                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE,  -->
+<!--                    ,rename="MG-Z0-alpha0") -->
+<!-- Z0_value_exact_theta<- get_full_res(string = "HLT_Z0-sig0-alpha2.00",all_obs = all_obs,mt = mt1) -->
+<!-- # df1<-add_corr_to_df(string ="HLT_Z0-sig0-alpha0.00", all_obs=all_obs,mt=mt1,df = df1, -->
+<!-- #                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE, rename="MG-Z0-alpha1") -->
+
+
+<!-- ###### -->
+<!-- ################ plot -->
+<!-- df1$x<- log2(df1$x) -->
+<!-- df1$xfit<- log2(df1$xfit) -->
+<!-- df1$tmin<-log2(df1$tmin) -->
+<!-- df1$tmax<-log2(df1$tmax) -->
+<!-- gg<- plot_df_corr_ggplot(df1) -->
+<!-- #gg<-myggplot(fill = FALSE,shape = FALSE) -->
+<!-- # gg<-gg + geom_point(aes(x=log2(df$lam)  , y=df[,4], -->
+<!-- #                        color=paste0("rho-",df$label) -->
+<!-- #                        )) -->
+<!-- # gg<-gg + geom_errorbar(aes(x=log2(df$lam)  , ymin=df[,4]-df[,5], -->
+<!-- #                            ymax=df[,4]+df[,5], -->
+<!-- #                        color=paste0("rho-",df$label) -->
+<!-- #                        )) -->
+
+
+
+<!-- fig<- myplotly(gg,"","log2(lam)", "rho", to_print=TRUE ) -->
+<!-- ############# -->
+
+
+<!-- tmp<-data.frame("lam"=dfY[,1], "A/A0"=dfY[,2]/dfY[,4], "B/Bnorm"=dfY[,3], "rho"=df1$y, -->
+<!--                 "drho"=df1$err, -->
+<!--                   "label"=df1$label -->
+<!--                 ) -->
+<!-- df<-rbind(df,tmp) -->
+
+
+<!-- ``` -->
+
+
+
+<!-- ```{r, echo=FALSE, results='asis', warning=FALSE} -->
+
+<!-- df<-NULL -->
+
+<!-- mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_kernel") -->
+<!-- all_obs<- get_all_corr(mt1) -->
+<!-- df1<-add_corr_to_df(string ="HLT_Z0-sig0-alpha2.00_lam16384.0000", -->
+<!--                     all_obs=all_obs,mt=mt1,df = NULL, -->
+<!--                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE) -->
+
+<!-- df1<-add_corr_to_df(string ="HLT_Z0-sig0-alpha2.00_lam32.0000", -->
+<!--                     all_obs=all_obs,mt=mt1,df = df1, -->
+<!--                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE) -->
+
+<!-- tmp<-data.frame("omega"=df1$x, "K"=df1$y, "Kb"=df1$fit,  -->
+<!--                  "label"=paste0(df1$label) -->
+<!--                 ) -->
+<!-- df<-rbind(df,tmp) -->
+
+<!-- ################ plot -->
+<!-- gg<-myggplot(shape = FALSE,fill = FALSE) -->
+<!-- gg<-gg + geom_line(aes(x=df$omega  , y=df$Kb, -->
+<!--                        color=paste0("K-",df$label), -->
+<!--                        linetype=paste0("K-",df$label))) -->
+<!-- gg<-gg + geom_line(aes(x=df$omega  , y=df$K, -->
+<!--                        color="exact", -->
+<!--                        linetype="exact")) -->
+
+<!-- fig<- myplotly(gg,"","omega", "K", to_print=TRUE ) -->
+
+
+<!-- ``` -->
+
+
+
+<!-- ```{r, echo=FALSE, results='asis', warning=FALSE} -->
+<!-- file<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_fit_HLT_Z0-sigma_fit_data.txt" -->
+<!-- df<- read.table(file, header=FALSE, fill=TRUE) -->
+
+
+<!-- gg<- myggplot(fill=FALSE) -->
+<!-- idy<-ncol(df)-2 -->
+
+
+<!-- gg<-gg+  geom_point(data=df, mapping=aes(x=df[,1] , y=df[,idy], -->
+<!--                                          color=as.factor(df[,idy+2]), shape=as.factor(df[,idy+2]))  -->
+<!--                     ,width=1e-4)  +labs(color = "", shape="") -->
+<!-- gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] , ymin=df[,idy]-df[,idy+1], -->
+<!--                                             ymax=df[,idy]+df[,idy+1],color=as.factor(df[,idy+2]),shape=as.factor(df[,idy+2]) )  -->
+<!--                                ,width=1e-4) -->
+<!-- datalist = list() -->
+<!-- for (n in c(1:1)){ -->
+
+<!--           file=sprintf("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_fit_HLT_Z0-sigma_fit_out_n%d_sigma.txt",n-1) -->
+<!--           #if(!file.exists(file)){next} -->
+<!--           datalist[[n]]<- read.table(file, header=FALSE, fill=TRUE,    -->
+<!--                                      col.names=c(paste0("x",n),paste0("fit",n),paste0("fiterr",n))) -->
+
+<!--           gg<-gg + geom_ribbon(data=datalist[[n]],  -->
+<!--                                mapping=aes_string(x=datalist[[n]][,1] , -->
+<!--                                                   ymin=datalist[[n]][,2]-datalist[[n]][,3], -->
+<!--                                                   ymax=datalist[[n]][,2]+datalist[[n]][,3]),alpha=0.5, fill="red") -->
+<!--           gg<-gg + geom_line(data=datalist[[n]], -->
+<!--                              mapping=aes_string(x=datalist[[n]][,1] , -->
+<!--                                                 y=datalist[[n]][,2]  ),color="red" ) -->
+
+
+<!-- } -->
+
+<!-- gg<- gg+geom_point(aes(x=0, y=Z0_value_exact_theta[,1], -->
+<!--                         color="sigma=0", shape="sigma=0")) -->
+<!-- gg<- gg+geom_errorbar(aes(x=0, ymax=Z0_value_exact_theta[,1]+Z0_value_exact_theta[,2], -->
+<!--                            ymin=Z0_value_exact_theta[,1]-Z0_value_exact_theta[,2], -->
+<!--                            color="sigma=0", shape="sigma=0" -->
+<!--                            ), width=0.002) -->
+<!-- fig<- myplotly(gg,title,"$\\sigma$", "$Z_0$", -->
+<!--                        to_print = FALSE, output="HTML", legend_position = c(0.8,0.9))  -->
+<!-- fig -->
+<!-- ``` -->

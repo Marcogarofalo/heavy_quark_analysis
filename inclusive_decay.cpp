@@ -480,7 +480,7 @@ int main(int argc, char** argv) {
     }
     ///////////// structure for fits alpha
     // std::vector<double> sigmas = { 0.12 ,   0.06 , 0.02, 0.05, 0.02 };
-    std::vector<double> sigmas = {0.120, 0.100, 0.075, 0.050, 0.037, 0.025, 0.017, 0.010, 0.005, 0.0035, 0.002, 0.0005};
+    std::vector<double> sigmas = { 0.120, 0.100, 0.075, 0.050, 0.037, 0.025, 0.017, 0.010, 0.005, 0.0035, 0.002, 0.0005 };
     // std::vector<double> sigmas = { 0.0005 };
 
     data_all jackall_sigma;
@@ -510,7 +510,6 @@ int main(int argc, char** argv) {
     HLT_info.T = head.T;
     HLT_info.type_b = HLT_EXP_b;
     HLT_info.prec = 50 * 3.33;
-    HLT_info.integration_maxE = 1e+4;
     HLT_info.integration_deg_limit = 1e+6;//1e+3;
     HLT_info.integration_eval_limit = 1e+9;//1e+6;
     HLT_info.integration_depth_limit = 1e+9;//1e+6;
@@ -524,8 +523,8 @@ int main(int argc, char** argv) {
     // theta_p[2] = 2.254511e-02;//pow(omega, 3);
     // HLT_info.E0 = 3.9995692470e-02;//E0_HLT * M_Ds[Njack - 1];
 
-    theta_p[0] = (1 - omega) * M_Ds[Njack - 1];
-    theta_p[2] = pow(omega, 3);
+    theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega0max
+    theta_p[2] = pow(omega, 3); // const
     HLT_info.E0 = E0_HLT * M_Ds[Njack - 1];
 
     printf("T=%d\n", HLT_info.T);
@@ -556,13 +555,13 @@ int main(int argc, char** argv) {
         double a = alphas[0] + t + 1 / theta_p[1];
         printf("a=%g\n", a);
         double precision = pow(10, -50);
-        double b = log(precision * a/theta_p[2]);
+        double b = log(precision * a / theta_p[2]);
         double max = (theta_p[0] / theta_p[1] - b) / a;
         if (max > Max) Max = max;
         printf("maxE %d =%g\n", t, max);
 
     }
-    printf("maxE all t =%g\n",  Max);
+    printf("maxE all t =%g\n", Max);
     HLT_info.integration_maxE = 100;//Max*10;
 
     std::vector<HLT_type*> HLT_space;
@@ -779,9 +778,9 @@ int main(int argc, char** argv) {
     theta_p.resize(5);
     theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega_0^max
     // Poly
-    theta_p[2] = omega * (1 - omega)*(1 - omega);//  const= |omega| * omega0max^2
-    theta_p[3] = -2.0*omega * (1 - omega)/ M_Ds[Njack - 1]; // -2 |omega| * omega0max    omega0
-    theta_p[4] = omega / (M_Ds[Njack - 1]*M_Ds[Njack - 1]); //  |omega|  omega0^2
+    theta_p[2] = omega * (1 - omega) * (1 - omega);//  const= |omega| * omega0max^2
+    theta_p[3] = -2.0 * omega * (1 - omega) / M_Ds[Njack - 1]; // -2 |omega| * omega0max    omega0
+    theta_p[4] = omega / (M_Ds[Njack - 1] * M_Ds[Njack - 1]); //  |omega|  omega0^2
     printf("T=%d\n", HLT_info.T);
     printf("omega0=%g\n", theta_p[0]);
     printf("c_0=%g\n", theta_p[2]);

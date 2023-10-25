@@ -311,8 +311,18 @@ df<-rbind(df,tmp)
 
 ###################### MG
 mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_AoverB")
-dfY<- get_block_n(mt,1)
-dfY<- rbind(dfY, get_block_n(mt,2))
+# dfY<- get_block_n(mt,1)
+# dfY<- rbind(dfY, get_block_n(mt,2))
+all_obs_AB<- get_all_corr(mt)
+dfY<-add_corr_to_df(string ="HLT_Z0-sig0.120000-alpha2.00", all_obs=all_obs_AB,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE, 
+                   ,reshape = FALSE)
+
+dfY<-add_corr_to_df(string ="HLT_Z0-sig0.120000-alpha0.00", all_obs=all_obs_AB,mt=mt,df = dfY,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE, 
+                   ,reshape = FALSE)
+
+
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_output")
 all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string ="HLT_Z0-sig0.120000-alpha2.00", all_obs=all_obs,mt=mt1,df = NULL,
@@ -347,7 +357,7 @@ fig<- myplotly(gg,"","log2(lam)", "rho", to_print=TRUE )
 
 tmp<-data.frame("lam"=dfY[,1], "A/A0"=dfY[,2]/dfY[,4], "B/Bnorm"=dfY[,3], "rho"=df1$y,
                 "drho"=df1$err,
-                  "label"=df1$label
+                  "label"=dfY$label
                 )
 df<-rbind(df,tmp)
 
@@ -465,8 +475,17 @@ df<-rbind(df,tmp)
 
 ###################### MG
 mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_AoverB")
-dfY<- get_block_n(mt,1)
-dfY<- rbind(dfY, get_block_n(mt,2))
+# dfY<- get_block_n(mt,1)
+# dfY<- rbind(dfY, get_block_n(mt,2))
+all_obs_AB<- get_all_corr(mt)
+dfY<-add_corr_to_df(string ="HLT_Z1-sig0.120000-alpha2.00", all_obs=all_obs_AB,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE, 
+                   ,reshape = FALSE)
+
+dfY<-add_corr_to_df(string ="HLT_Z1-sig0.120000-alpha0.00", all_obs=all_obs_AB,mt=mt,df = dfY,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE, 
+                   ,reshape = FALSE)
+
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_output")
 all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string ="HLT_Z1-sig0.120000-alpha2.00", all_obs=all_obs,mt=mt1,df = NULL,
@@ -501,7 +520,7 @@ fig<- myplotly(gg,"","log2(lam)", "rho", to_print=TRUE )
 
 tmp<-data.frame("lam"=dfY[,1], "A/A0"=dfY[,2]/dfY[,4], "B/Bnorm"=dfY[,3], "rho"=df1$y,
                 "drho"=df1$err,
-                  "label"=df1$label
+                  "label"=dfY$label
                 )
 df<-rbind(df,tmp)
 
@@ -619,8 +638,17 @@ df<-rbind(df,tmp)
 
 ###################### MG
 mt<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_AoverB")
-dfY<- get_block_n(mt,1)
-dfY<- rbind(dfY, get_block_n(mt,2))
+# dfY<- get_block_n(mt,1)
+# dfY<- rbind(dfY, get_block_n(mt,2))
+all_obs_AB<- get_all_corr(mt)
+dfY<-add_corr_to_df(string ="HLT_Z2-sig0.120000-alpha2.00", all_obs=all_obs_AB,mt=mt,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE, 
+                   ,reshape = FALSE)
+
+dfY<-add_corr_to_df(string ="HLT_Z2-sig0.120000-alpha0.00", all_obs=all_obs_AB,mt=mt,df = dfY,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE, 
+                   ,reshape = FALSE)
+
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_output")
 all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string ="HLT_Z2-sig0.120000-alpha2.00", all_obs=all_obs,mt=mt1,df = NULL,
@@ -655,7 +683,7 @@ fig<- myplotly(gg,"","log2(lam)", "rho", to_print=TRUE )
 
 tmp<-data.frame("lam"=dfY[,1], "A/A0"=dfY[,2]/dfY[,4], "B/Bnorm"=dfY[,3], "rho"=df1$y,
                 "drho"=df1$err,
-                  "label"=df1$label
+                  "label"=dfY$label
                 )
 df<-rbind(df,tmp)
 

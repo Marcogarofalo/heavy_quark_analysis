@@ -9,11 +9,13 @@ book:
     - index.qmd
     - cB211.072.64_PRACE.qmd
     - cB211.072.64_inclusive.qmd
+    - cB211.072.64_HLT.qmd
     - cross_check_cB211.072.64_th6_t48_64.qmd
     - checks_sigma_extrapolation.qmd
     - intro.qmd
     - summary.qmd
     - references.qmd
+    - scratch_area.qmd
 
 bibliography: references.bib
 
