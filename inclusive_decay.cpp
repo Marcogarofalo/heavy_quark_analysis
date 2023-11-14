@@ -495,7 +495,7 @@ int main(int argc, char** argv) {
 
     }
 
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// HLT
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -505,7 +505,6 @@ int main(int argc, char** argv) {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     HLT_type_input HLT_info;
-    HLT_info.tmax = 33;
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
     HLT_info.type_b = HLT_EXP_b;
@@ -517,6 +516,9 @@ int main(int argc, char** argv) {
     double sigma1, dsigma1, E0_HLT;
     line_read_param(option, "sigma1", sigma1, dsigma1, myseed, namefile_plateaux);
     line_read_param(option, "E0_HLT", E0_HLT, dsigma1, myseed, namefile_plateaux);
+    int dtmax;
+    line_read_param(option, "HLT_tmax", HLT_info.tmax, dtmax, dtmax, namefile_plateaux);
+
     std::vector<double>  theta_p(3);
     // theta_p[0] = 5.739387e-01;//(1 - omega) * M_Ds[Njack - 1];
     // theta_p[1] = 9.598966e-02;//sigma1 * M_Ds[Njack - 1];
@@ -545,7 +547,10 @@ int main(int argc, char** argv) {
     fit_info_HLT.stepsE_check_reconstuct = 100;
     fit_info_HLT.lambda_start = pow(2, 14);//3.09454500212;
     fit_info_HLT.nsame = 4;
-    fit_info_HLT.nlambda_max = 10;
+    fit_info_HLT.strict_checks = false;
+    // fit_info_HLT.nlambda_max = 10;
+    line_read_param(option, "HLT_nlambda_max", fit_info_HLT.nlambda_max, dtmax, dtmax, namefile_plateaux);
+
     fit_info_HLT.reduce_lambda = 0.5;
     fit_info_HLT.diag_cov = false;
 
@@ -553,12 +558,12 @@ int main(int argc, char** argv) {
     for (int t = HLT_info.tmin;t < HLT_info.tmax;t++) {
         theta_p[1] = sigmas[0] * M_Ds[Njack - 1];
         double a = alphas[0] + t + 1 / theta_p[1];
-        printf("a=%g\n", a);
+        // printf("a=%g\n", a);
         double precision = pow(10, -50);
         double b = log(precision * a / theta_p[2]);
         double max = (theta_p[0] / theta_p[1] - b) / a;
         if (max > Max) Max = max;
-        printf("maxE %d =%g\n", t, max);
+        // printf("maxE %d =%g\n", t, max);
 
     }
     printf("maxE all t =%g\n", Max);
@@ -663,7 +668,7 @@ int main(int argc, char** argv) {
 
 
 
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Z1
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -763,7 +768,7 @@ int main(int argc, char** argv) {
     fit_info.covariancey = false;
     fit_info.verbosity = 0;
     mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z1-sigma", option[6]);
-   
+
     fit_result fit_Z1_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.15 };
@@ -792,7 +797,7 @@ int main(int argc, char** argv) {
     for (int si = 0;si < sigmas.size(); si++) {
         theta_p[1] = sigmas[si] * M_Ds[Njack - 1];
         for (int ai = 0; ai < alphas.size();ai++) {
-           
+
             wrapper_smearing Delta(c2_theta_s_HLT, theta_p, HLT_space[ai]);
             HLT_space[ai]->compute_f_EXP_b(Delta);
             char namefit[NAMESIZE];
@@ -870,7 +875,7 @@ int main(int argc, char** argv) {
     fit_info.covariancey = false;
     fit_info.verbosity = 0;
     mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z2-sigma", option[6]);
-   
+
     fit_result fit_Z2_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.15 };
