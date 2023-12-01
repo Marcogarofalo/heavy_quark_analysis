@@ -1,0 +1,307 @@
+#  cB211.072.64 $d\Gamma/dq^2$
+
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+require(tikzDevice)
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
+myplotly(ggplot())
+```
+
+
+```{r,results='asis', echo=FALSE}
+dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/"
+ths<- c("1","3","5","6","7","9")
+dG<-rep(0, length(ths))
+dG_err<-rep(0, length(ths))
+q2<-rep(0, length(ths))
+for (i in seq_along(ths) ){
+  mt<-read_df(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_output"))
+  all_obs<- get_all_corr(mt)
+  fit<-get_full_res("dGammadq_GEV3", all_obs, mt)
+  dG[i]<-fit[1,1]
+  dG_err[i]<-fit[1,2]
+  q2[i]<-fit[1,3]
+ 
+}
+gg<- myggplot(fill = FALSE)
+gg<- gg + geom_pointrange(aes(x=q2, y=dG,
+            ymin=dG-dG_err, ymax=dG+dG_err) )
+
+fig<-myplotly(gg,"","$q^2[GeV]$", "$24 \\pi^3 d\\Gamma/dq^2 [GeV^-3]$",to_print = TRUE)
+```
+
+
+
+
+::: {.panel-tabset}
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+Zs<- c("Z0","Z1","Z2")
+for (Z in Zs){
+cat("\n## ",Z,"\n\n")
+for (i in seq_along(ths) ){
+  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sigma")
+  gg<-plot_fit(file,"sigma", "alpha-ave" )
+  ############################# plot all alpha
+  
+  dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/"
+  
+  val<-c()
+  err<-c()
+  sigma<-c()
+  alpha<-c()
+  for (s in c(0.120, 0.100, 0.075, 0.050, 0.037, 0.025, 0.017, 0.010, 0.005, 0.0035, 0.002, 0.0005 ) ){
+    si<-sprintf("%f",s)
+   P<-read_fit_P_file(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_P.dat"))
+   file<-paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_data.txt")
+    dfa<- read.table(file, header=FALSE, fill=TRUE)
+    cols<-length(dfa[1,])
+    val<-c(val,dfa[,cols-2])
+    err<-c(err,dfa[,cols-1])
+    alpha<-c(alpha,dfa[,1])
+    sigma<-c(sigma,rep(s, length(dfa[,1])))
+  }
+  ##gg<- myggplot(fill = FALSE)
+  gg<- gg + geom_pointrange(aes(x=sigma+(sigma+3+alpha)/10000, y=val,
+              ymin=val-err, ymax=val+err, color=as.factor(alpha),
+              shape=as.factor(alpha), fill=as.factor(alpha) ) )
+  #gg<-gg+ scale_shape_manual(values = c(4,2,3,5,6))
+  ##################################################
+  fig<- myplotly(gg,title,"$\\sigma$", paste0(Z,"-th",ths[i]),
+                         to_print = TRUE, output="HTML", legend_position = c(0.8,0.9),
+               legend_title = "alpha") 
+}
+}
+```
+
+
+:::
+
+
+
+
+::: {.panel-tabset}
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+Zs<- c("Z0","Z1","Z2")
+for (Z in Zs){
+cat("\n## ",Z,"\n\n")
+  
+for (i in seq_along(ths) ){
+
+df<-NULL
+file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_output")
+mt1<-read_df(file)
+all_obs<- get_all_corr(mt1)
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.120000-alpha2.00"), all_obs=all_obs,mt=mt1,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE,logx=2 
+                   )
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha2.00"), all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0.1,print_res = FALSE,logx=2)
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha0.00"), all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0.2,print_res = FALSE,logx=2)
+
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha-1.99"), all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0.3,print_res = FALSE,logx=2)
+
+
+
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00"), all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0.4,print_res = FALSE,logx=2)
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00"), all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0.5,print_res = FALSE,logx=2)
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"), all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0.5,print_res = FALSE,logx=2)
+
+
+
+gg<- plot_df_corr_ggplot(df1)
+gg<- gg +scale_y_continuous(sec.axis = dup_axis())
+
+fig<- myplotly(gg,"","log2(lam)", paste0("rho-th",ths[i]), to_print=TRUE )
+}
+}
+```
+
+
+:::
+
+# th3
+
+::: {.panel-tabset}
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+Zs<- c("Z0","Z1","Z2")
+for (Z in Zs){
+cat("\n## ",Z,"\n\n")
+ 
+  
+df<-NULL
+###################### MG
+mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th3_t56_44.dat_HLT_kernel")
+all_obs<- get_all_corr(mt1)
+
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99_lam1024.0000"),
+                    all_obs=all_obs,mt=mt1,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE,
+                   )
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00_lam1024.0000"),
+                    all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00_lam1024.0000"),
+                    all_obs=all_obs,mt=mt1,df = df1,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
+# 
+# df1<-add_corr_to_df(string ="HLT_Z0-sig0.100000-alpha-1.99_lam32.0000",
+#                     all_obs=all_obs,mt=mt1,df = NULL,
+#                    log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+# df1<-add_corr_to_df(string ="HLT_Z0-sig0.100000-alpha0.00_lam32.0000",
+#                     all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+# df1<-add_corr_to_df(string ="HLT_Z0-sig0.100000-alpha2.00_lam32.0000",  
+#                     all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0,print_res = TRUE)
+
+
+tmp<-data.frame("omega"=df1$x, "K"=df1$y, "Kb"=df1$fit, 
+                 "label"=paste0(df1$label)
+                )
+df<-rbind(df,tmp)
+
+################ plot
+gg<-myggplot(shape = FALSE,fill = FALSE)
+gg<-gg + geom_line(aes(x=df$omega  , y=df$Kb,
+                       color=paste0("K-",df$label)
+                       ),linetype="dashed" )
+gg<-gg + geom_line(aes(x=df$omega  , y=df$K,
+                       color="exact"), linetype="solid")
+gg<-gg + geom_line(aes(x=df$omega  , y=df$K-df$Kb,
+                       color=paste0("diff-",df$label)
+                       ),linetype="dotted")
+fig<- myplotly(gg,"","omega", "K", to_print=TRUE , legend_position = c(0.5,0.95),legend_title = "")
+
+}
+```
+
+
+:::
+
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+
+for (i in seq_along(ths) ){
+
+df<-NULL
+file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_output")
+mt1<-read_df(file)
+all_obs<- get_all_corr(mt1)
+df1<-add_corr_to_df(string =paste0("Z_{0}"),
+                  all_obs=all_obs,mt=mt1,df = NULL,
+                  log = TRUE, number = NULL,nudge = 0,
+                  print_res = FALSE,logx=2 
+                   )
+df1<-add_corr_to_df(string =paste0("Z_{1}"),
+                  all_obs=all_obs,mt=mt1,df = df1,
+                  log = TRUE, number = NULL,nudge = 0,
+                  print_res = FALSE,logx=2 
+                   )
+df1<-add_corr_to_df(string =paste0("Z_{2}"),
+                  all_obs=all_obs,mt=mt1,df = df1,
+                  log = TRUE, number = NULL,nudge = 0,
+                  print_res = FALSE,logx=2 
+                   )
+
+gg<- plot_df_corr_ggplot(df1)
+#gg<- gg +scale_y_continuous(sec.axis = dup_axis())
+
+fig<- myplotly(gg,"","t", paste0("log Z"), to_print=TRUE )
+}
+ 
+```
+
+
+:::
+
+```{r, include=FALSE, eval=FALSE}
+source("/home/garofalo/programs/Rose/R/read_block.R")
+Z<-"Z0"
+i<-1
+ths<-c("3")
+file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_output")
+mt1<-read_df(file)
+all_obs<- get_all_corr(mt1)
+# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.120000-alpha2.00"),
+#                     all_obs=all_obs,mt=mt1,df = NULL,
+#                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE,logx=2 
+#                    )
+# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha2.00"),
+#                     all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0.1,print_res = FALSE,logx=2)
+# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha0.00"),
+#                     all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0.2,print_res = FALSE,logx=2)
+# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha-1.99"),
+#                     all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0.3,print_res = FALSE,logx=2)
+# 
+# 
+# 
+# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00"), all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0.4,print_res = FALSE,logx=2)
+# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00"), all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0.5,print_res = FALSE,logx=2)
+# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"), all_obs=all_obs,mt=mt1,df = df1,
+#                    log = FALSE, number = NULL,nudge = 0.5,print_res = FALSE,logx=2)
+
+fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_HLT_AoverB")
+mtA<-read_df(fileA)
+all_obsA<- get_all_corr(mtA)
+dfA<-get_block(string =paste0("HLT_",Z,"-sig0.120000-alpha2.00"),
+                    all_obs=all_obsA,mt=mtA,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,
+                    print_res = FALSE,logx=2,ix=2,
+                   reshape = FALSE
+                   )
+
+gg<- myggplot()
+gg <- gg+ geom_pointrange(aes( x=dfA[,2] , y=dfA[,6],
+                      ymin=dfA[,6]-dfA[,7], ymax=dfA[,6]+dfA[,7],
+                      color=dfA$label, shape=dfA$label, fill=dfA$label)
+                      )
+dfp <- filter(dfA, dfA[,2]>=Amin, dfA[,2]<=Amax )
+gg <- gg + geom_ribbon(  mapping=aes(x=dfp[,2],
+                      ymin=dfp$fit-dfp$dfit,  ymax=dfp$fit+dfp$dfit ,
+                      color=dfp$label, shape=dfp$label, fill=dfp$label),
+                    alpha=0.5 , inherit.aes = TRUE, show.legend = FALSE)
+#gg<- plot_df_corr_ggplot(df1)
+# dfA[,1]<-log2(dfA[,1])
+# gg<- gg+geom_point(aes(x=dfA[,1] , y=dfA[,2], color=dfA$label,shape=dfA$label ))
+# gg<- gg +scale_x_continuous(breaks = dfA[,1],
+#                      labels = dfA[,2])
+gg
+fig<- myplotly(gg,"","log2(lam)", paste0("rho-th",ths[i]), to_print=TRUE )
+```

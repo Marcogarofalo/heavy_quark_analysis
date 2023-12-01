@@ -127,7 +127,7 @@ all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string ="HLT_Z0-sig0.000500-alpha2.00_lam16384.0000",
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
-df1<-add_corr_to_df(string ="HLT_Z0-sig0.000500-alpha2.00_lam32.0000",  
+df1<-add_corr_to_df(string ="HLT_Z0-sig0.000500-alpha2.00_lam1024.0000",  
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
@@ -208,7 +208,7 @@ all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string ="HLT_Z1-sig0.000500-alpha2.00_lam16384.0000",
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
-df1<-add_corr_to_df(string ="HLT_Z1-sig0.000500-alpha2.00_lam32.0000",  
+df1<-add_corr_to_df(string ="HLT_Z1-sig0.000500-alpha2.00_lam1024.0000",  
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
@@ -280,7 +280,7 @@ all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string ="HLT_Z2-sig0.000500-alpha2.00_lam16384.0000",
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
-df1<-add_corr_to_df(string ="HLT_Z2-sig0.000500-alpha2.00_lam32.0000",  
+df1<-add_corr_to_df(string ="HLT_Z2-sig0.000500-alpha2.00_lam1024.0000",  
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
@@ -445,24 +445,7 @@ fig<- myplotly(gg,"","omega", "K", to_print=TRUE , legend_position = c(0.5,0.95)
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 Z<- "Z0"
 
-file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th6_t56_44_nobin.dat_fit_HLT_",Z,"-sigma_fit_data.txt")
-df<- read.table(file, header=FALSE, fill=TRUE)
-        
-        
-gg<- myggplot()
-idy<-ncol(df)-2
-# gg<- gg +geom_point(aes(x=dfi[,1], y=dfi[,2], color="intepolated"))      
-# gg<- gg +geom_errorbar(aes(x=dfi[,1], ymax=dfi[,2]+dfi[,3],
-#                             ymin=dfi[,2]-dfi[,3],
-#                            , color="intepolated"), width=1e-4)      
-gg<-gg+  geom_point(data=df, 
-          mapping=aes(x=df[,1] , y=df[,idy],
-            color="alpha-ave",shape="alpha-ave",fill="alpha-ave"  ) 
-          ,width=1e-4,size=2)  +labs(color = "", shape="")
-gg<-gg + geom_errorbar(data=df, mapping=aes(x=df[,1] ,
-          ymin=df[,idy]-df[,idy+1], ymax=df[,idy]+df[,idy+1], 
-          color="alpha-ave",shape="alpha-ave",fill="alpha-ave" ) 
-        ,width=1e-4)
+gg<-plot_fit("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th6_t56_44_nobin.dat_fit_HLT_Z0-sigma","sigma", "alpha-ave" )
 ############################# plot all alpha
 
 dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/"
@@ -488,32 +471,9 @@ gg<- gg + geom_pointrange(aes(x=sigma+(sigma+3+alpha)/10000, y=val,
             shape=as.factor(alpha), fill=as.factor(alpha) ) )
 #gg<-gg+ scale_shape_manual(values = c(4,2,3,5,6))
 ##################################################
-
-
-datalist = list()
-for (n in c(1:1)){
-          
-          file=sprintf("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th6_t56_44_nobin.dat_fit_HLT_%s-sigma_fit_out_n%d_sigma.txt",Z,n-1)
-          #if(!file.exists(file)){next}
-          datalist[[n]]<- read.table(file, header=FALSE, fill=TRUE,   
-                                     col.names=c(paste0("x",n),paste0("fit",n),paste0("fiterr",n)))
-          
-gg<-gg + geom_ribbon(data=datalist[[n]], 
-            mapping=aes_string(x=datalist[[n]][,1] ,
-              ymin=datalist[[n]][,2]-datalist[[n]][,3],
-              ymax=datalist[[n]][,2]+datalist[[n]][,3]
-              ,fill=as.factor("fit"),color=as.factor("fit"),shape=as.factor("fit") ),
-           alpha=0.5 )
-gg<-gg + geom_line(data=datalist[[n]],
-           mapping=aes_string(x=datalist[[n]][,1] ,
-             y=datalist[[n]][,2], fill=as.factor("fit"),
-             color=as.factor("fit"),shape=as.factor("fit")  )
-           )
-          
-        
-}
 fig<- myplotly(gg,title,"$\\sigma$", Z,
-                       to_print = TRUE, output="HTML", legend_position = c(0.8,0.9)) 
+                       to_print = TRUE, output="HTML", legend_position = c(0.8,0.9),
+               legend_title = "alpha") 
 
 ```
 
