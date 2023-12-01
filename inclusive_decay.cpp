@@ -24,7 +24,7 @@
 #include "HLT.hpp"
 
 struct kinematic kinematic_2pt;
-
+constexpr double hbarc = 197.326963;
 char** argv_to_options(char** argv) {
     char** option;
     option = (char**)malloc(sizeof(char*) * 7);
@@ -228,8 +228,8 @@ int main(int argc, char** argv) {
 
     symmetrise_jackboot(Njack, id_Ds_ss_2pt, head.T, conf_jack, 1);
     symmetrise_jackboot(Njack, id_Ds_ls_2pt, head.T, conf_jack, 1);
-    symmetrise_jackboot(Njack, id_K_ss_2pt, head.T, conf_jack, 1);
-    symmetrise_jackboot(Njack, id_K_ls_2pt, head.T, conf_jack, 1);
+    // symmetrise_jackboot(Njack, id_K_ss_2pt, head.T, conf_jack, 1);
+    // symmetrise_jackboot(Njack, id_K_ls_2pt, head.T, conf_jack, 1);
 
 
     ////////////////////
@@ -325,6 +325,15 @@ int main(int argc, char** argv) {
     double* ZA_jack = myres->create_fake(ZA, dZA, myseed);
     line_read_param(option, "ZV", ZV, dZV, myseed, namefile_plateaux);
     double* ZV_jack = myres->create_fake(ZV, dZV, myseed);
+    double a_val, da_val;
+    line_read_param(option, "a", a_val, da_val, myseed, namefile_plateaux);
+    double* a_fm_jack = myres->create_fake(a_val, da_val, myseed);
+    double* a_MeV_jack = (double*)malloc(sizeof(double) * Njack);
+    double* a_GeV_jack = (double*)malloc(sizeof(double) * Njack);
+    for (int j = 0; j < Njack;j++) {
+        a_MeV_jack[j] = a_fm_jack[j] / hbarc;
+        a_GeV_jack[j] =a_MeV_jack[j]*1000.0;
+    }
 
     for (int mu = 0; mu < 4;mu++) {  // C_munu   mu runs faster // mu is given by the gamma // nu by the insertion
         for (int nu = 0; nu < 4;nu++) {
@@ -347,13 +356,13 @@ int main(int argc, char** argv) {
 
 
             //                  2pt_files      +   A_4pt              +  gamma=Vmu + insertions Vmu     
-            int id_VV = 4 * head.gammas.size() + 4 * head.gammas.size() + (mu + 5) + nu * head.gammas.size();
+            int id_VV = 2 * head.gammas.size() + 4 * head.gammas.size() + (mu + 5) + nu * head.gammas.size();
             //                   2pt_files       +  gamma=Amu + insertions Amu     
-            int id_AA = 4 * head.gammas.size() + 0 + (mu + 1) + nu * head.gammas.size();
+            int id_AA = 2 * head.gammas.size() + 0 + (mu + 1) + nu * head.gammas.size();
             //                  2pt_files      +A_4pt+  gamma=Vmu + insertions Vmu     
-            int id_VA = 4 * head.gammas.size() + 0 + (mu + 5) + nu * head.gammas.size();
+            int id_VA = 2 * head.gammas.size() + 0 + (mu + 5) + nu * head.gammas.size();
             //                  2pt_files      +   A_4pt                +  gamma=Amu + insertions Vmu     
-            int id_AV = 4 * head.gammas.size() + 4 * head.gammas.size() + (mu + 1) + nu * head.gammas.size();
+            int id_AV = 2 * head.gammas.size() + 4 * head.gammas.size() + (mu + 1) + nu * head.gammas.size();
             fit_info.corr_id = { id_VV, id_AA, id_VA, id_AV, id_Ds_ss_2pt };//diag{ ll, ss}
 
 
@@ -545,7 +554,7 @@ int main(int argc, char** argv) {
     fit_info_HLT.outfile = outfile;
     fit_info_HLT.maxE_check_reconstuct = 2;
     fit_info_HLT.stepsE_check_reconstuct = 100;
-    fit_info_HLT.lambda_start = pow(2, 14);//3.09454500212;
+    fit_info_HLT.lambda_start = pow(2, 25);//3.09454500212;
     fit_info_HLT.nsame = 4;
     fit_info_HLT.strict_checks = false;
     // fit_info_HLT.nlambda_max = 10;
@@ -659,11 +668,11 @@ int main(int argc, char** argv) {
     mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
     mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// resampling
 
-    fit_result fit_inter_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+    fit_result fit_Z0_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.15 };
-    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_inter_sigma, fit_inter_sigma, 0, fit_info.myen.size() - 1, 0.01);
-    write_jack(fit_inter_sigma.P[0], Njack, jack_file);
+    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_Z0_sigma, fit_Z0_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    write_jack(fit_Z0_sigma.P[0], Njack, jack_file);
     check_correlatro_counter(54);
 
 
@@ -882,6 +891,34 @@ int main(int argc, char** argv) {
     print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_Z2_sigma, fit_Z2_sigma, 0, fit_info.myen.size() - 1, 0.01);
     write_jack(fit_Z2_sigma.P[0], Njack, jack_file);
     check_correlatro_counter(56);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    // sum the Z
+    /// 
+
+    double* dGammadq = (double*)malloc(sizeof(double) * Njack);
+    double* q2 = (double*)malloc(sizeof(double) * Njack);
+    for (int j = 0;j < Njack;j++) {
+        dGammadq[j] = fit_Z0_sigma.P[0][j] + fit_Z1_sigma.P[0][j] + fit_Z2_sigma.P[0][j];
+        if(j==Njack-1) printf(" sumZ=%g\n",dGammadq[j]);
+        dGammadq[j] *= (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) / (2 * M_PI);
+        if(j==Njack-1) printf(" dgammaZ=%g\n",dGammadq[j]);
+        if(j==Njack-1) printf(" a=%g\n",a_fm_jack[j]);
+        if(j==Njack-1) printf(" a GeV=%g\n",a_GeV_jack[j]);
+        if(j==Njack-1) printf(" MDS GeV=%g\n",M_Ds[j] / a_GeV_jack[j]);
+        q2[j] = head.thetas[0] * M_PI / (head.L * a_GeV_jack[j]);
+    }
+    fprintf(outfile, "\n\n#dGamma/dq_GEV3 summign Z\n");
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z0_sigma.P[0][Njack - 1], myres->comp_error(fit_Z0_sigma.P[0]));
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z1_sigma.P[0][Njack - 1], myres->comp_error(fit_Z1_sigma.P[0]));
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z2_sigma.P[0][Njack - 1], myres->comp_error(fit_Z2_sigma.P[0]));
+    fprintf(outfile, "\n\n #%s fit in [%d,%d] chi2=%.5g  %.5g\n", "dGammadq_GEV3", 0, 2, 0.0, 0.0);
+    fprintf(outfile, "%.15g    %.15g     %.15g    %.15g\n", dGammadq[Njack - 1], myres->comp_error(dGammadq), q2[Njack - 1], myres->comp_error(q2));
+    printf("dGammadq_GEV3 = %.15g    %.15g    \n", dGammadq[Njack - 1], myres->comp_error(dGammadq));
+
+
+    write_jack(fit_Z2_sigma.P[0], Njack, jack_file);
+    check_correlatro_counter(57);
 
 
 }
