@@ -73,3 +73,7 @@ _book
 .editorconfig
 analysis_heavy_quarks.code-workspace
 Meson_masses_clover/my-plotly-plot.html
+
+*.js
+*.html
+*.png
