@@ -222,17 +222,17 @@ all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string =paste0("Z_{0}"),
                   all_obs=all_obs,mt=mt1,df = NULL,
                   log = TRUE, number = NULL,nudge = 0,
-                  print_res = FALSE,logx=2 
+                  print_res = FALSE,logx=0 
                    )
 df1<-add_corr_to_df(string =paste0("Z_{1}"),
                   all_obs=all_obs,mt=mt1,df = df1,
                   log = TRUE, number = NULL,nudge = 0,
-                  print_res = FALSE,logx=2 
+                  print_res = FALSE,logx=0 
                    )
 df1<-add_corr_to_df(string =paste0("Z_{2}"),
                   all_obs=all_obs,mt=mt1,df = df1,
                   log = TRUE, number = NULL,nudge = 0,
-                  print_res = FALSE,logx=2 
+                  print_res = FALSE,logx=0 
                    )
 
 gg<- plot_df_corr_ggplot(df1)
