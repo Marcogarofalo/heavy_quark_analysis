@@ -11,6 +11,8 @@ book:
     - cB211.072.64_inclusive.qmd
     - cB211.072.64_HLT.qmd
     - cB211.072.64_dGamma.qmd
+    - cB211.072.96_dGamma.qmd
+    - overview_dGamma.qmd
     - cross_check_cB211.072.64_th6_t48_64.qmd
     - checks_sigma_extrapolation.qmd
     - check_Emax.qmd
