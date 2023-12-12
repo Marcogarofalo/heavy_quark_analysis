@@ -60,5 +60,6 @@ gg<- gg + geom_pointrange(aes(x=q2, y=dG,
             color=ensemble, shape=ensemble) )
 
 fig<-myplotly(gg,"","$q^2[GeV]$", "$24 \\pi^3 d\\Gamma/dq^2 [GeV^-3]$",to_print = TRUE)
+df<-data.frame("ensemble"=ensemble,"q2_GEV"=q2,"dG_GEV1"=dG,"ddG"=dG_err)
 ```
 

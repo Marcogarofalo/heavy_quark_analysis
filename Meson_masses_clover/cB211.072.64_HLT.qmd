@@ -124,10 +124,10 @@ df<-NULL
 ###################### MG
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_kernel")
 all_obs<- get_all_corr(mt1)
-df1<-add_corr_to_df(string ="HLT_Z0-sig0.000500-alpha2.00_lam16384.0000",
+df1<-add_corr_to_df(string ="HLT_Z0-sig0.000500-alpha2.00_lam16384",
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
-df1<-add_corr_to_df(string ="HLT_Z0-sig0.000500-alpha2.00_lam1024.0000",  
+df1<-add_corr_to_df(string ="HLT_Z0-sig0.000500-alpha2.00_lam1024",  
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
@@ -205,10 +205,10 @@ df<-NULL
 ###################### MG
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_kernel")
 all_obs<- get_all_corr(mt1)
-df1<-add_corr_to_df(string ="HLT_Z1-sig0.000500-alpha2.00_lam16384.0000",
+df1<-add_corr_to_df(string ="HLT_Z1-sig0.000500-alpha2.00_lam16384",
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
-df1<-add_corr_to_df(string ="HLT_Z1-sig0.000500-alpha2.00_lam1024.0000",  
+df1<-add_corr_to_df(string ="HLT_Z1-sig0.000500-alpha2.00_lam1024",  
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
@@ -277,10 +277,10 @@ df<-NULL
 ###################### MG
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_ins48_ins64_th6.dat_HLT_kernel")
 all_obs<- get_all_corr(mt1)
-df1<-add_corr_to_df(string ="HLT_Z2-sig0.000500-alpha2.00_lam16384.0000",
+df1<-add_corr_to_df(string ="HLT_Z2-sig0.000500-alpha2.00_lam16384",
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
-df1<-add_corr_to_df(string ="HLT_Z2-sig0.000500-alpha2.00_lam1024.0000",  
+df1<-add_corr_to_df(string ="HLT_Z2-sig0.000500-alpha2.00_lam1024",  
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 

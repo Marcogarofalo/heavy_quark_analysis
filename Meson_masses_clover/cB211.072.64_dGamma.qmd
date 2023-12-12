@@ -190,14 +190,14 @@ df<-NULL
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th3_t56_44.dat_HLT_kernel")
 all_obs<- get_all_corr(mt1)
 
-df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99_lam1024.0000"),
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99_lam1024"),
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE,
                    )
-df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00_lam1024.0000"),
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00_lam1024"),
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
-df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00_lam1024.0000"),
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00_lam1024"),
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 # 
@@ -257,7 +257,7 @@ mt1<-read_df(paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072
 all_obs<- get_all_corr(mt1)
 
 df1<-add_corr_to_df(
-  string=paste0("HLT_",Z,"-sig0.000500-alpha0.00_lam1024.0000"),
+  string=paste0("HLT_",Z,"-sig0.000500-alpha0.00_lam1024"),
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE)
 
@@ -339,7 +339,7 @@ ths<-c("3")
 file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_output")
 mt1<-read_df(file)
 all_obs<- get_all_corr(mt1)
-df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.120000-alpha2.00"),
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.120000-alpha2"),
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE,logx=2
                    )
@@ -365,7 +365,7 @@ df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.120000-alpha2.00"),
 fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_HLT_AoverB")
 mtA<-read_df(fileA)
 all_obsA<- get_all_corr(mtA)
-dfA<-get_block(string =paste0("HLT_",Z,"-sig0.120000-alpha2.00"),
+dfA<-get_block(string =paste0("HLT_",Z,"-sig0.120000-alpha2"),
                     all_obs=all_obsA,mt=mtA,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,
                     print_res = FALSE,logx=2,ix=2, iy=6,ierr=7,ifit=9,ierrfit=10,
