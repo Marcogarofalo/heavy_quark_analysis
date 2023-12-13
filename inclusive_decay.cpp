@@ -313,6 +313,11 @@ int main(int argc, char** argv) {
     fit_info.restore_default();
 
 
+    //// struct to ignore the plateaux range
+    fit_type tmp_info;
+    tmp_info.codeplateaux = true;
+    tmp_info.tmin = 20;
+    tmp_info.tmax = 20;
     //////////////////////
     std::vector<std::vector<int>> id_Mmunu(4, std::vector<int>(4));
     int ncorr_new = head.ncorr;
@@ -332,7 +337,7 @@ int main(int argc, char** argv) {
     double* a_GeV_jack = (double*)malloc(sizeof(double) * Njack);
     for (int j = 0; j < Njack;j++) {
         a_MeV_jack[j] = a_fm_jack[j] / hbarc;
-        a_GeV_jack[j] =a_MeV_jack[j]*1000.0;
+        a_GeV_jack[j] = a_MeV_jack[j] * 1000.0;
     }
 
     for (int mu = 0; mu < 4;mu++) {  // C_munu   mu runs faster // mu is given by the gamma // nu by the insertion
@@ -377,13 +382,13 @@ int main(int argc, char** argv) {
 
             double* Mmunu = plateau_correlator_function(
                 option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-                namefile_plateaux, outfile, ncorr_new - 1, name, identity, jack_file);
+                namefile_plateaux, outfile, ncorr_new - 1, name, identity, jack_file, tmp_info);
             check_correlatro_counter(6 + (nu + mu * 4) * 2);
             free(Mmunu);
             mysprintf(name, NAMESIZE, "ImM_{%d,%d}", mu, nu);
             double* Mmunu_im = plateau_correlator_function(
                 option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-                namefile_plateaux, outfile, ncorr_new - 1, name, identity_im, jack_file);
+                namefile_plateaux, outfile, ncorr_new - 1, name, identity_im, jack_file, tmp_info);
             check_correlatro_counter(7 + (nu + mu * 4) * 2);
             free(Mmunu_im);
 
@@ -433,13 +438,13 @@ int main(int argc, char** argv) {
         mysprintf(name, NAMESIZE, "Y_{%d}", i);
         double* Y = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-            namefile_plateaux, outfile, id_Y[i], name, identity, jack_file);
+            namefile_plateaux, outfile, id_Y[i], name, identity, jack_file,tmp_info);
         check_correlatro_counter(38 + (i - 1) * 2);
         free(Y);
         mysprintf(name, NAMESIZE, "ImY_{%d}", i);
         Y = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-            namefile_plateaux, outfile, id_Y[i], name, identity_im, jack_file);
+            namefile_plateaux, outfile, id_Y[i], name, identity_im, jack_file,tmp_info);
         check_correlatro_counter(39 + (i - 1) * 2);
         free(Y);
     }
@@ -463,13 +468,13 @@ int main(int argc, char** argv) {
         mysprintf(name, NAMESIZE, "Z_{%d}", i);
         double* Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-            namefile_plateaux, outfile, id_Z[i], name, identity, jack_file);
+            namefile_plateaux, outfile, id_Z[i], name, identity, jack_file, tmp_info);
         check_correlatro_counter(48 + i * 2);
         free(Z);
         mysprintf(name, NAMESIZE, "ImZ_{%d}", i);
         Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-            namefile_plateaux, outfile, id_Z[i], name, identity_im, jack_file);
+            namefile_plateaux, outfile, id_Z[i], name, identity_im, jack_file, tmp_info);
         check_correlatro_counter(49 + i * 2);
         free(Z);
     }
@@ -900,12 +905,12 @@ int main(int argc, char** argv) {
     double* q2 = (double*)malloc(sizeof(double) * Njack);
     for (int j = 0;j < Njack;j++) {
         dGammadq[j] = fit_Z0_sigma.P[0][j] + fit_Z1_sigma.P[0][j] + fit_Z2_sigma.P[0][j];
-        if(j==Njack-1) printf(" sumZ=%g\n",dGammadq[j]);
+        if (j == Njack - 1) printf(" sumZ=%g\n", dGammadq[j]);
         dGammadq[j] *= (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) / (2 * M_PI);
-        if(j==Njack-1) printf(" dgammaZ=%g\n",dGammadq[j]);
-        if(j==Njack-1) printf(" a=%g\n",a_fm_jack[j]);
-        if(j==Njack-1) printf(" a GeV=%g\n",a_GeV_jack[j]);
-        if(j==Njack-1) printf(" MDS GeV=%g\n",M_Ds[j] / a_GeV_jack[j]);
+        if (j == Njack - 1) printf(" dgammaZ=%g\n", dGammadq[j]);
+        if (j == Njack - 1) printf(" a=%g\n", a_fm_jack[j]);
+        if (j == Njack - 1) printf(" a GeV=%g\n", a_GeV_jack[j]);
+        if (j == Njack - 1) printf(" MDS GeV=%g\n", M_Ds[j] / a_GeV_jack[j]);
         q2[j] = head.thetas[0] * M_PI / (head.L * a_GeV_jack[j]);
     }
     fprintf(outfile, "\n\n#dGamma/dq_GEV3 summign Z\n");
