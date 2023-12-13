@@ -24,13 +24,13 @@
 
 #./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th6_t56_44_nobin.dat -bin 1 jack
 
-#./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins48_ins64_th0.dat -bin 1 jack || exit 1
 #./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins48_ins64_th6.dat -bin 1 jack || exit 1
 #
-#./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th2.dat -bin 1 jack || exit 1
-#./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th4.dat -bin 1 jack || exit 1
-#./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th6.dat -bin 1 jack || exit 1
-#./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th8.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins48_ins64_th0.dat -bin 1 jack 
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th2.dat -bin 1 jack 
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th4.dat -bin 1 jack 
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th6.dat -bin 1 jack 
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins40_ins56_th8.dat -bin 1 jack 
 #
 #
 #

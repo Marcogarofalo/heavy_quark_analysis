@@ -120,28 +120,28 @@ all_obsA<- get_all_corr(mtA)
 dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00"),
                     all_obs=all_obsA,mt=mtA,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=2,ix=2, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=2,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
 dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00"),
                     all_obs=all_obsA,mt=mtA,df = dfA,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=2,ix=2, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=2,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
 dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"),
                     all_obs=all_obsA,mt=mtA,df = dfA,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=2,ix=2, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=2,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
 
-dfA$x<-dfA$x-log2(dfA[,4])# A/A0
-dfA$xfit<-dfA$xfit-log2(dfA[,4])# A/A0
-dfA$tmin<-dfA$tmin-log2(dfA[,4])# A/A0
-dfA$tmax<-dfA$tmax-log2(dfA[,4])# A/A0
-gg<- plot_df_corr_ggplot(dfA,width = 0.1)
-fig<- myplotly(gg,"","log2(A/A0)", paste0("rho-th",ths[i]), to_print=TRUE )
+dfA$x<-dfA$x-log2(dfA[,12])# A/A0_ref
+dfA$xfit<-dfA$xfit-log2(dfA[,12])# A/A0_ref
+dfA$tmin<-dfA$tmin-log2(dfA[,12])# A/A0_ref
+dfA$tmax<-dfA$tmax-log2(dfA[,12])# A/A0_ref
+gg<- plot_df_corr_ggplot(dfA,width = 0.05)
+fig<- myplotly(gg,"","log2(A/A0)_ref", paste0("rho-th",ths[i]), to_print=TRUE )
 
 
 # file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.96_th",ths[i],"_t56_44.dat_output")

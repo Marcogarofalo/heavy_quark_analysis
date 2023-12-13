@@ -114,26 +114,26 @@ all_obsA<- get_all_corr(mtA)
 dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00"),
                     all_obs=all_obsA,mt=mtA,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=2,ix=2, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=2,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
 dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00"),
                     all_obs=all_obsA,mt=mtA,df = dfA,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=2,ix=2, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=2,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
 dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"),
                     all_obs=all_obsA,mt=mtA,df = dfA,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=2,ix=2, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=2,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
 
-dfA$x<-dfA$x-log2(dfA[,4])# A/A0
-dfA$xfit<-dfA$xfit-log2(dfA[,4])# A/A0
-dfA$tmin<-dfA$tmin-log2(dfA[,4])# A/A0
-dfA$tmax<-dfA$tmax-log2(dfA[,4])# A/A0
+dfA$x<-dfA$x-log2(dfA[,12])# A/A0
+dfA$xfit<-dfA$xfit-log2(dfA[,12])# A/A0
+dfA$tmin<-dfA$tmin-log2(dfA[,12])# A/A0
+dfA$tmax<-dfA$tmax-log2(dfA[,12])# A/A0
 gg<- plot_df_corr_ggplot(dfA,width = 0.1)
 fig<- myplotly(gg,"","log2(A/A0)", paste0("rho-th",ths[i]), to_print=TRUE )
                
@@ -275,9 +275,9 @@ gg<-gg + geom_line(aes(x=df$omega  , y=df$Kb,
                        ),linetype="dashed" )
 gg<-gg + geom_line(aes(x=df$omega  , y=df$K,
                        color=paste0("exact-",df$label)), linetype="solid")
-gg<-gg + geom_line(aes(x=df$omega  , y=df$K*exp(-1.99*df$omega),
+gg<-gg + geom_line(aes(x=df$omega  , y=df$K*exp(1.99*df$omega),
                        color=paste0("a-1.99-",df$label)), linetype="solid")
-gg<-gg + geom_line(aes(x=df$omega  , y=df$K*exp(2*df$omega),
+gg<-gg + geom_line(aes(x=df$omega  , y=df$K*exp(-2*df$omega),
                        color=paste0("a2-",df$label)), linetype="solid")
 
 
