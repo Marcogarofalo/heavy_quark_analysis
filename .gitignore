@@ -74,9 +74,15 @@ _book
 analysis_heavy_quarks.code-workspace
 Meson_masses_clover/my-plotly-plot.html
 
+*.css
+*.woff
+*.map
+*.scss
 *.js
 *.html
 *.png
 
 gprof_build/*
 !gprof_build/do_cmake.sh
+Meson_masses_clover/cD211.054.96_dGamma_files/libs/jquery-3.5.1/jquery-AUTHORS.txt
+cov_bin.txt
