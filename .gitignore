@@ -77,3 +77,6 @@ Meson_masses_clover/my-plotly-plot.html
 *.js
 *.html
 *.png
+
+gprof_build/*
+!gprof_build/do_cmake.sh
