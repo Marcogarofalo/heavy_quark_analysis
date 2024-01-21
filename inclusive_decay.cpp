@@ -438,13 +438,13 @@ int main(int argc, char** argv) {
         mysprintf(name, NAMESIZE, "Y_{%d}", i);
         double* Y = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-            namefile_plateaux, outfile, id_Y[i], name, identity, jack_file,tmp_info);
+            namefile_plateaux, outfile, id_Y[i], name, identity, jack_file, tmp_info);
         check_correlatro_counter(38 + (i - 1) * 2);
         free(Y);
         mysprintf(name, NAMESIZE, "ImY_{%d}", i);
         Y = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
-            namefile_plateaux, outfile, id_Y[i], name, identity_im, jack_file,tmp_info);
+            namefile_plateaux, outfile, id_Y[i], name, identity_im, jack_file, tmp_info);
         check_correlatro_counter(39 + (i - 1) * 2);
         free(Y);
     }
@@ -596,7 +596,13 @@ int main(int argc, char** argv) {
             // HLT_info.alpha = alphas[ai];
             // HLT_type HLT_space(HLT_info);
             wrapper_smearing Delta(c_theta_s_HLT, theta_p, HLT_space[ai]);
-            HLT_space[ai]->compute_f_EXP_b(Delta);
+
+            // HLT_space[ai]->compute_f_EXP_b(Delta);
+            char nameHLT[NAMESIZE];
+            mysprintf(nameHLT, NAMESIZE, "%s/out/%s_HLT_f_Z0-sig%f-alpha%2.2f", option[3], option[6], sigmas[si], alphas[ai]);
+            // HLT_space[ai]->store_f_EXP_b(nameHLT);
+            HLT_space[ai]->load_f_EXP_b(nameHLT);
+
             char namefit[NAMESIZE];
             mysprintf(namefit, NAMESIZE, "HLT_Z0-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
             fit_result tmp = HLT_space[ai]->HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
@@ -648,7 +654,7 @@ int main(int argc, char** argv) {
     fit_info.Nvar = 1;
     fit_info.Njack = head.Njack;
     fit_info.N = 1;
-    fit_info.myen = std::vector<int>(sigmas.size());
+    fit_info.myen = std::vector<int>(sigmas.size() - 5);
     for (int n = 0;n < fit_info.myen.size();n++) fit_info.myen[n] = n;
     fit_info.entot = fit_info.myen.size() * fit_info.N;
     fit_info.malloc_x();
@@ -706,7 +712,13 @@ int main(int argc, char** argv) {
             // HLT_info.alpha = alphas[ai];
             // HLT_type HLT_space(HLT_info);
             wrapper_smearing Delta(c1_theta_s_HLT, theta_p, HLT_space[ai]);
-            HLT_space[ai]->compute_f_EXP_b(Delta);
+            // HLT_space[ai]->compute_f_EXP_b(Delta);
+            char nameHLT[NAMESIZE];
+            mysprintf(nameHLT, NAMESIZE, "%s/out/%s_HLT_f_Z1-sig%f-alpha%2.2f", option[3], option[6], sigmas[si], alphas[ai]);
+            // HLT_space[ai]->store_f_EXP_b(nameHLT);
+            HLT_space[ai]->load_f_EXP_b(nameHLT);
+
+
             char namefit[NAMESIZE];
             mysprintf(namefit, NAMESIZE, "HLT_Z1-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
             fit_result tmp = HLT_space[ai]->HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
@@ -813,7 +825,12 @@ int main(int argc, char** argv) {
         for (int ai = 0; ai < alphas.size();ai++) {
 
             wrapper_smearing Delta(c2_theta_s_HLT, theta_p, HLT_space[ai]);
-            HLT_space[ai]->compute_f_EXP_b(Delta);
+            // HLT_space[ai]->compute_f_EXP_b(Delta);
+            char nameHLT[NAMESIZE];
+            mysprintf(nameHLT, NAMESIZE, "%s/out/%s_HLT_f_Z2-sig%f-alpha%2.2f", option[3], option[6], sigmas[si], alphas[ai]);
+            // HLT_space[ai]->store_f_EXP_b(nameHLT);
+            HLT_space[ai]->load_f_EXP_b(nameHLT);
+
             char namefit[NAMESIZE];
             mysprintf(namefit, NAMESIZE, "HLT_Z2-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
             fit_result tmp = HLT_space[ai]->HLT_of_corr(option, conf_jack, namefile_plateaux, namefit, Delta, jack_file, fit_info_HLT);
