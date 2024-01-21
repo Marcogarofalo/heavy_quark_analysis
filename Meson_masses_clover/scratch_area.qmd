@@ -43,8 +43,13 @@ For $Z_0$ the kernel function is
 
 - One could also try $-\int \theta_0(\omega-\omega_0)\approx-(\omega-\omega_0)\theta_0(\omega-\omega_0)$
 
-- We could iterate the procedure and use as base $b_t''=\frac{e^{-Et}}{t^2}$ to     approximate $\Delta''$
-$$\Delta''=\int\int \theta_0(\omega-\omega_0)\approx \frac{1}{2} (\omega-\omega_0)^2\theta_0(\omega-\omega_0)$$
+- We could iterate the procedure and use as base $b_t''=\frac{e^{-Et}}{t^2}$ to     approximate $\int \int\Delta$
+$$\int\int\Delta=\int\int \theta_0(\omega-\omega_0)\approx \frac{1}{2} (\omega-\omega_0)^2\theta_0(\omega-\omega_0)$$
+
+- We try a different function that approach the $\theta$, the algebraic function
+$$
+  \theta_0^{algebraic}=\frac{c}{2}\left( \frac{x}{\sqrt{1+x^2}}+1\right)\,, \quad x=\frac{\omega_0-\omega}{\sigma}
+$$
 
 ```{r,results='asis', echo=FALSE}
 dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/test_Emax/out/"
@@ -435,14 +440,14 @@ for (i in seq_along(ths) ){
 
 
   file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/test_Emax/out/cD211.054.96_th3_t78_62.dat_fit_HLT_",Z,"-part-bt-k2-sigma")
-  gg<-custom_plot_fit(file,"sigma", "$-(\\omega-\\omega_0)\\theta_0(\\omega-\\omega_0)$" , gg=gg,nudge = 0.0002)
+  gg<-custom_plot_fit(file,"sigma", "$-(\\omega-\\omega_0)\\theta_0(\\omega-\\omega_0)$" , gg=gg,nudge = 0.001)
 
 
     file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/test_Emax/out/cD211.054.96_th3_t78_62.dat_fit_HLT_",Z,"-part2-bt-k2-sigma")
-  gg<-custom_plot_fit(file,"sigma", "$0.5(\\omega-\\omega_0)^2\\theta_0(\\omega-\\omega_0)$" , gg=gg,nudge = 0.0004)
+  gg<-custom_plot_fit(file,"sigma", "$0.5(\\omega-\\omega_0)^2\\theta_0(\\omega-\\omega_0)$" , gg=gg,nudge = 0.002)
   
     file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/test_Emax/out/cD211.054.96_th3_t78_62.dat_fit_HLT_",Z,"-algebraic_th-sigma")
-  gg<-custom_plot_fit(file,"sigma", "$\\theta_0^{algebraic}(\\omega-\\omega_0)$" , gg=gg,nudge = 0.0004)
+  gg<-custom_plot_fit(file,"sigma", "$\\theta_0^{algebraic}(\\omega-\\omega_0)$" , gg=gg,nudge = 0.003)
   
 
   

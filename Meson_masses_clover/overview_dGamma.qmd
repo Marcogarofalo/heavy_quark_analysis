@@ -22,10 +22,10 @@ myplotly(ggplot())
 
 
 ```{r,results='asis', echo=FALSE}
-ens<-c("cB211.072.64", "cB211.072.96", "cD211.054.96")
-seps<-c("t56_44", "t78_62")
+ens<-c("cB211.072.64", "cB211.072.96", "cC211.06.80", "cD211.054.96" )
+seps<-c("t56_44", "t78_62", "t65_51")
 dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/"
-ths<- c("1","3","5","6","7","9")
+ths<- c("1","2","3","4","5","6","7","8","9","9.5")
 len<-0
 for (ie in seq_along(ens)){
 for (i in seq_along(ths) ){
@@ -51,7 +51,7 @@ for (is in seq_along(seps) ){
     fit<-get_full_res("dGammadq_GEV3", all_obs, mt)
     dG[count]<-fit[1,1]
     dG_err[count]<-fit[1,2]
-    q2[count]<-fit[1,3]
+    q2[count]<-fit[1,3]+0.002*ie
     ensemble[count]<-ens[ie]
     count<-count+1
   }

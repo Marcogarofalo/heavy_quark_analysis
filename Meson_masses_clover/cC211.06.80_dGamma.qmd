@@ -1,4 +1,4 @@
-#  cD211.054.96 $d\Gamma/dq^2$
+#  cC211.06.80 $d\Gamma/dq^2$
 
 
 ```{r ,include=FALSE}
@@ -27,7 +27,7 @@ dG<-rep(0, length(ths))
 dG_err<-rep(0, length(ths))
 q2<-rep(0, length(ths))
 for (i in seq_along(ths) ){
-  mt<-read_df(paste0(dir,"cD211.054.96_th",ths[i],"_t78_62.dat_output"))
+  mt<-read_df(paste0(dir,"cC211.06.80_th",ths[i],"_t65_51.dat_output"))
   all_obs<- get_all_corr(mt)
   fit<-get_full_res("dGammadq_GEV3", all_obs, mt)
   dG[i]<-fit[1,1]
@@ -57,7 +57,7 @@ Zs<- c("Z0","Z1","Z2")
 for (Z in Zs){
 cat("\n## ",Z,"\n\n")
 for (i in seq_along(ths) ){
-  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cD211.054.96_th",ths[i],"_t78_62.dat_fit_HLT_",Z,"-sigma")
+  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cC211.06.80_th",ths[i],"_t65_51.dat_fit_HLT_",Z,"-sigma")
   gg<-plot_fit(file,"sigma", "alpha-ave" )
   ############################# plot all alpha
   
@@ -69,8 +69,8 @@ for (i in seq_along(ths) ){
   alpha<-c()
   for (s in c(0.120, 0.100, 0.075, 0.050, 0.037, 0.025, 0.017, 0.010, 0.005, 0.0035, 0.002, 0.0005 ) ){
     si<-sprintf("%f",s)
-   P<-read_fit_P_file(paste0(dir,"cD211.054.96_th",ths[i],"_t78_62.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_P.dat"))
-   file<-paste0(dir,"cD211.054.96_th",ths[i],"_t78_62.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_data.txt")
+   P<-read_fit_P_file(paste0(dir,"cC211.06.80_th",ths[i],"_t65_51.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_P.dat"))
+   file<-paste0(dir,"cC211.06.80_th",ths[i],"_t65_51.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_data.txt")
     dfa<- read.table(file, header=FALSE, fill=TRUE)
     cols<-length(dfa[1,])
     val<-c(val,dfa[,cols-2])
@@ -84,9 +84,11 @@ for (i in seq_along(ths) ){
               shape=as.factor(alpha), fill=as.factor(alpha) ) )
   #gg<-gg+ scale_shape_manual(values = c(4,2,3,5,6))
   ##################################################
+  
   fig<- myplotly(gg,title,"$\\sigma$", paste0(Z,"-th",ths[i]),
                          to_print = TRUE, output="HTML", legend_position = c(0.8,0.9),
                legend_title = "alpha") 
+
 }
 }
 ```
@@ -103,21 +105,22 @@ for (i in seq_along(ths) ){
 
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
-
+sigmas<-c("0.120000", "0.100000", "0.075000", "0.050000", "0.037000", "0.025000", "0.017000", "0.010000", "0.005000", "0.003500", "0.002000", "0.000500" )
+sigmas<-c("0.025000")
 Zs<- c("Z0","Z1","Z2")
 for (Z in Zs){
 cat("\n## ",Z,"\n\n")
   
 for (i in seq_along(ths) ){
-
+ for(s in sigmas){
 df<-NULL
 
 
 df<-NULL
-fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cD211.054.96_th",ths[i],"_t78_62.dat_HLT_AoverB")
+fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cC211.06.80_th",ths[i],"_t65_51.dat_HLT_AoverB")
 mtA<-read_df(fileA)
 all_obsA<- get_all_corr(mtA)
-dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00"),
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha2.00"),
                     all_obs=all_obsA,mt=mtA,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,
                     print_res = FALSE,logx=10,ix=11,
@@ -147,9 +150,12 @@ gg<- plot_df_corr_ggplot(dfA,width = 0.01)
 # library(scales) # to access break formatting functions
 # gg<-gg+scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x),
 #               labels = trans_format("log10", math_format(10^.x))) 
+cat("\n\n::: {.callout-caution collapse=\"true\"}\n\n")
+  cat("## th:",ths[i],"  sigma:",s," \n")
 fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",ths[i]), to_print=TRUE )
+  cat("\n:::\n")
 
-
+ }
 }
 }
 ```
@@ -172,7 +178,7 @@ cat("\n## ",Z,"\n\n")
   
 df<-NULL
 ###################### MG
-mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cD211.054.96_th3_t78_62.dat_HLT_kernel")
+mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cC211.06.80_th3_t65_51.dat_HLT_kernel")
 all_obs<- get_all_corr(mt1)
 
 df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99_lam1024"),
@@ -241,7 +247,7 @@ fig<- myplotly(gg,"","omega", "K", to_print=TRUE , legend_position = c(0.5,0.95)
 for (i in seq_along(ths) ){
 
 df<-NULL
-file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cD211.054.96_th",ths[i],"_t78_62.dat_output")
+file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cC211.06.80_th",ths[i],"_t65_51.dat_output")
 mt1<-read_df(file)
 all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string =paste0("Z_{0}"),
@@ -267,4 +273,5 @@ fig<- myplotly(gg,"","t", paste0("log Z th-",ths[i] ), to_print=TRUE )
 }
  
 ```
+
 
