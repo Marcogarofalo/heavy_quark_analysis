@@ -129,6 +129,11 @@ int main(int argc, char** argv) {
         option[6]);
     FILE* jack_file = open_file(namefile, "w+");
     head.write_header(jack_file);
+    fflush(jack_file);
+
+    // FILE* rjack_file = open_file(namefile, "r");
+    // head.read_header(rjack_file);
+    // head.print_header();
 
     //////////////////////////////////// confs
     double**** data = calloc_corr(confs, head.ncorr, head.T);

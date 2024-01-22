@@ -66,3 +66,9 @@ target_link_libraries(inclusive_decay PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
 
 target_link_libraries(test_Emax_HLT PUBLIC functions_heavy_quarks)
 target_link_libraries(test_Emax_HLT PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
+
+
+### fit all
+
+add_executable(fit_all_inclusive_Ds fit_all_inclusive_Ds.cpp)
+target_link_libraries(fit_all_inclusive_Ds PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
