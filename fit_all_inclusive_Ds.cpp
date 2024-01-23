@@ -32,6 +32,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+constexpr double hbarc = 197.326963;
 
 
 
@@ -62,7 +63,7 @@ data_single read_single_dataj(FILE* stream) {
     int Njack;
     int Nobs;
 
-    
+
     data_single dj;
     dj.header.read_header_jack(stream);
     dj.header.print_header();
@@ -84,18 +85,18 @@ data_all read_all_the_files(std::vector<std::string> files, const char* resampli
     jackall.resampling = resampling;
     jackall.en = new data_single[files.size()];
     jackall.ens = files.size();
-    for (int i=0; i<files.size();i++) {
-        printf("reading: %s\n",files[i].c_str());
+    for (int i = 0; i < files.size();i++) {
+        printf("reading: %s\n", files[i].c_str());
         FILE* f = open_file(files[i].c_str(), "r");
 
         // read_single_dataj(f, params, &(jackall->en[count]));
         jackall.en[i] = read_single_dataj(f);
         jackall.en[i].resampling = resampling;
-        
+
         fclose(f);
 
         // printing
-        printf("file: %s\n",files[i].c_str());
+        printf("file: %s\n", files[i].c_str());
         jackall.en[i].header.print_header();
 
     }
@@ -107,7 +108,6 @@ int main(int argc, char** argv) {
     error(argc != 4, 1, "main ",
         "usage:./fit_all_phi4  jack/boot   path_to_jack   output_dir");
     char namefile[NAMESIZE];
-    char namefit[NAMESIZE];
 
     std::vector<std::string> files;
 
@@ -209,12 +209,84 @@ int main(int argc, char** argv) {
         all_en[e] = e;
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //// read
+    ////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////
+    //// generalised resampling
+    ////////////////////////////////////////////////////////////////////////////
     data_all jackall = read_all_the_files(files, argv[1]);
     jackall.create_generalised_resampling();
 
+    int Njack = jackall.en[0].Njack;
+    if (strcmp(argv[1], "jack") == 0) {
+        myres = new resampling_jack(Njack - 1);
+    }
+    else if (strcmp(argv[1], "boot") == 0) {
+        myres = new resampling_boot(Njack - 1);
+    }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    // fits 
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<std::string>th_map = { "1","2","3","4","5","6","7","8","9","9.5" };
+    error(th_map.size() != Ntheta_B64, 1, "check the thetas", "");
+    double** fit_result_dG = malloc_2<double>(Ntheta_B64, Njack);
+    for (int th = 0;th < Ntheta_B64;th++) {
+        fit_type fit_info;
+        fit_info.Npar = 1;
+        fit_info.N = 1;
+        fit_info.Nvar = 3;
+        fit_info.Njack = Njack;
 
+        fit_info.myen.resize(4);
+        fit_info.myen[0] = th;
+        fit_info.myen[1] = fit_info.myen[0] + Ntheta_B64;
+        fit_info.myen[2] = fit_info.myen[1] + Ntheta_B96;
+        fit_info.myen[3] = fit_info.myen[2] + Ntheta_C80;
 
+        fit_info.entot = fit_info.myen.size() * fit_info.N;
+        fit_info.malloc_x();// Nvar, entot, Njack
+        int count = 0;
+        for (int n = 0;n < fit_info.N;n++) {
+            // for (int e = 0;e < fit_info.myen.size();e++) {
+            for (int e : fit_info.myen) {
+                for (int j = 0;j < Njack;j++) {
+                    fit_info.x[0][count][j] = pow(jackall.en[e].jack[58][j], 2);
+                    fit_info.x[1][count][j] = pow(jackall.en[e].header.thetas[0] * M_PI / (jackall.en[e].header.L * jackall.en[e].jack[58][j] * 1000.0 / hbarc), 2);// GeV
+                    fit_info.x[2][count][j] = jackall.en[e].header.L;
+                }
+                count++;
+            }
+        }
+        fit_info.function = rhs_const;
+        fit_info.corr_id = { 57 };//
+        char namefit[NAMESIZE];
+        mysprintf(namefit, NAMESIZE, "dGamma_th%s_const", th_map[th].c_str());
+        fit_result dGamma_th = fit_all_data(argv, jackall, lhs_identity, fit_info, namefit);
+        fit_info.band_range = { 0,0.0081 };
+        print_fit_band(argv, jackall, fit_info, fit_info, namefit, "afm", dGamma_th, dGamma_th, 0, fit_info.myen.size() - 1, 0.001);
+
+        fit_info.restore_default();
+        for (int j = 0;j < Njack;j++)
+            fit_result_dG[th][j] = dGamma_th.P[0][j];
+
+        dGamma_th.clear();
+    }
+    double **Cov = myres->comp_cov(Ntheta_B64, fit_result_dG);
+    char namecov[NAMESIZE];
+    mysprintf(namecov, NAMESIZE, "%s/dGamma_const_corr.dat", argv[3]);
+    FILE* fcov = open_file(namecov, "w+");
+    for (int i = 0;i < Ntheta_B64;i++) {
+        for (int j = 0;j < Ntheta_B64;j++) {
+            fprintf(fcov, "%-22.4g", Cov[i][j] / sqrt(Cov[i][i] * Cov[j][j]));
+        }
+        fprintf(fcov,"\n");
+    }
+    fclose(fcov);
+    free_2(Ntheta_B64, Cov);
+    free_2(Ntheta_B64, fit_result_dG);
 
 
 }
