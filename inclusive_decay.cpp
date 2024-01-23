@@ -934,6 +934,7 @@ int main(int argc, char** argv) {
         if (j == Njack - 1) printf(" a GeV=%g\n", a_GeV_jack[j]);
         if (j == Njack - 1) printf(" MDS GeV=%g\n", M_Ds[j] / a_GeV_jack[j]);
         q2[j] = head.thetas[0] * M_PI / (head.L * a_GeV_jack[j]);
+        q2[j]*=q2[j];
     }
     fprintf(outfile, "\n\n#dGamma/dq_GEV3 summign Z\n");
     fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z0_sigma.P[0][Njack - 1], myres->comp_error(fit_Z0_sigma.P[0]));
@@ -944,8 +945,12 @@ int main(int argc, char** argv) {
     printf("dGammadq_GEV3 = %.15g    %.15g    \n", dGammadq[Njack - 1], myres->comp_error(dGammadq));
 
 
-    write_jack(fit_Z2_sigma.P[0], Njack, jack_file);
+    write_jack(dGammadq, Njack, jack_file);
     check_correlatro_counter(57);
+    write_jack(a_fm_jack, Njack, jack_file);
+    check_correlatro_counter(58);
+    
+
 
 
 }

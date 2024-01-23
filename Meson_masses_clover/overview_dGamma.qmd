@@ -59,9 +59,20 @@ for (is in seq_along(seps) ){
 gg<- myggplot(fill = FALSE)
 gg<- gg + geom_pointrange(aes(x=q2, y=dG,
             ymin=dG-dG_err, ymax=dG+dG_err,
-            color=ensemble, shape=ensemble) )
+            color=ensemble, shape=ensemble) ,size=1.5, stroke=0.3)
 
 fig<-myplotly(gg,"","$q^2[GeV]$", "$24 \\pi^3 d\\Gamma/dq^2 [GeV^-3]$",to_print = TRUE)
 df<-data.frame("ensemble"=ensemble,"q2_GEV"=q2,"dG_GEV1"=dG,"ddG"=dG_err)
 ```
 
+
+```{r, eval=FALSE, include=FALSE}
+library(ggplot2)
+gg<-ggplot()
+N<-10
+gg<- gg+geom_point(aes(x=c(1:10)/N, y=rep(1,10)),size=4)+theme(aspect.ratio = 0.8,
+text = element_text(size=30))
+gg<- gg+geom_point(aes(x=(c(1:10)/N)^2, y=rep(1.1,10)), color="red",size=4)+ylim(1,1.5)
+gg<- gg+geom_point(aes(x=(c(1,2,3,4,5,6,7,7.8,8,8.5)/N)^2, y=c(1.2)), color="blue",size=4)
+gg
+```

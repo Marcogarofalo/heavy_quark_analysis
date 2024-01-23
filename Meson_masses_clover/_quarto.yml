@@ -15,6 +15,7 @@ book:
     - cD211.054.96_dGamma.qmd
     - cC211.06.80_dGamma.qmd
     - overview_dGamma.qmd
+    - continuum_limit_dGamma.qmd
     - cross_check_cB211.072.64_th6_t48_64.qmd
     - checks_sigma_extrapolation.qmd
     - check_Emax.qmd
