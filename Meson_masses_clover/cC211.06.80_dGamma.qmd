@@ -58,7 +58,7 @@ for (Z in Zs){
 cat("\n## ",Z,"\n\n")
 for (i in seq_along(ths) ){
   file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cC211.06.80_th",ths[i],"_t65_51.dat_fit_HLT_",Z,"-sigma")
-  gg<-plot_fit(file,"sigma", "alpha-ave" )
+  gg<-plot_fit(file,"sigma", "alpha-ave",width = 0.002 )
   ############################# plot all alpha
   
   dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/"
@@ -89,6 +89,7 @@ for (i in seq_along(ths) ){
                          to_print = TRUE, output="HTML", legend_position = c(0.8,0.9),
                legend_title = "alpha") 
 
+ 
 }
 }
 ```
@@ -106,12 +107,22 @@ for (i in seq_along(ths) ){
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 sigmas<-c("0.120000", "0.100000", "0.075000", "0.050000", "0.037000", "0.025000", "0.017000", "0.010000", "0.005000", "0.003500", "0.002000", "0.000500" )
-sigmas<-c("0.025000")
+source("/home/garofalo/programs/Rose/R/plot_routines.R")
 Zs<- c("Z0","Z1","Z2")
+sigmas<-c("0.120000","0.025000","0.000500")
+#Zs<- c("Z0")
 for (Z in Zs){
 cat("\n## ",Z,"\n\n")
   
 for (i in seq_along(ths) ){
+  
+# cat("\n\n::: {.callout-caution collapse=\"true\"}\n\n")
+# cat("## ",Z," th:",ths[i],"  \n")
+
+name<-paste0("C80_",Z,"_th",ths[i],".pdf")
+namefull<-paste0("./_book/",name)
+pdf(namefull)
+
  for(s in sigmas){
 df<-NULL
 
@@ -120,44 +131,61 @@ df<-NULL
 fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cC211.06.80_th",ths[i],"_t65_51.dat_HLT_AoverB")
 mtA<-read_df(fileA)
 all_obsA<- get_all_corr(mtA)
-dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha2.00"),
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha-1.99"),
                     all_obs=all_obsA,mt=mtA,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,
+                    print_res = FALSE,logx=10,ix=11,
+                    iy=6,ierr=7,ifit=9,ierrfit=10,
+                    iplateau = 1
+                   )
+
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha0.00"),
+                    all_obs=all_obsA,mt=mtA,df = dfA,
+                   log = FALSE, number = NULL,nudge = 0,
+                    print_res = FALSE,logx=10,ix=11,
+                    iy=6,ierr=7,ifit=9,ierrfit=10,
+                    iplateau = 1
+                   )
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha2.00"),
+                    all_obs=all_obsA,mt=mtA,df = dfA,
                    log = FALSE, number = NULL,nudge = 0,
                     print_res = FALSE,logx=10,ix=11,
                    iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
-dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00"),
-                    all_obs=all_obsA,mt=mtA,df = dfA,
-                   log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=10,ix=11,
-                    iy=6,ierr=7,ifit=9,ierrfit=10,
-                    iplateau = 1
-                   )
-dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"),
-                    all_obs=all_obsA,mt=mtA,df = dfA,
-                   log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=10,ix=11,
-                    iy=6,ierr=7,ifit=9,ierrfit=10,
-                    iplateau = 1
-                   )
+
 
 dfA$x<-dfA$x-log10(dfA[,12])# A/A0_ref
 dfA$xfit<-dfA$xfit-log10(dfA[,12])# A/A0_ref
 dfA$tmin<-dfA$tmin-log10(dfA[,12])# A/A0_ref
 dfA$tmax<-dfA$tmax-log10(dfA[,12])# A/A0_ref
-gg<- plot_df_corr_ggplot(dfA,width = 0.01)
+gg<- plot_df_corr_ggplot(dfA,width = 0.01,stroke = 1,alpha = 0.2,size_error=0.6)
+#gg<- gg + scale_color_manual(values=c("#C04000","#404040","#4863A0"))
 # library(scales) # to access break formatting functions
 # gg<-gg+scale_x_log10(breaks = trans_breaks("log10", function(x) 10^x),
 #               labels = trans_format("log10", math_format(10^.x))) 
-cat("\n\n::: {.callout-caution collapse=\"true\"}\n\n")
-  cat("## th:",ths[i],"  sigma:",s," \n")
-fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",ths[i]), to_print=TRUE )
-  cat("\n:::\n")
+avep<-(max(dfA$fit)+min(dfA$fit))/2.0
+sdp<- max(dfA$fit)-min(dfA$fit)
+fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",ths[i]), to_print=TRUE, 
+               output = "PDF", to_webgl = FALSE,
+               yrange=c(avep-4*sdp,avep+4*sdp), legend_position = c(0.2,1))
 
+   # name<-paste0("C80_",Z,"_th",ths[i],"_","sig",sigmas,".html")
+   # namefull<-paste0("./_book/",name)
+   # 
+   # htmlwidgets::saveWidget(
+   #             widget = fig, #the plotly object
+   #             file = namefull, #the path & file name
+   #             selfcontained = FALSE #creates a single html file
+   #             )
+   # cat("[/",name,"](",name,"){.external target=\"_blank\"} \n")
  }
+# cat("\n:::\n")
+dev.off()
+cat("[/",name,"](",name,"){.external target=\"_blank\"} \n\n")
 }
 }
+
 ```
 
 

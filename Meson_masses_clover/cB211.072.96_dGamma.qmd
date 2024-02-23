@@ -58,7 +58,7 @@ for (Z in Zs){
 cat("\n## ",Z,"\n\n")
 for (i in seq_along(ths) ){
   file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.96_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sigma")
-  gg<-plot_fit(file,"sigma", "alpha-ave" )
+  gg<-plot_fit(file,"sigma", "alpha-ave",width = 0.002 )
   ############################# plot all alpha
   
   dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/"
@@ -101,15 +101,24 @@ for (i in seq_along(ths) ){
 ::: {.panel-tabset}
 
 
-
 ```{r, echo=FALSE, results='asis', warning=FALSE}
+sigmas<-c("0.120000", "0.100000", "0.075000", "0.050000", "0.037000", "0.025000", "0.017000", "0.010000", "0.005000", "0.003500", "0.002000", "0.000500" )
+source("/home/garofalo/programs/Rose/R/plot_routines.R")
 
 Zs<- c("Z0","Z1","Z2")
+sigmas<-c("0.120000","0.025000","0.000500")
+#Zs<- c("Z0")
 for (Z in Zs){
 cat("\n## ",Z,"\n\n")
   
 for (i in seq_along(ths) ){
+  
 
+name<-paste0("B96_",Z,"_th",ths[i],".pdf")
+namefull<-paste0("./_book/",name)
+pdf(namefull)
+
+ for(s in sigmas){
 df<-NULL
 
 
@@ -117,64 +126,49 @@ df<-NULL
 fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.96_th",ths[i],"_t56_44.dat_HLT_AoverB")
 mtA<-read_df(fileA)
 all_obsA<- get_all_corr(mtA)
-dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00"),
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha-1.99"),
                     all_obs=all_obsA,mt=mtA,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=10,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=10,ix=11,
+                    iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
-dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00"),
+
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha0.00"),
                     all_obs=all_obsA,mt=mtA,df = dfA,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=10,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=10,ix=11,
+                    iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
-dfA<-get_block(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"),
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha2.00"),
                     all_obs=all_obsA,mt=mtA,df = dfA,
                    log = FALSE, number = NULL,nudge = 0,
-                    print_res = FALSE,logx=10,ix=11, iy=6,ierr=7,ifit=9,ierrfit=10,
+                    print_res = FALSE,logx=10,ix=11,
+                   iy=6,ierr=7,ifit=9,ierrfit=10,
                     iplateau = 1
                    )
+
 
 dfA$x<-dfA$x-log10(dfA[,12])# A/A0_ref
 dfA$xfit<-dfA$xfit-log10(dfA[,12])# A/A0_ref
 dfA$tmin<-dfA$tmin-log10(dfA[,12])# A/A0_ref
 dfA$tmax<-dfA$tmax-log10(dfA[,12])# A/A0_ref
-gg<- plot_df_corr_ggplot(dfA,width = 0.01)
-fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",ths[i]), to_print=TRUE )
+gg<- plot_df_corr_ggplot(dfA,width = 0.01,stroke = 1,alpha = 0.2,size_error=0.6)
 
+avep<-(max(dfA$fit)+min(dfA$fit))/2.0
+sdp<- max(dfA$fit)-min(dfA$fit)
+fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",ths[i]), to_print=TRUE, 
+               output = "PDF", to_webgl = FALSE,
+               yrange=c(avep-4*sdp,avep+4*sdp), legend_position = c(0.2,1))
 
-# file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.96_th",ths[i],"_t56_44.dat_output")
-# mt1<-read_df(file)
-# all_obs<- get_all_corr(mt1)
-# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.120000-alpha2.00"), all_obs=all_obs,mt=mt1,df = NULL,
-#                    log = FALSE, number = NULL,nudge = 0,print_res = FALSE,logx=2 
-#                    )
-# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha2.00"), all_obs=all_obs,mt=mt1,df = df1,
-#                    log = FALSE, number = NULL,nudge = 0.1,print_res = FALSE,logx=2)
-# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha0.00"), all_obs=all_obs,mt=mt1,df = df1,
-#                    log = FALSE, number = NULL,nudge = 0.2,print_res = FALSE,logx=2)
-# 
-# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.100000-alpha-1.99"), all_obs=all_obs,mt=mt1,df = df1,
-#                    log = FALSE, number = NULL,nudge = 0.3,print_res = FALSE,logx=2)
-# 
-# 
-# 
-# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00"), all_obs=all_obs,mt=mt1,df = df1,
-#                    log = FALSE, number = NULL,nudge = 0.0,print_res = FALSE,logx=2)
-# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00"), all_obs=all_obs,mt=mt1,df = df1,
-#                    log = FALSE, number = NULL,nudge = 0.1,print_res = FALSE,logx=2)
-# df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"), all_obs=all_obs,mt=mt1,df = df1,
-#                    log = FALSE, number = NULL,nudge = 0.2,print_res = FALSE,logx=2)
-# 
-# 
-# 
-# gg<- plot_df_corr_ggplot(df1)
-# gg<- gg +scale_y_continuous(sec.axis = dup_axis())
-# 
-# fig<- myplotly(gg,"","log2(lam)", paste0("rho-th",ths[i]), to_print=TRUE )
+  
+ }
+dev.off()
+cat("[/",name,"](",name,"){.external target=\"_blank\"} \n\n")
 }
 }
+
 ```
 
 

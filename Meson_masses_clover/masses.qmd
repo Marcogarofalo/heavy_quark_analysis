@@ -1,0 +1,173 @@
+# Masses
+
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+require(tikzDevice)
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
+myplotly(ggplot())
+```
+
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE, dev='tikz'}
+ths<-c("5")
+ens<-c("cB211.072.64", "cB211.072.96", "cC211.06.80", "cD211.054.96" )
+seps<-c("t56_44", "t78_62", "t65_51")
+channels<- c("","_cs","_cs_smearing1")
+df<-NULL
+for (ie in seq_along(ens)){
+for (i in seq_along(ths) ){
+for (is in seq_along(seps) ){
+for (ic in seq_along(channels) ){
+  name<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/",ens[ie],"_th",
+             ths[i],"_",seps[is],channels[ic],".dat_output")  
+  if(file.exists(name)){
+mt<-read_df(name)
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "M_{Ds}_ss",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE,
+                   rename = paste0(ens[ie],"-th",ths[i],channels[ic]))
+  }
+  
+}}}}
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","$t$", "$M_{D_s}$", to_print=TRUE )
+```
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE, dev='tikz'}
+ths<-c("5")
+ens<-c("cB211.072.64", "cB211.072.96", "cC211.06.80", "cD211.054.96" )
+seps<-c("t56_44", "t78_62", "t65_51")
+channels<- c("","_cs","_cs_smearing1")
+df<-NULL
+for (ie in seq_along(ens)){
+for (i in seq_along(ths) ){
+for (is in seq_along(seps) ){
+for (ic in seq_along(channels) ){
+  name<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/",ens[ie],"_th",
+             ths[i],"_",seps[is],channels[ic],".dat_output")  
+  if(file.exists(name)){
+mt<-read_df(name)
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "Z_{Ds}_ss",all_obs=all_obs,mt=mt,df = df,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE,
+                   rename = paste0(ens[ie],"-th",ths[i],channels[ic]))
+  }
+  
+}}}}
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","$t$", "$2M_{D_s}|\\langle{D_s}|{D_s}|0\\rangle|^2$", to_print=TRUE )
+```
+
+
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE, dev='tikz'}
+ths<-c("5")
+ens<-c("cB211.072.64", "cB211.072.96", "cC211.06.80", "cD211.054.96" )
+seps<-c("t56_44", "t78_62", "t65_51")
+channels<- c("","_cs","_cs_smearing1")
+df<-NULL
+for (ie in seq_along(ens)){
+for (i in seq_along(ths) ){
+for (is in seq_along(seps) ){
+for (ic in seq_along(channels) ){
+  name<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/",ens[ie],"_th",
+             ths[i],"_",seps[is],channels[ic],".dat_output")  
+  if(file.exists(name)){
+mt<-read_df(name)
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "Z_{0}",all_obs=all_obs,mt=mt,df = df,
+                   log = TRUE, number = NULL,nudge = 0,print_res = FALSE,
+                   rename = paste0(ens[ie],"-th",ths[i],channels[ic]))
+  }
+  
+}}}}
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","$t$", "$Z_0$", to_print=TRUE )
+```
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE, dev='tikz'}
+ths<-c("5")
+ens<-c("cB211.072.64", "cB211.072.96", "cC211.06.80", "cD211.054.96" )
+seps<-c("t56_44", "t78_62", "t65_51")
+channels<- c("","_cs","_cs_smearing1")
+df<-NULL
+for (ie in seq_along(ens)){
+for (i in seq_along(ths) ){
+for (is in seq_along(seps) ){
+for (ic in seq_along(channels) ){
+  name<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/",ens[ie],"_th",
+             ths[i],"_",seps[is],channels[ic],".dat_output")  
+  if(file.exists(name)){
+mt<-read_df(name)
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "Z_{1}",all_obs=all_obs,mt=mt,df = df,
+                   log = TRUE, number = NULL,nudge = 0,print_res = FALSE,
+                   rename = paste0(ens[ie],"-th",ths[i],channels[ic]))
+  }
+  
+}}}}
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","$t$", "$Z_2$", to_print=TRUE )
+```
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE, dev='tikz'}
+ths<-c("5")
+ens<-c("cB211.072.64", "cB211.072.96", "cC211.06.80", "cD211.054.96" )
+seps<-c("t56_44", "t78_62", "t65_51")
+channels<- c("","_cs","_cs_smearing1")
+df<-NULL
+for (ie in seq_along(ens)){
+for (i in seq_along(ths) ){
+for (is in seq_along(seps) ){
+for (ic in seq_along(channels) ){
+  name<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/",ens[ie],"_th",
+             ths[i],"_",seps[is],channels[ic],".dat_output")  
+  if(file.exists(name)){
+mt<-read_df(name)
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "Z_{2}",all_obs=all_obs,mt=mt,df = df,
+                   log = TRUE, number = NULL,nudge = 0,print_res = FALSE,
+                   rename = paste0(ens[ie],"-th",ths[i],channels[ic]))
+  }
+  
+}}}}
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","$t$", "$Z_2$", to_print=TRUE )
+```
