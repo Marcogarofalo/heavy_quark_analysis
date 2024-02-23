@@ -1,6 +1,10 @@
 #!/bin/bash
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins48_ins64_th6.dat -bin 1 jack
 
+./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th1_t56_44_cs.dat -bin 1 jack
+./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th1_t56_44_cs.dat -bin 1 jack
+./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th1_t56_44_cs_smearing1.dat -bin 1 jack
+
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th1_t56_44.dat -bin 1 jack
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th2_t56_44.dat -bin 1 jack
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th3_t56_44.dat -bin 1 jack
@@ -11,6 +15,7 @@
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th8_t56_44.dat -bin 1 jack
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th9_t56_44.dat -bin 1 jack
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th9.5_t56_44.dat -bin 1 jack
+
 
 
 ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.96_th1_t56_44.dat -bin 1 jack || exit 1
