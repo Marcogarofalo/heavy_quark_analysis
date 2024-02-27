@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <filesystem>
 
 #include "global.hpp"
 #include "read.hpp"
@@ -22,6 +23,7 @@
 #include "functions_heavy_quarks.hpp"
 #include "tower.hpp"
 #include "HLT.hpp"
+
 
 struct kinematic kinematic_2pt;
 constexpr double hbarc = 197.326963;
@@ -602,11 +604,15 @@ int main(int argc, char** argv) {
             // HLT_type HLT_space(HLT_info);
             wrapper_smearing Delta(c_theta_s_HLT, theta_p, HLT_space[ai]);
 
-            // HLT_space[ai]->compute_f_EXP_b(Delta);
             char nameHLT[NAMESIZE];
             mysprintf(nameHLT, NAMESIZE, "%s/out/%s_HLT_f_Z0-sig%f-alpha%2.2f", option[3], option[6], sigmas[si], alphas[ai]);
-            // HLT_space[ai]->store_f_EXP_b(nameHLT);
-            HLT_space[ai]->load_f_EXP_b(nameHLT);
+            if (std::filesystem::exists(nameHLT)){
+                HLT_space[ai]->load_f_EXP_b(nameHLT);
+            }
+            else {
+                HLT_space[ai]->compute_f_EXP_b(Delta);
+                HLT_space[ai]->store_f_EXP_b(nameHLT);
+            }
 
             char namefit[NAMESIZE];
             mysprintf(namefit, NAMESIZE, "HLT_Z0-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
@@ -717,11 +723,15 @@ int main(int argc, char** argv) {
             // HLT_info.alpha = alphas[ai];
             // HLT_type HLT_space(HLT_info);
             wrapper_smearing Delta(c1_theta_s_HLT, theta_p, HLT_space[ai]);
-            // HLT_space[ai]->compute_f_EXP_b(Delta);
             char nameHLT[NAMESIZE];
             mysprintf(nameHLT, NAMESIZE, "%s/out/%s_HLT_f_Z1-sig%f-alpha%2.2f", option[3], option[6], sigmas[si], alphas[ai]);
-            // HLT_space[ai]->store_f_EXP_b(nameHLT);
-            HLT_space[ai]->load_f_EXP_b(nameHLT);
+            if (std::filesystem::exists(nameHLT)){
+                HLT_space[ai]->load_f_EXP_b(nameHLT);
+            }
+            else {
+                HLT_space[ai]->compute_f_EXP_b(Delta);
+                HLT_space[ai]->store_f_EXP_b(nameHLT);
+            }
 
 
             char namefit[NAMESIZE];
@@ -830,11 +840,15 @@ int main(int argc, char** argv) {
         for (int ai = 0; ai < alphas.size();ai++) {
 
             wrapper_smearing Delta(c2_theta_s_HLT, theta_p, HLT_space[ai]);
-            // HLT_space[ai]->compute_f_EXP_b(Delta);
             char nameHLT[NAMESIZE];
             mysprintf(nameHLT, NAMESIZE, "%s/out/%s_HLT_f_Z2-sig%f-alpha%2.2f", option[3], option[6], sigmas[si], alphas[ai]);
-            // HLT_space[ai]->store_f_EXP_b(nameHLT);
-            HLT_space[ai]->load_f_EXP_b(nameHLT);
+            if (std::filesystem::exists(nameHLT)){
+                HLT_space[ai]->load_f_EXP_b(nameHLT);
+            }
+            else {
+                HLT_space[ai]->compute_f_EXP_b(Delta);
+                HLT_space[ai]->store_f_EXP_b(nameHLT);
+            }
 
             char namefit[NAMESIZE];
             mysprintf(namefit, NAMESIZE, "HLT_Z2-sig%f-alpha%2.2f", sigmas[si], alphas[ai]);
@@ -960,13 +974,13 @@ int main(int argc, char** argv) {
         M_Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Z[1], "M_{Z_1}", M_eff_T, jack_file);
-        check_correlatro_counter(59);
+        check_correlatro_counter(60);
         free(M_Z);
 
         M_Z = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
             namefile_plateaux, outfile, id_Z[2], "M_{Z_2}", M_eff_T, jack_file);
-        check_correlatro_counter(59);
+        check_correlatro_counter(61);
         free(M_Z);
 
     }
