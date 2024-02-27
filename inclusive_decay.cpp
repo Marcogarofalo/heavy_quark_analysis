@@ -934,7 +934,7 @@ int main(int argc, char** argv) {
         if (j == Njack - 1) printf(" a GeV=%g\n", a_GeV_jack[j]);
         if (j == Njack - 1) printf(" MDS GeV=%g\n", M_Ds[j] / a_GeV_jack[j]);
         q2[j] = head.thetas[0] * M_PI / (head.L * a_GeV_jack[j]);
-        q2[j]*=q2[j];
+        q2[j] *= q2[j];
     }
     fprintf(outfile, "\n\n#dGamma/dq_GEV3 summign Z\n");
     fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z0_sigma.P[0][Njack - 1], myres->comp_error(fit_Z0_sigma.P[0]));
@@ -949,8 +949,26 @@ int main(int argc, char** argv) {
     check_correlatro_counter(57);
     write_jack(a_fm_jack, Njack, jack_file);
     check_correlatro_counter(58);
-    
 
+    {
+        double* M_Z = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Z[0], "M_{Z_0}", M_eff_T, jack_file);
+        check_correlatro_counter(59);
+        free(M_Z);
 
+        M_Z = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Z[1], "M_{Z_1}", M_eff_T, jack_file);
+        check_correlatro_counter(59);
+        free(M_Z);
+
+        M_Z = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Z[2], "M_{Z_2}", M_eff_T, jack_file);
+        check_correlatro_counter(59);
+        free(M_Z);
+
+    }
 
 }
