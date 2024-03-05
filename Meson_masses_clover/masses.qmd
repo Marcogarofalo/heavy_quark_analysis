@@ -171,3 +171,49 @@ gg<- plot_df_corr_ggplot(df)
 
 fig<- myplotly(gg,"","$t$", "$Z_2$", to_print=TRUE )
 ```
+
+## meff Z
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE, dev='tikz'}
+ths<-c("5")
+ens<-c("cB211.072.64", "cB211.072.96", "cC211.06.80", "cD211.054.96" )
+seps<-c("t56_44", "t78_62", "t65_51")
+channels<- c("","_cs","_cs_smearing1")
+df<-NULL
+for (ie in seq_along(ens)){
+for (i in seq_along(ths) ){
+for (is in seq_along(seps) ){
+for (ic in seq_along(channels) ){
+  name<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/",ens[ie],"_th",
+             ths[i],"_",seps[is],channels[ic],".dat_output")  
+  if(file.exists(name)){
+mt<-read_df(name)
+all_obs<- get_all_corr(mt)
+
+
+df<-add_corr_to_df(string = "M_{Z_0}",all_obs=all_obs,mt=mt,df = df,
+                   log = TRUE, number = NULL,nudge = 0,print_res = TRUE,
+                   rename = paste0(ens[ie],"-th",ths[i],channels[ic]))
+# df<-add_corr_to_df(string = "M_{Ds}_ss",all_obs=all_obs,mt=mt,df = df,
+#                    log = TRUE, number = NULL,nudge = 0,print_res = TRUE,
+#                    rename = paste0("Ds",ens[ie],"-th",ths[i],channels[ic]))
+  
+# df<-add_corr_to_df(string = "M_{Z_1}",all_obs=all_obs,mt=mt,df = df,
+#                    log = TRUE, number = NULL,nudge = 0,print_res = FALSE,
+#                    # rename = paste0(ens[ie],"-th",ths[i],channels[ic])
+#                    )
+#   
+# df<-add_corr_to_df(string = "M_{Z_2}",all_obs=all_obs,mt=mt,df = df,
+#                    log = TRUE, number = NULL,nudge = 0,print_res = FALSE,
+#                    # rename = paste0(ens[ie],"-th",ths[i],channels[ic])
+#                    )
+  }
+  
+  
+}}}}
+gg<- plot_df_corr_ggplot(df)
+
+fig<- myplotly(gg,"","$t$", "$M_{Z_0}$", to_print=TRUE )
+```
