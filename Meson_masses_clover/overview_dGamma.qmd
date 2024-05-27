@@ -48,12 +48,24 @@ for (is in seq_along(seps) ){
   if(file.exists(name)){
     mt<-read_df(name)
     all_obs<- get_all_corr(mt)
-    fit<-get_full_res("dGammadq_GEV3", all_obs, mt)
-    dG[count]<-fit[1,1]
-    dG_err[count]<-fit[1,2]
-    q2[count]<-fit[1,3]+0.002*ie
-    ensemble[count]<-ens[ie]
-    count<-count+1
+    ##############
+    if (any(any(all_obs[,2]=="dGammadq_GEV3"))){
+      fit<-get_full_res("dGammadq_GEV3", all_obs, mt)
+      dG[count]<-fit[1,1]
+      dG_err[count]<-fit[1,2]
+      q2[count]<-fit[1,3]+0.002*ie
+      ensemble[count]<-ens[ie]
+      count<-count+1
+    }
+    ##############
+    if (any(any(all_obs[,2]=="dGammadq_part_GEV3"))){
+      fit<-get_full_res("dGammadq_part_GEV3", all_obs, mt)
+      dG[count]<-fit[1,1]
+      dG_err[count]<-fit[1,2]
+      q2[count]<-fit[1,3]+0.002*ie
+      ensemble[count]<-paste0(ens[ie],"part")
+      count<-count+1
+    }
   }
 }}}
 gg<- myggplot(fill = FALSE)

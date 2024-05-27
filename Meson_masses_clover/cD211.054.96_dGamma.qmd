@@ -67,8 +67,10 @@ for (i in seq_along(ths) ){
   err<-c()
   sigma<-c()
   alpha<-c()
-  for (s in c(0.120, 0.100, 0.075, 0.050, 0.037, 0.025, 0.017, 0.010, 0.005, 0.0035, 0.002, 0.0005 ) ){
-    si<-sprintf("%f",s)
+ for (s in c(0.005,  0.010,  0.020,  0.030,  0.050,  0.070,
+              0.090,  0.110,  0.130,  0.150,  0.170,  0.190,
+              0.210,  0.230,  0.250,  0.270,  0.290,  0.310,
+              0.330,  0.350,  0.400,  0.500 ) ){    si<-sprintf("%f",s)
    P<-read_fit_P_file(paste0(dir,"cD211.054.96_th",ths[i],"_t78_62.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_P.dat"))
    file<-paste0(dir,"cD211.054.96_th",ths[i],"_t78_62.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_data.txt")
     dfa<- read.table(file, header=FALSE, fill=TRUE)
@@ -101,12 +103,12 @@ for (i in seq_along(ths) ){
 ::: {.panel-tabset}
 
 
-```{r, echo=FALSE, results='asis', warning=FALSE}
+```{r, echo=FALSE, results='asis', warning=FALSE, eval=FALSE}
 sigmas<-c("0.120000", "0.100000", "0.075000", "0.050000", "0.037000", "0.025000", "0.017000", "0.010000", "0.005000", "0.003500", "0.002000", "0.000500" )
 source("/home/garofalo/programs/Rose/R/plot_routines.R")
 
 Zs<- c("Z0","Z1","Z2")
-sigmas<-c("0.120000","0.025000","0.000500")
+sigmas<-c("0.005000","0.130000","0.500000")
 #Zs<- c("Z0")
 for (Z in Zs){
 cat("\n## ",Z,"\n\n")
@@ -192,22 +194,22 @@ df<-NULL
 mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cD211.054.96_th3_t78_62.dat_HLT_kernel")
 all_obs<- get_all_corr(mt1)
 
-df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99_lam1024"),
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.005000-alpha-1.99_lam1024"),
                     all_obs=all_obs,mt=mt1,df = NULL,
                    log = FALSE, number = NULL,nudge = 0,
                    print_res = FALSE,
                    )
-df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha0.00_lam1024"),
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.005000-alpha0.00_lam1024"),
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,
                    print_res = FALSE)
-df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha2.00_lam1024"),
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.005000-alpha2.00_lam1024"),
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,
                    print_res = FALSE)
 
 df1<-add_corr_to_df(
-  string =paste0("HLT_",Z,"-sig0.000500-alpha0.00_lam32"),
+  string =paste0("HLT_",Z,"-sig0.005000-alpha0.00_lam32"),
                     all_obs=all_obs,mt=mt1,df = df1,
                    log = FALSE, number = NULL,nudge = 0,
                    print_res = FALSE)

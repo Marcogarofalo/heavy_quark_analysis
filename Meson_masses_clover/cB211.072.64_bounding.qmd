@@ -1,0 +1,228 @@
+#  cB211.072.64 $d\Gamma/dq^2$
+
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+require(tikzDevice)
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x,y)) + geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir=parent.frame())
+  #ggp
+  df    # NOT returning a plot
+}
+res1 <- f1(df)
+ggp   # Let knit handle the plot
+myplotly(ggplot())
+```
+
+
+```{r,results='asis', echo=FALSE}
+dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/out/"
+ths<- c("7")
+
+```
+
+
+```{r} 
+theta_m <- function(x,s){
+  return(  (exp(-x/s)-1)/(1/s+exp(x/s)+exp(-x/s))  )
+}
+theta_p <- function(x,s){
+  return(  (1+s)/(1+s*exp(x/s))  )
+}
+
+theta <- function(x){
+  r<-x*0
+  l<-which(x<0)
+  r[l]<-1
+  return( r)
+}
+N<-200
+x<-(c(0:N)-N/2)/(N/4)
+y<-theta_m(x,0.5) 
+gg<- myggplot(fill = FALSE, shape = FALSE)
+gg<- gg + geom_line(aes(x=x, y=theta(x), color="$\\theta$"))
+gg<- gg + geom_line(aes(x=x, y=theta_p(x,0.5), color="$\\theta_+(s=0.5)$"))
+gg<- gg + geom_line(aes(x=x, y=theta_p(x,0.2), color="$\\theta_+(s=0.2)$"))
+gg<- gg + geom_line(aes(x=x, y=theta_p(x,0.05), color="$\\theta_+(s=0.05)$"))
+gg<- gg + geom_line(aes(x=x, y=theta_m(x,0.5), color="$\\theta_-(s=0.5)$"))
+gg<- gg + geom_line(aes(x=x, y=theta_m(x,0.2), color="$\\theta_-(s=0.2)$"))
+gg<- gg + geom_line(aes(x=x, y=theta_m(x,0.05), color="$\\theta_-(s=0.05)$"))
+
+myplotly(gg)
+```
+
+## $\sigma$ extrapolation
+
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+Zs<- c("Z0","plus_Z0","minus_Z0")
+gg<-ggplot()
+for (Z in Zs){
+# cat("\n## ",Z,"\n\n")
+for (i in seq_along(ths) ){
+  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sigma")
+  gg<-plot_fit(file,var="sigma", labelfit =Z ,width = 0.002,gg = gg,data_type = Z
+                )
+  
+  
+}
+}
+fig<- myplotly(gg,title,"$\\sigma$", paste0(Z,"-th",ths[i]),
+                         to_print = TRUE, output="HTML", legend_position = c(0.8,0.9),
+               legend_title = "alpha") 
+```
+
+
+
+
+## Stability
+
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+sigmas<-c("0.120000", "0.100000", "0.075000", "0.050000", "0.037000", "0.025000", "0.017000", "0.010000", "0.005000", "0.003500", "0.002000", "0.000500" )
+sigmas<-c("0.005000",  "0.010000",  "0.020000",  "0.030000",  "0.050000",  "0.070000",  "0.090000",
+          "0.110000",  "0.130000",  "0.150000",  "0.170000",  "0.190000",  "0.210000",  "0.230000",
+          "0.250000",  "0.270000",  "0.290000",  "0.310000",  "0.330000",  "0.350000",  "0.400000",
+          "0.500000")
+source("/home/garofalo/programs/Rose/R/plot_routines.R")
+
+Zs<- c("Z0","plus_Z0","minus_Z0")
+sigmas<-c("0.005000","0.130000","0.500000")
+#Zs<- c("Z0")
+
+  
+for (i in seq_along(ths) ){
+  
+
+name<-paste0("B64_",Z,"_th",ths[i],".pdf")
+namefull<-paste0("./_book/",name)
+# pdf(namefull)
+# ragg::agg_png(namefull)
+
+ for(s in sigmas){
+df<-NULL
+dfA<-NULL
+for (Z in Zs){
+# cat("\n## ",Z,"\n\n")
+  
+df<-NULL
+fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_HLT_AoverB")
+mtA<-read_df(fileA)
+all_obsA<- get_all_corr(mtA)
+# dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha-1.99"),
+#                     all_obs=all_obsA,mt=mtA,df = NULL,
+#                    log = FALSE, number = NULL,nudge = 0,
+#                     print_res = FALSE,logx=10,ix=11,
+#                     iy=6,ierr=7,ifit=9,ierrfit=10,
+#                     iplateau = 1
+#                    )
+
+dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha0.00"),
+                    all_obs=all_obsA,mt=mtA,df = dfA,
+                   log = FALSE, number = NULL,nudge = 0,
+                    print_res = FALSE,logx=10,ix=11,
+                    iy=6,ierr=7,ifit=9,ierrfit=10,
+                    iplateau = 1
+                   )
+}
+# dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha2.00"),
+#                     all_obs=all_obsA,mt=mtA,df = dfA,
+#                    log = FALSE, number = NULL,nudge = 0,
+#                     print_res = FALSE,logx=10,ix=11,
+#                    iy=6,ierr=7,ifit=9,ierrfit=10,
+#                     iplateau = 1
+#                    )
+
+
+dfA$x<-dfA$x-log10(dfA[,12])# A/A0_ref
+dfA$xfit<-dfA$xfit-log10(dfA[,12])# A/A0_ref
+dfA$tmin<-dfA$tmin-log10(dfA[,12])# A/A0_ref
+dfA$tmax<-dfA$tmax-log10(dfA[,12])# A/A0_ref
+gg<- plot_df_corr_ggplot(dfA,width = 0.01,stroke = 1,alpha = 0.2,size_error=0.6)
+
+avep<-(max(dfA$fit)+min(dfA$fit))/2.0
+sdp<- max(dfA$fit)-min(dfA$fit)
+fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",ths[i]), to_print=TRUE, 
+               output = "HTML", to_webgl = FALSE,
+               # yrange=c(avep-4*sdp,avep+4*sdp),
+               legend_position = c(0.2,1))
+
+  
+ }
+# dev.off()
+# cat("[/",name,"](",name,"){.external target=\"_blank\"} \n\n")
+}
+
+
+```
+
+
+
+
+
+
+# reconstruction th7
+
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+ 
+sigmas<-c("0.005000",  "0.010000",  "0.020000",  "0.030000",  "0.050000",  "0.070000",  "0.090000",
+          "0.110000",  "0.130000",  "0.150000",  "0.170000",  "0.190000",  "0.210000",  "0.230000",
+          "0.250000",  "0.270000",  "0.290000",  "0.310000",  "0.330000",  "0.350000",  "0.400000",
+          "0.500000")
+sigmas<-c("0.005000","0.130000","0.500000")
+for(sigma in sigmas){
+Zs<- c("Z0","plus_Z0","minus_Z0")
+gg<-myggplot(shape = FALSE,fill = FALSE)
+df<-NULL
+for (Z in Zs){
+# cat("\n## ",Z,"\n\n")
+###################### MG
+# sigma<-"0.090000"
+cat("here we plot the smallest $\\sigma$:",sigma,"\n\n" )
+mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th7_t56_44.dat_HLT_kernel")
+all_obs<- get_all_corr(mt1)
+
+df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig",sigma,"-alpha0.00_lam1024"),
+                    all_obs=all_obs,mt=mt1,df = NULL,
+                   log = FALSE, number = NULL,nudge = 0,print_res = FALSE,
+                   )
+
+
+tmp<-data.frame("omega"=df1$x, "K"=df1$y, "Kb"=df1$fit, 
+                 "label"=paste0(df1$label)
+                )
+df<-rbind(df,tmp)
+
+################ plot
+# gg<-gg + geom_line(aes(x=df$omega  , y=df$K-df$Kb,
+#                        color=paste0("diff-",df$label)
+#                        ),linetype="dotted")
+}
+
+gg<-gg + geom_line(aes(x=df$omega  , y=df$Kb,
+                       color=paste0("K-",df$label)
+                       ),linetype="dashed" )
+gg<-gg + geom_line(aes(x=df$omega  , y=df$K,
+                       color=paste0("exact-",df$label)), linetype="solid")
+fig<- myplotly(gg,"","omega", "K", to_print=TRUE , legend_position = c(0.5,0.95),legend_title = "")
+}
+
+```
+
+
+
+
+

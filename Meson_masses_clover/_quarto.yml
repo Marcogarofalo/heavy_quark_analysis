@@ -12,9 +12,11 @@ book:
     - cB211.072.64_inclusive.qmd
     - cB211.072.64_HLT.qmd
     - cB211.072.64_dGamma.qmd
+    - cB211.072.64_bounding.qmd
     - cB211.072.96_dGamma.qmd
     - cD211.054.96_dGamma.qmd
     - cC211.06.80_dGamma.qmd
+    - stability.qmd
     - overview_dGamma.qmd
     - continuum_limit_dGamma.qmd
     - cross_check_cB211.072.64_th6_t48_64.qmd
@@ -44,8 +46,10 @@ format:
     # html-math-method:
     #   method: mathjax
     #   url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-      
-    
+    resources: 
+    - shinylive-sw.js
+filters:
+  - shinylive
   #pdf:
   #  documentclass: scrreprt
 
