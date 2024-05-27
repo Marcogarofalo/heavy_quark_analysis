@@ -1,6 +1,7 @@
 #ifndef functions_heavy_quarks_H
 #define functions_heavy_quarks_H
 #include "non_linear_fit.hpp"
+#include "arb_calc.h"
 
 double lhs_function_heavy_quarks_eg(int j, double**** in, int t, struct fit_type fit_info);
 
@@ -41,4 +42,6 @@ double rhs_2fit_par(int n, int Nvar, double* x, int Npar, double* P);
 
 double sigma2_fit(int n, int Nvar, double* x, int Npar, double* P);
 
+int c_thetap_s_HLT(acb_ptr res, const acb_t z, void* param, slong order, slong prec);
+int c_thetam_s_HLT(acb_ptr res, const acb_t z, void* param, slong order, slong prec);
 #endif

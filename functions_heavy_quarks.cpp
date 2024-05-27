@@ -241,6 +241,57 @@ double lhs_function_me(int j, double**** in, int t, struct fit_type fit_info) {
 
 //
 double sigma2_fit(int n, int Nvar, double* x, int Npar, double* P) {
-    return P[0]+P[1]*x[0]*x[0];
+    return P[0] + P[1] * x[0] * x[0];
 }
 
+
+int c_thetap_s_HLT(acb_ptr res, const acb_t z, void* param, slong order, slong prec) {
+    // if (order > 1)
+ //     flint_abort();  /* Would be needed for Taylor method. */
+
+ //  return P[2]  (1+p[1]) / (1 +p[1] exp((x-p[0]) / p[1]));
+    arb_t* p = (arb_t*)param;
+
+    arb_sub(acb_realref(res), acb_realref(z), p[0], prec);
+    arb_div(acb_realref(res), acb_realref(res), p[1], prec);
+    arb_exp(acb_realref(res), acb_realref(res), prec);
+    arb_mul(acb_realref(res), acb_realref(res), p[1], prec);
+    arb_add_ui(acb_realref(res), acb_realref(res), 1, prec);
+    // arb_inv(acb_realref(res), acb_realref(res), prec);
+    // arb_mul(acb_realref(res), acb_realref(res), p[2], prec);
+    arb_t num;
+    arb_init(num);
+    arb_add_ui(num, p[1], 1, prec);
+    arb_mul(num, p[2], num, prec);
+    arb_div(acb_realref(res), num, acb_realref(res), prec);
+    arb_clear(num);
+    return 0;
+}
+
+int c_thetam_s_HLT(acb_ptr res, const acb_t z, void* param, slong order, slong prec) {
+    // if (order > 1)
+ //     flint_abort();  /* Would be needed for Taylor method. */
+
+ //  return   - P[2]  (1-  exp(-(x-p[0]) / p[1]) ) / (1/p[1] + exp((x-p[0]) / p[1]) + exp(-(x-p[0]) / p[1]));
+    arb_t* p = (arb_t*)param;
+    arb_ptr r = acb_realref(res);
+
+    arb_sub(r, acb_realref(z), p[0], prec);
+    arb_div(r, r, p[1], prec);
+    arb_exp(r, r, prec);
+    arb_t num, den;
+    arb_init(num);
+    arb_init(den);
+    arb_inv(den, r, prec);
+    arb_sub_ui(num, den, 1, prec);
+    arb_mul(num, p[2], num, prec);
+
+    arb_add(r, r, den, prec);
+    arb_inv(den, p[1], prec);
+    arb_add(r, r, den, prec);
+
+    arb_div(r, num, r, prec);
+    arb_clear(num);
+    arb_clear(den);
+    return 0;
+}
