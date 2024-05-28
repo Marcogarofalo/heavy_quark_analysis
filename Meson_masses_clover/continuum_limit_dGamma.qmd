@@ -29,17 +29,29 @@ dir<-"/home/garofalo/analysis/heavy_quarks/data_Inc/fit_all/"
 df<-NULL
 for (th in ths){
   namefit<-paste0(dir,"dGamma_th",th,"_const")
-  file<-fileA<-paste0(namefit,"_fit_P.dat")
+  file<-paste0(namefit,"_fit_P.dat")
   fit<-read_fit_P_file(file)
   filed<-paste0(namefit,"_fit_data.txt")
   dfq<- read.table(filed, header=FALSE, fill=TRUE)
 
-  tmp<-data.frame("q2"=dfq[1,2], "dG"=fit$P[[2]],"dG_err"=fit$P[[3]] )
+  tmp<-data.frame("q2"=dfq[1,2], "dG"=fit$P[[2]],"dG_err"=fit$P[[3]],
+                  "label"="sum")
+  df<-rbind(df,tmp)
+}
+for (th in ths){
+  namefit<-paste0(dir,"dGamma_th",th,"_part_const")
+  file<-paste0(namefit,"_fit_P.dat")
+  fit<-read_fit_P_file(file)
+  filed<-paste0(namefit,"_fit_data.txt")
+  dfq<- read.table(filed, header=FALSE, fill=TRUE)
+
+  tmp<-data.frame("q2"=dfq[1,2], "dG"=fit$P[[2]],"dG_err"=fit$P[[3]],
+                  "label"="sum-Z0-part")
   df<-rbind(df,tmp)
 }
 gg<- myggplot(fill = FALSE)
 gg<- gg + geom_pointrange(data=df,aes(x=q2, y=dG,
-            ymin=dG-dG_err, ymax=dG+dG_err,
+            ymin=dG-dG_err, ymax=dG+dG_err, color=label
             ) ,size=1.5, stroke=0.3)
 
 fig<-myplotly(gg,"","$q^2[GeV]$", "$24 \\pi^3 d\\Gamma/dq^2 [GeV^{-3}]$",to_print = TRUE)

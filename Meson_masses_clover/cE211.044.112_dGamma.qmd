@@ -1,4 +1,4 @@
-#  cB211.072.64 $d\Gamma/dq^2$
+#  cE211.044.112 $d\Gamma/dq^2$
 
 
 ```{r ,include=FALSE}
@@ -30,7 +30,7 @@ q2<-rep(0, length(ths)*howmany)
 label<-rep(0, length(ths)*howmany)
 count<-1
 for (i in seq_along(ths) ){
-  mt<-read_df(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_output"))
+  mt<-read_df(paste0(dir,"cE211.044.112_th",ths[i],"_t91_72.dat_output"))
   all_obs<- get_all_corr(mt)
   ########
   fit<-get_full_res("dGammadq_GEV3_sigma4", all_obs, mt)
@@ -40,28 +40,28 @@ for (i in seq_along(ths) ){
   label[count]<-" sum"
   count<- count+1
   #####
-  P<-read_fit_P_file(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_Z0-sigma4_fit_P.dat"))
+  P<-read_fit_P_file(paste0(dir,"cE211.044.112_th",ths[i],"_t91_72.dat_fit_HLT_Z0-sigma4_fit_P.dat"))
   dG[count]<-P$P[1,2]
   dG_err[count]<-P$P[1,3]
   q2[count]<-fit[1,3]
   label[count]<-"Z0"
   count<- count+1
   #####
-  P<-read_fit_P_file(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_Z1-sigma4_fit_P.dat"))
+  P<-read_fit_P_file(paste0(dir,"cE211.044.112_th",ths[i],"_t91_72.dat_fit_HLT_Z1-sigma4_fit_P.dat"))
   dG[count]<-P$P[1,2]
   dG_err[count]<-P$P[1,3]
   q2[count]<-fit[1,3]
   label[count]<-"Z1"
   count<- count+1
   #####
-  P<-read_fit_P_file(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_Z2-sigma4_fit_P.dat"))
+  P<-read_fit_P_file(paste0(dir,"cE211.044.112_th",ths[i],"_t91_72.dat_fit_HLT_Z2-sigma4_fit_P.dat"))
   dG[count]<-P$P[1,2]
   dG_err[count]<-P$P[1,3]
   q2[count]<-fit[1,3]
   label[count]<-"Z2"
   count<- count+1
   #####
-  P<-read_fit_P_file(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_part_Z0-sigma4_fit_P.dat"))
+  P<-read_fit_P_file(paste0(dir,"cE211.044.112_th",ths[i],"_t91_72.dat_fit_HLT_part_Z0-sigma4_fit_P.dat"))
   dG[count]<-P$P[1,2]
   dG_err[count]<-P$P[1,3]
   q2[count]<-fit[1,3]
@@ -98,7 +98,7 @@ Zs<- c("Z0","Z1","Z2","part_Z0")
 for (Z in Zs){
 cat("\n## ",Z,"\n\n")
 for (i in seq_along(ths) ){
-  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sigma4")
+  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cE211.044.112_th",ths[i],"_t91_72.dat_fit_HLT_",Z,"-sigma4")
   gg<-plot_fit(file,"sigma", "alpha-ave" ,width = 0.002)
   ############################# plot all alpha
   
@@ -113,8 +113,8 @@ for (i in seq_along(ths) ){
               0.210,  0.230,  0.250,  0.270,  0.290,  0.310,
               0.330,  0.350,  0.400,  0.500 ) ){
     si<-sprintf("%f",s)
-   P<-read_fit_P_file(paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_P.dat"))
-   file<-paste0(dir,"cB211.072.64_th",ths[i],"_t56_44.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_data.txt")
+   P<-read_fit_P_file(paste0(dir,"cE211.044.112_th",ths[i],"_t91_72.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_P.dat"))
+   file<-paste0(dir,"cE211.044.112_th",ths[i],"_t91_72.dat_fit_HLT_",Z,"-sig",si,"-alpha_fit_data.txt")
     dfa<- read.table(file, header=FALSE, fill=TRUE)
     cols<-length(dfa[1,])
     val<-c(val,dfa[,cols-2])
@@ -161,7 +161,7 @@ cat("\n## ",Z,"\n\n")
 for (i in seq_along(ths) ){
   
 
-name<-paste0("B64_",Z,"_th",ths[i],".pdf")
+name<-paste0("B96_",Z,"_th",ths[i],".pdf")
 namefull<-paste0("./_book/",name)
 pdf(namefull)
 # ragg::agg_png(namefull)
@@ -171,7 +171,7 @@ df<-NULL
 
 
 df<-NULL
-fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_HLT_AoverB")
+fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cE211.044.112_th",ths[i],"_t91_72.dat_HLT_AoverB")
 mtA<-read_df(fileA)
 all_obsA<- get_all_corr(mtA)
 dfA<-get_block(string =paste0("HLT_",Z,"-sig",s,"-alpha-1.99"),
@@ -244,7 +244,7 @@ df<-NULL
 ###################### MG
 sigma<-"0.005000"
 cat("here we plot the smallest $\\sigma$:",sigma,"\n\n" )
-mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th9.5_t56_44.dat_HLT_kernel")
+mt1<-read_df("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cE211.044.112_th9.5_t91_72.dat_HLT_kernel")
 all_obs<- get_all_corr(mt1)
 
 df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig",sigma,"-alpha-1.99_lam1024"),
@@ -383,7 +383,7 @@ cat("\n## ",Z,"\n\n")
 df<-NULL
 ###################### MG
 for (th in c("1","3","9")){
-mt1<-read_df(paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",th,"_t56_44.dat_HLT_kernel"))
+mt1<-read_df(paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cE211.044.112_th",th,"_t91_72.dat_HLT_kernel"))
 all_obs<- get_all_corr(mt1)
 
 df1<-add_corr_to_df(
@@ -431,7 +431,7 @@ fig<- myplotly(gg,"","omega", "K", to_print=TRUE , legend_position = c(0.5,0.95)
 for (i in seq_along(ths) ){
 
 df<-NULL
-file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_output")
+file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cE211.044.112_th",ths[i],"_t91_72.dat_output")
 mt1<-read_df(file)
 all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string =paste0("Z_{0}"),
@@ -466,7 +466,7 @@ source("/home/garofalo/programs/Rose/R/read_block.R")
 Z<-"Z0"
 i<-1
 ths<-c("3")
-file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_output")
+file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cE211.044.112_th",ths[i],"_t91_72.dat_output")
 mt1<-read_df(file)
 all_obs<- get_all_corr(mt1)
 df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.110000-alpha2"),
@@ -492,7 +492,7 @@ df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.110000-alpha2"),
 # df1<-add_corr_to_df(string =paste0("HLT_",Z,"-sig0.000500-alpha-1.99"), all_obs=all_obs,mt=mt1,df = df1,
 #                    log = FALSE, number = NULL,nudge = 0.5,print_res = FALSE,logx=2)
 ################################################################
-fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th",ths[i],"_t56_44.dat_HLT_AoverB")
+fileA<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cE211.044.112_th",ths[i],"_t91_72.dat_HLT_AoverB")
 mtA<-read_df(fileA)
 all_obsA<- get_all_corr(mtA)
 dfA<-get_block(string =paste0("HLT_",Z,"-sig0.110000-alpha2"),
