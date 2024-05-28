@@ -718,7 +718,10 @@ int main(int argc, char** argv) {
         jackall_sigma_Z1.en[i].jack = (double**)malloc(sizeof(double*) * jackall_sigma_Z1.en[i].Nobs);
 
     }
-
+    if (strcmp(option[6], "cC211.06.80_th9.5_t65_51.dat") == 0 || strcmp(option[6], "cC211.06.80_th9_t65_51.dat") == 0 ||
+        strcmp(option[6], "cE211.044.112_th9.5_t91_72.dat") == 0 || strcmp(option[6], "cE211.044.112_th9_t91_72.dat") == 0) {
+        fit_info_HLT.lambda_start = pow(2, 23);
+    }
     theta_p.resize(4);
     theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega_0^max
     // Poly
@@ -846,6 +849,8 @@ int main(int argc, char** argv) {
         jackall_sigma_Z2.en[i].jack = (double**)malloc(sizeof(double*) * jackall_sigma_Z2.en[i].Nobs);
 
     }
+
+    fit_info_HLT.lambda_start = pow(2, 23);
 
     theta_p.resize(5);
     theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega_0^max
