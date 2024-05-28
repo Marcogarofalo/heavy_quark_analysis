@@ -226,6 +226,29 @@ int main(int argc, char** argv) {
 
     int Ntheta_E112 = files.size() - Ntheta_B64 - Ntheta_B96 - Ntheta_C80 - Ntheta_D96;
 
+     mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th1_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th2_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th3_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th4_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th5_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th6_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th7_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th8_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th9_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+    mysprintf(namefile, NAMESIZE, "%s/%s_cB211.072.48_th9.5_t48_36.dat", argv[2], argv[1]);
+    files.emplace_back(namefile);
+
+    int Ntheta_B48 = files.size() - Ntheta_B64 - Ntheta_B96 - Ntheta_C80 - Ntheta_D96 - Ntheta_E112 ;
+
     std::vector<int> all_en(files.size());
     for (int e = 0; e < files.size(); e++) {
         all_en[e] = e;
@@ -262,12 +285,13 @@ int main(int argc, char** argv) {
         fit_info.Nvar = 3;
         fit_info.Njack = Njack;
 
-        fit_info.myen.resize(5);
+        fit_info.myen.resize(6);
         fit_info.myen[0] = th;
         fit_info.myen[1] = fit_info.myen[0] + Ntheta_B64;
         fit_info.myen[2] = fit_info.myen[1] + Ntheta_B96;
         fit_info.myen[3] = fit_info.myen[2] + Ntheta_C80;
-        fit_info.myen[4] = fit_info.myen[3] + Ntheta_E112;
+        fit_info.myen[4] = fit_info.myen[3] + Ntheta_D96;
+        fit_info.myen[5] = fit_info.myen[3] + Ntheta_E112;
 
         fit_info.entot = fit_info.myen.size() * fit_info.N;
         fit_info.malloc_x();// Nvar, entot, Njack
@@ -323,12 +347,14 @@ int main(int argc, char** argv) {
         fit_info.Nvar = 3;
         fit_info.Njack = Njack;
 
-        fit_info.myen.resize(5);
+        fit_info.myen.resize(6);
         fit_info.myen[0] = th;
         fit_info.myen[1] = fit_info.myen[0] + Ntheta_B64;
         fit_info.myen[2] = fit_info.myen[1] + Ntheta_B96;
         fit_info.myen[3] = fit_info.myen[2] + Ntheta_C80;
-        fit_info.myen[4] = fit_info.myen[3] + Ntheta_E112;
+        fit_info.myen[4] = fit_info.myen[3] + Ntheta_D96;
+        fit_info.myen[5] = fit_info.myen[3] + Ntheta_E112;
+
 
         fit_info.entot = fit_info.myen.size() * fit_info.N;
         fit_info.malloc_x();// Nvar, entot, Njack
@@ -345,7 +371,7 @@ int main(int argc, char** argv) {
             }
         }
         fit_info.function = rhs_const;
-        fit_info.corr_id = { 70 };//
+        fit_info.corr_id = { 71 };//
         char namefit[NAMESIZE];
         mysprintf(namefit, NAMESIZE, "dGamma_th%s_part_const", th_map[th].c_str());
         fit_result dGamma_th = fit_all_data(argv, jackall, lhs_identity, fit_info, namefit);
