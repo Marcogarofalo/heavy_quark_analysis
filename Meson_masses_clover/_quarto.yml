@@ -8,6 +8,7 @@ book:
   chapters:
     - index.qmd
     - masses.qmd
+    - cB211.072.48_dGamma.qmd
     - cB211.072.64_PRACE.qmd
     # - cB211.072.64_inclusive.qmd
     # - cB211.072.64_HLT.qmd
@@ -22,7 +23,7 @@ book:
     - continuum_limit_dGamma.qmd
     # - cross_check_cB211.072.64_th6_t48_64.qmd
     # - checks_sigma_extrapolation.qmd
-    - check_Emax.qmd
+    # - check_Emax.qmd
     - intro.qmd
     - summary.qmd
     - references.qmd

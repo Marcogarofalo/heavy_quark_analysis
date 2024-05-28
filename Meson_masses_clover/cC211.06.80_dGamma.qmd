@@ -161,7 +161,7 @@ cat("\n## ",Z,"\n\n")
 for (i in seq_along(ths) ){
   
 
-name<-paste0("B96_",Z,"_th",ths[i],".pdf")
+name<-paste0("C80_",Z,"_th",ths[i],".pdf")
 namefull<-paste0("./_book/",name)
 pdf(namefull)
 # ragg::agg_png(namefull)
