@@ -244,6 +244,9 @@ double sigma2_fit(int n, int Nvar, double* x, int Npar, double* P) {
     return P[0] + P[1] * x[0] * x[0];
 }
 
+double sigma4_fit(int n, int Nvar, double* x, int Npar, double* P) {
+    return P[0] + P[1] * x[0] * x[0] + P[2] * x[0] * x[0] * x[0] * x[0];
+}
 
 int c_thetap_s_HLT(acb_ptr res, const acb_t z, void* param, slong order, slong prec) {
     // if (order > 1)

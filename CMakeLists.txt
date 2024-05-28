@@ -47,6 +47,7 @@ add_library(
 )
 target_link_libraries(functions_heavy_quarks PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
 target_include_directories(functions_heavy_quarks PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(functions_heavy_quarks PUBLIC flint-arb flint)
 
 add_executable(heavy_quarks heavy_quarks.cpp)
 target_link_libraries(heavy_quarks PUBLIC functions_heavy_quarks)

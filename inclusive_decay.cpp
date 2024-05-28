@@ -707,6 +707,17 @@ int main(int argc, char** argv) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Z1
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    data_all jackall_sigma_Z1;
+    jackall_sigma_Z1.resampling = argv[6];
+    jackall_sigma_Z1.ens = sigmas.size();
+    jackall_sigma_Z1.en = new data_single[jackall_sigma_Z1.ens];
+    for (int i = 0;i < jackall_sigma_Z1.ens;i++) {
+        jackall_sigma_Z1.en[i].header = head;
+        jackall_sigma_Z1.en[i].Nobs = 1;
+        jackall_sigma_Z1.en[i].Njack = head.Njack;
+        jackall_sigma_Z1.en[i].jack = (double**)malloc(sizeof(double*) * jackall_sigma_Z1.en[i].Nobs);
+
+    }
 
     theta_p.resize(4);
     theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega_0^max
@@ -783,7 +794,7 @@ int main(int argc, char** argv) {
         // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
         // check_correlatro_counter(78 + (alphas.size() + 1) * si);
 
-        jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
+        jackall_sigma_Z1.en[si].jack[0] = fit_inter_alpha.P[0];
 
     }
 
@@ -814,16 +825,27 @@ int main(int argc, char** argv) {
     fit_info.verbosity = 0;
     mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z1-sigma", option[6]);
 
-    fit_result fit_Z1_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+    fit_result fit_Z1_sigma = fit_all_data(temp_argv, jackall_sigma_Z1, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.5 };
-    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_Z1_sigma, fit_Z1_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    print_fit_band(temp_argv, jackall_sigma_Z1, fit_info, fit_info, namefit, "sigma", fit_Z1_sigma, fit_Z1_sigma, 0, fit_info.myen.size() - 1, 0.01);
     write_jack(fit_Z1_sigma.P[0], Njack, jack_file);
     check_correlatro_counter(55);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Z2
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    data_all jackall_sigma_Z2;
+    jackall_sigma_Z2.resampling = argv[6];
+    jackall_sigma_Z2.ens = sigmas.size();
+    jackall_sigma_Z2.en = new data_single[jackall_sigma_Z2.ens];
+    for (int i = 0;i < jackall_sigma_Z2.ens;i++) {
+        jackall_sigma_Z2.en[i].header = head;
+        jackall_sigma_Z2.en[i].Nobs = 1;
+        jackall_sigma_Z2.en[i].Njack = head.Njack;
+        jackall_sigma_Z2.en[i].jack = (double**)malloc(sizeof(double*) * jackall_sigma_Z2.en[i].Nobs);
+
+    }
 
     theta_p.resize(5);
     theta_p[0] = (1 - omega) * M_Ds[Njack - 1];// omega_0^max
@@ -899,7 +921,7 @@ int main(int argc, char** argv) {
         // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
         // check_correlatro_counter(78 + (alphas.size() + 1) * si);
 
-        jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
+        jackall_sigma_Z2.en[si].jack[0] = fit_inter_alpha.P[0];
 
     }
 
@@ -930,10 +952,10 @@ int main(int argc, char** argv) {
     fit_info.verbosity = 0;
     mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z2-sigma", option[6]);
 
-    fit_result fit_Z2_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+    fit_result fit_Z2_sigma = fit_all_data(temp_argv, jackall_sigma_Z2, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.5 };
-    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_Z2_sigma, fit_Z2_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    print_fit_band(temp_argv, jackall_sigma_Z2, fit_info, fit_info, namefit, "sigma", fit_Z2_sigma, fit_Z2_sigma, 0, fit_info.myen.size() - 1, 0.01);
     write_jack(fit_Z2_sigma.P[0], Njack, jack_file);
     check_correlatro_counter(56);
 
@@ -993,7 +1015,17 @@ int main(int argc, char** argv) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Z0 by part  (omega-omega0) theta(omega-omega0)
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    data_all jackall_sigma_Z0_part;
+    jackall_sigma_Z0_part.resampling = argv[6];
+    jackall_sigma_Z0_part.ens = sigmas.size();
+    jackall_sigma_Z0_part.en = new data_single[jackall_sigma_Z0_part.ens];
+    for (int i = 0;i < jackall_sigma_Z0_part.ens;i++) {
+        jackall_sigma_Z0_part.en[i].header = head;
+        jackall_sigma_Z0_part.en[i].Nobs = 1;
+        jackall_sigma_Z0_part.en[i].Njack = head.Njack;
+        jackall_sigma_Z0_part.en[i].jack = (double**)malloc(sizeof(double*) * jackall_sigma_Z0_part.en[i].Nobs);
 
+    }
     HLT_info;
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
@@ -1098,7 +1130,7 @@ int main(int argc, char** argv) {
         print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "alpha", fit_inter_alpha, fit_inter_alpha, 0, fit_info.myen.size() - 1, 0.5);
         // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
         // check_correlatro_counter(57 + (alphas.size() + 1) * si);
-        jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
+        jackall_sigma_Z0_part.en[si].jack[0] = fit_inter_alpha.P[0];
     }
     // fit in sigma
     fit_info.restore_default();
@@ -1130,10 +1162,10 @@ int main(int argc, char** argv) {
     mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
     mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// outfile
 
-    fit_result fit_part_Z0_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+    fit_result fit_part_Z0_sigma = fit_all_data(temp_argv, jackall_sigma_Z0_part, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.5 };
-    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_part_Z0_sigma, fit_part_Z0_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    print_fit_band(temp_argv, jackall_sigma_Z0_part, fit_info, fit_info, namefit, "sigma", fit_part_Z0_sigma, fit_part_Z0_sigma, 0, fit_info.myen.size() - 1, 0.01);
     write_jack(fit_part_Z0_sigma.P[0], Njack, jack_file);
     check_correlatro_counter(62);
 
@@ -1170,7 +1202,17 @@ int main(int argc, char** argv) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Z0 bounding plus
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    data_all jackall_sigma_Z0_plus;
+    jackall_sigma_Z0_plus.resampling = argv[6];
+    jackall_sigma_Z0_plus.ens = sigmas.size();
+    jackall_sigma_Z0_plus.en = new data_single[jackall_sigma_Z0_plus.ens];
+    for (int i = 0;i < jackall_sigma_Z0_plus.ens;i++) {
+        jackall_sigma_Z0_plus.en[i].header = head;
+        jackall_sigma_Z0_plus.en[i].Nobs = 1;
+        jackall_sigma_Z0_plus.en[i].Njack = head.Njack;
+        jackall_sigma_Z0_plus.en[i].jack = (double**)malloc(sizeof(double*) * jackall_sigma_Z0_plus.en[i].Nobs);
 
+    }
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
     HLT_info.prec = 50 * 3.33;
@@ -1279,7 +1321,7 @@ int main(int argc, char** argv) {
         print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "alpha", fit_inter_alpha, fit_inter_alpha, 0, fit_info.myen.size() - 1, 0.5);
         // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
         // check_correlatro_counter(57 + (alphas.size() + 1) * si);
-        jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
+        jackall_sigma_Z0_plus.en[si].jack[0] = fit_inter_alpha.P[0];
     }
     // fit in sigma
     fit_info.restore_default();
@@ -1311,17 +1353,27 @@ int main(int argc, char** argv) {
     mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
     mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// outfile
 
-    fit_result fit_plus_Z0_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+    fit_result fit_plus_Z0_sigma = fit_all_data(temp_argv, jackall_sigma_Z0_plus, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.5 };
-    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_plus_Z0_sigma, fit_plus_Z0_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    print_fit_band(temp_argv, jackall_sigma_Z0_plus, fit_info, fit_info, namefit, "sigma", fit_plus_Z0_sigma, fit_plus_Z0_sigma, 0, fit_info.myen.size() - 1, 0.01);
     write_jack(fit_plus_Z0_sigma.P[0], Njack, jack_file);
     check_correlatro_counter(64);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Z0 bounding minus
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    data_all jackall_sigma_Z0_minus;
+    jackall_sigma_Z0_minus.resampling = argv[6];
+    jackall_sigma_Z0_minus.ens = sigmas.size();
+    jackall_sigma_Z0_minus.en = new data_single[jackall_sigma_Z0_minus.ens];
+    for (int i = 0;i < jackall_sigma_Z0_minus.ens;i++) {
+        jackall_sigma_Z0_minus.en[i].header = head;
+        jackall_sigma_Z0_minus.en[i].Nobs = 1;
+        jackall_sigma_Z0_minus.en[i].Njack = head.Njack;
+        jackall_sigma_Z0_minus.en[i].jack = (double**)malloc(sizeof(double*) * jackall_sigma_Z0_minus.en[i].Nobs);
 
+    }
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
     HLT_info.prec = 50 * 3.33;
@@ -1431,7 +1483,7 @@ int main(int argc, char** argv) {
         print_fit_band(temp_argv, jackall, fit_info, fit_info, namefit, "alpha", fit_inter_alpha, fit_inter_alpha, 0, fit_info.myen.size() - 1, 0.5);
         // write_jack(fit_inter_alpha.P[0], Njack, jack_file);
         // check_correlatro_counter(57 + (alphas.size() + 1) * si);
-        jackall_sigma.en[si].jack[0] = fit_inter_alpha.P[0];
+        jackall_sigma_Z0_minus.en[si].jack[0] = fit_inter_alpha.P[0];
     }
     // fit in sigma
     fit_info.restore_default();
@@ -1463,11 +1515,141 @@ int main(int argc, char** argv) {
     mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
     mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// outfile
 
-    fit_result fit_minus_Z0_sigma = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+    fit_result fit_minus_Z0_sigma = fit_all_data(temp_argv, jackall_sigma_Z0_minus, lhs_identity, fit_info, namefit);
 
     fit_info.band_range = { 0,0.5 };
-    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_minus_Z0_sigma, fit_minus_Z0_sigma, 0, fit_info.myen.size() - 1, 0.01);
+    print_fit_band(temp_argv, jackall_sigma_Z0_minus, fit_info, fit_info, namefit, "sigma", fit_minus_Z0_sigma, fit_minus_Z0_sigma, 0, fit_info.myen.size() - 1, 0.01);
     write_jack(fit_minus_Z0_sigma.P[0], Njack, jack_file);
     check_correlatro_counter(65);
+
+    //////////////////////////////////////////////////////////////
+    // fit in sigma^2 + sigma^4
+    //////////////////////////////////////////////////////////////
+    // fit in sigma
+    fit_info.restore_default();
+    fit_info.Npar = 3;
+    fit_info.Nvar = 1;
+    fit_info.Njack = head.Njack;
+    fit_info.N = 1;
+    offset = 6;
+    int esclude_last = 1;
+    fit_info.myen = std::vector<int>(sigmas.size() - offset - esclude_last);
+    for (int n = 0;n < fit_info.myen.size();n++) fit_info.myen[n] = n + offset;
+    fit_info.entot = fit_info.myen.size() * fit_info.N;
+    fit_info.malloc_x();
+    count = 0;
+    for (int n = 0;n < fit_info.N;n++) {
+        // for (int e : fit_info.myen) {
+        for (int e = 0; e < fit_info.myen.size(); e++) {
+            for (int j = 0;j < fit_info.Njack;j++) {
+                fit_info.x[0][count][j] = sigmas[e + offset]; // mus1
+            }
+            count++;
+        }
+    }
+    fit_info.corr_id = { 0 };
+    fit_info.function = sigma4_fit;//constant_fit;
+    fit_info.linear_fit = true;
+    fit_info.covariancey = false;
+    fit_info.verbosity = 0;
+    mysprintf(temp_argv[1], NAMESIZE, "%s", argv[6]);// resampling
+    mysprintf(temp_argv[3], NAMESIZE, "%s/out", option[3]);// resampling
+    fit_info.band_range = { 0,0.5 };
+
+    mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z0-sigma4", option[6]);
+    fit_result fit_Z0_sigma4 = fit_all_data(temp_argv, jackall_sigma, lhs_identity, fit_info, namefit);
+    print_fit_band(temp_argv, jackall_sigma, fit_info, fit_info, namefit, "sigma", fit_Z0_sigma4, fit_Z0_sigma4, 0, fit_info.myen.size() - 1, 0.01);
+    write_jack(fit_Z0_sigma4.P[0], Njack, jack_file);
+    // fit_Z0_sigma4.clear();
+    check_correlatro_counter(66);
+
+    mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z1-sigma4", option[6]);
+    fit_result fit_Z1_sigma4 = fit_all_data(temp_argv, jackall_sigma_Z1, lhs_identity, fit_info, namefit);
+    print_fit_band(temp_argv, jackall_sigma_Z1, fit_info, fit_info, namefit, "sigma", fit_Z1_sigma4, fit_Z1_sigma4, 0, fit_info.myen.size() - 1, 0.01);
+    write_jack(fit_Z1_sigma4.P[0], Njack, jack_file);
+    // fit_Z1_sigma4.clear();
+    check_correlatro_counter(67);
+
+    mysprintf(namefit, NAMESIZE, "%s_fit_HLT_Z2-sigma4", option[6]);
+    fit_result fit_Z2_sigma4 = fit_all_data(temp_argv, jackall_sigma_Z2, lhs_identity, fit_info, namefit);
+    print_fit_band(temp_argv, jackall_sigma_Z2, fit_info, fit_info, namefit, "sigma", fit_Z2_sigma4, fit_Z2_sigma4, 0, fit_info.myen.size() - 1, 0.01);
+    write_jack(fit_Z2_sigma4.P[0], Njack, jack_file);
+    // fit_Z2_sigma4.clear();
+    check_correlatro_counter(68);
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    // sum the Z
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    for (int j = 0;j < Njack;j++) {
+        dGammadq[j] = fit_Z0_sigma4.P[0][j] + fit_Z1_sigma4.P[0][j] + fit_Z2_sigma4.P[0][j];
+        if (j == Njack - 1) printf(" sumZ=%g\n", dGammadq[j]);
+        dGammadq[j] *= (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) / (2 * M_PI);
+        if (j == Njack - 1) printf(" dgammaZ=%g\n", dGammadq[j]);
+        if (j == Njack - 1) printf(" a=%g\n", a_fm_jack[j]);
+        if (j == Njack - 1) printf(" a GeV=%g\n", a_GeV_jack[j]);
+        if (j == Njack - 1) printf(" MDS GeV=%g\n", M_Ds[j] / a_GeV_jack[j]);
+        q2[j] = head.thetas[0] * M_PI / (head.L * a_GeV_jack[j]);
+        q2[j] *= q2[j];
+    }
+    fprintf(outfile, "\n\n#dGamma/dq_GEV3 summign Z, sigma4 extrapolation\n");
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z0_sigma4.P[0][Njack - 1], myres->comp_error(fit_Z0_sigma4.P[0]));
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z1_sigma4.P[0][Njack - 1], myres->comp_error(fit_Z1_sigma4.P[0]));
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z2_sigma4.P[0][Njack - 1], myres->comp_error(fit_Z2_sigma4.P[0]));
+    fprintf(outfile, "\n\n #%s fit in [%d,%d] chi2=%.5g  %.5g\n", "dGammadq_GEV3_sigma4", 0, 2, 0.0, 0.0);
+    fprintf(outfile, "%.15g    %.15g     %.15g    %.15g\n", dGammadq[Njack - 1], myres->comp_error(dGammadq), q2[Njack - 1], myres->comp_error(q2));
+    printf("dGammadq_part_GEV3 = %.15g    %.15g    \n", dGammadq[Njack - 1], myres->comp_error(dGammadq));
+
+
+    write_jack(dGammadq, Njack, jack_file);
+    check_correlatro_counter(69);
+
+    offset = 3;
+    esclude_last = 2;
+    fit_info.myen = std::vector<int>(sigmas.size() - offset - esclude_last);
+    for (int n = 0;n < fit_info.myen.size();n++) fit_info.myen[n] = n + offset;
+    fit_info.entot = fit_info.myen.size() * fit_info.N;
+    fit_info.malloc_x();
+    count = 0;
+    for (int n = 0;n < fit_info.N;n++) {
+        // for (int e : fit_info.myen) {
+        for (int e = 0; e < fit_info.myen.size(); e++) {
+            for (int j = 0;j < fit_info.Njack;j++) {
+                fit_info.x[0][count][j] = sigmas[e + offset]; // mus1
+            }
+            count++;
+        }
+    }
+    mysprintf(namefit, NAMESIZE, "%s_fit_HLT_part_Z0-sigma4", option[6]);
+    fit_result fit_Z0_part_sigma4 = fit_all_data(temp_argv, jackall_sigma_Z0_part, lhs_identity, fit_info, namefit);
+    print_fit_band(temp_argv, jackall_sigma_Z0_part, fit_info, fit_info, namefit, "sigma", fit_Z0_part_sigma4, fit_Z0_part_sigma4, 0, fit_info.myen.size() - 1, 0.01);
+    write_jack(fit_Z0_part_sigma4.P[0], Njack, jack_file);
+    // fit_Z0_part_sigma4.clear();
+    check_correlatro_counter(70);
+
+    for (int j = 0;j < Njack;j++) {
+        dGammadq[j] = fit_Z0_part_sigma4.P[0][j] + fit_Z1_sigma4.P[0][j] + fit_Z2_sigma4.P[0][j];
+        if (j == Njack - 1) printf(" sumZ=%g\n", dGammadq[j]);
+        dGammadq[j] *= (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) * (M_Ds[j] / a_GeV_jack[j]) / (2 * M_PI);
+        if (j == Njack - 1) printf(" dgammaZ=%g\n", dGammadq[j]);
+        if (j == Njack - 1) printf(" a=%g\n", a_fm_jack[j]);
+        if (j == Njack - 1) printf(" a GeV=%g\n", a_GeV_jack[j]);
+        if (j == Njack - 1) printf(" MDS GeV=%g\n", M_Ds[j] / a_GeV_jack[j]);
+        q2[j] = head.thetas[0] * M_PI / (head.L * a_GeV_jack[j]);
+        q2[j] *= q2[j];
+    }
+    fprintf(outfile, "\n\n#dGamma/dq_GEV3 summign Z, Z0 by part\n");
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z0_part_sigma4.P[0][Njack - 1], myres->comp_error(fit_Z0_part_sigma4.P[0]));
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z1_sigma4.P[0][Njack - 1], myres->comp_error(fit_Z1_sigma4.P[0]));
+    fprintf(outfile, "%d   %.15e    %.15e\t", 0, fit_Z2_sigma4.P[0][Njack - 1], myres->comp_error(fit_Z2_sigma4.P[0]));
+    fprintf(outfile, "\n\n #%s fit in [%d,%d] chi2=%.5g  %.5g\n", "dGammadq_GEV3_part_sigma4", 0, 2, 0.0, 0.0);
+    fprintf(outfile, "%.15g    %.15g     %.15g    %.15g\n", dGammadq[Njack - 1], myres->comp_error(dGammadq), q2[Njack - 1], myres->comp_error(q2));
+    printf("dGammadq_part_GEV3 = %.15g    %.15g    \n", dGammadq[Njack - 1], myres->comp_error(dGammadq));
+
+    write_jack(dGammadq, Njack, jack_file);
+    check_correlatro_counter(71);
+
 
 }
