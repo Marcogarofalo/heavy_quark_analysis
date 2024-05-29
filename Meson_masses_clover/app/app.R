@@ -89,7 +89,7 @@ server <- function(input, output, session) {
       
       avep<-(max(dfA$fit)+min(dfA$fit))/2.0
       sdp<- max(dfA$fit)-min(dfA$fit)
-     fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",ths[i]), to_print=FALSE, 
+     fig<- myplotly(gg,"","log10(A/A0)_ref", paste0("rho-th",input$th), to_print=FALSE, 
                    output = "HTML", to_webgl = FALSE,
                    yrange=c(avep-4*sdp,avep+4*sdp), legend_position = c(0.2,1))
     

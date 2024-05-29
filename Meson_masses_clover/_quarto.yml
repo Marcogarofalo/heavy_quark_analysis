@@ -27,6 +27,7 @@ book:
     - intro.qmd
     - summary.qmd
     - references.qmd
+    - volume.qmd
     - scratch_area.qmd
 
 bibliography: references.bib
