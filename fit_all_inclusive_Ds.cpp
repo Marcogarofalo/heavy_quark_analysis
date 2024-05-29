@@ -291,7 +291,7 @@ int main(int argc, char** argv) {
         fit_info.myen[2] = fit_info.myen[1] + Ntheta_B96;
         fit_info.myen[3] = fit_info.myen[2] + Ntheta_C80;
         fit_info.myen[4] = fit_info.myen[3] + Ntheta_D96;
-        fit_info.myen[5] = fit_info.myen[3] + Ntheta_E112;
+        fit_info.myen[5] = fit_info.myen[4] + Ntheta_E112;
 
         fit_info.entot = fit_info.myen.size() * fit_info.N;
         fit_info.malloc_x();// Nvar, entot, Njack
@@ -353,7 +353,7 @@ int main(int argc, char** argv) {
         fit_info.myen[2] = fit_info.myen[1] + Ntheta_B96;
         fit_info.myen[3] = fit_info.myen[2] + Ntheta_C80;
         fit_info.myen[4] = fit_info.myen[3] + Ntheta_D96;
-        fit_info.myen[5] = fit_info.myen[3] + Ntheta_E112;
+        fit_info.myen[5] = fit_info.myen[4] + Ntheta_E112;
 
 
         fit_info.entot = fit_info.myen.size() * fit_info.N;
