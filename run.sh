@@ -1,19 +1,23 @@
 #!/bin/bash
+
+./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th3_t56_44_cs.dat -bin 1 jack
+./inclusive_disc_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_disc_th2_t56_cs.dat -bin 1 jack 
+
 ## ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_ins48_ins64_th6.dat -bin 1 jack
 ## ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th1_t56_44_cs.dat -bin 1 jack
 ## ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th5_t56_44_cs.dat -bin 1 jack
 ## ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th5_t56_44_cs_smearing1.dat -bin 1 jack
 
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th1_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th2_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th3_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th4_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th5_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th6_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th7_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th8_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th9_t48_36.dat -bin 1 jack || exit 1
-./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th9.5_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th1_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th2_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th3_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th4_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th5_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th6_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th7_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th8_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th9_t48_36.dat -bin 1 jack || exit 1
+# ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.48_th9.5_t48_36.dat -bin 1 jack || exit 1
 
 # ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th1_t56_44.dat -bin 1 jack || exit 1
 # ./inclusive_decay -p ../../../heavy_quarks/data_Inc/ cB211.072.64_th2_t56_44.dat -bin 1 jack || exit 1
