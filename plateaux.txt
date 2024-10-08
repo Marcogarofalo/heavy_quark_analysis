@@ -349,6 +349,25 @@ cB211.072.64_th2_t56_44.dat  M_{Z_0}   10 30 1
 cB211.072.64_th2_t56_44.dat  M_{Z_1}   10 30 1
 cB211.072.64_th2_t56_44.dat  M_{Z_2}   10 30 1
 
+cB211.072.64_disc_th2_t56_cs.dat  a   0.07957 0.00013  3
+cB211.072.64_disc_th2_t56_cs.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_disc_th2_t56_cs.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_disc_th2_t56_cs.dat  M_{K}_sl   16 48 1
+cB211.072.64_disc_th2_t56_cs.dat  M_{K}_ss   16 48 1
+cB211.072.64_disc_th2_t56_cs.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_disc_th2_t56_cs.dat  ZA     0.74294  0.00024   1
+cB211.072.64_disc_th2_t56_cs.dat  ZV     0.706379 0.000024  2
+cB211.072.64_disc_th2_t56_cs.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_disc_th2_t56_cs.dat  TJW           44 0 1
+cB211.072.64_disc_th2_t56_cs.dat  TDs           56 0 1
+cB211.072.64_disc_th2_t56_cs.dat  E0_HLT           0.05 0 1
+cB211.072.64_disc_th2_t56_cs.dat  sigma1           0.12 0 1
+cB211.072.64_disc_th2_t56_cs.dat  HLT_tmax         33 0 1
+cB211.072.64_disc_th2_t56_cs.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_disc_th2_t56_cs.dat  M_{Z_0}   10 30 1
+cB211.072.64_disc_th2_t56_cs.dat  M_{Z_1}   10 30 1
+cB211.072.64_disc_th2_t56_cs.dat  M_{Z_2}   10 30 1
+
 
 cB211.072.64_th3_t56_44.dat  a   0.07957 0.00013  3
 cB211.072.64_th3_t56_44.dat  M_{Ds}_sl  16 48 1
@@ -368,6 +387,28 @@ cB211.072.64_th3_t56_44.dat  HLT_nlambda_max   21 0 1
 cB211.072.64_th3_t56_44.dat  M_{Z_0}   10 30 1
 cB211.072.64_th3_t56_44.dat  M_{Z_1}   10 30 1
 cB211.072.64_th3_t56_44.dat  M_{Z_2}   10 30 1
+
+
+cB211.072.64_th3_t56_44_cs.dat  a   0.07957 0.00013  3
+cB211.072.64_th3_t56_44_cs.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th3_t56_44_cs.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th3_t56_44_cs.dat  M_{K}_sl   16 48 1
+cB211.072.64_th3_t56_44_cs.dat  M_{K}_ss   16 48 1
+cB211.072.64_th3_t56_44_cs.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th3_t56_44_cs.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th3_t56_44_cs.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th3_t56_44_cs.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th3_t56_44_cs.dat  TJW           44 0 1
+cB211.072.64_th3_t56_44_cs.dat  TDs           56 0 1
+cB211.072.64_th3_t56_44_cs.dat  E0_HLT           0.05 0 1
+cB211.072.64_th3_t56_44_cs.dat  sigma1           0.12 0 1
+cB211.072.64_th3_t56_44_cs.dat  HLT_tmax         33 0 1
+cB211.072.64_th3_t56_44_cs.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th3_t56_44_cs.dat  M_{Z_0}   10 30 1
+cB211.072.64_th3_t56_44_cs.dat  M_{Z_1}   10 30 1
+cB211.072.64_th3_t56_44_cs.dat  M_{Z_2}   10 30 1
+
+
 
 cB211.072.64_th4_t56_44.dat  a   0.07957 0.00013  3
 cB211.072.64_th4_t56_44.dat  M_{Ds}_sl  16 48 1
