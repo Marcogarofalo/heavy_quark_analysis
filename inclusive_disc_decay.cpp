@@ -174,9 +174,10 @@ int main(int argc, char** argv) {
                     int id_final = 2 * head.gammas.size() + g1 + g2 * 8;
                     std::complex<double> cp(data[j][idg1][t][0], data[j][idg1][t][1]);
                     std::complex<double> cm(data[j][idg2][t0][0], data[j][idg2][t0][1]);
+                    // std::complex<double> cm(data[j][idg2][(t+10)%head.T][0], data[j][idg2][(t+10)%head.T][1]);
                     // we put a minus sign because respect to the connected 
                     // part there is a sign change due to the fermion loops
-                    std::complex<double>  c4 = - cp * cm; 
+                    std::complex<double>  c4 = - cp * std::conj(cm); 
                     data_4pt[j][id_final][t][0] = c4.real();
                     data_4pt[j][id_final][t][1] = c4.imag();
                 }
@@ -422,7 +423,7 @@ int main(int argc, char** argv) {
             fit_info.verbosity = 0;
             id_Mmunu[mu][nu] = ncorr_new;
             printf("C_%d,%d\n", mu, nu);
-            add_correlators(option, ncorr_new, conf_jack, compute_Mmunu, fit_info);
+            add_correlators(option, ncorr_new, conf_jack, compute_Mmunu_disc1, fit_info);
             printf(" ncorr after C_munu %d\n", ncorr_new);
             char name[NAMESIZE];
             mysprintf(name, NAMESIZE, "M_{%d,%d}", mu, nu);

@@ -115,6 +115,45 @@ double** compute_Mmunu(int j, double**** in, int t, struct fit_type fit_info) {
 
     return r;
 }
+double** compute_Mmunu_disc1(int j, double**** in, int t, struct fit_type fit_info) {
+    double** r = malloc_2<double>(1, 2);
+    int VV = fit_info.corr_id[0];
+    int AA = fit_info.corr_id[1];
+    int VA = fit_info.corr_id[2];
+    int AV = fit_info.corr_id[3];
+    int C2 = fit_info.corr_id[4];
+    int dt = fit_info.myen[0] - fit_info.myen[1];
+    int mu = fit_info.myen[2];
+    int nu = fit_info.myen[3];
+
+    double M = fit_info.ext_P[0][j];
+    double ZA = fit_info.ext_P[1][j];
+    double ZV = fit_info.ext_P[2][j];
+
+    int t1 = (fit_info.myen[1] - t);
+    if (t1 < 0) { r[0][0] = 0; r[0][1] = 0; return r; }
+    r[0][0] = -ZA * ZA * in[j][VV][t1][0] + ZV * ZV * in[j][AA][t1][0];
+    r[0][0] /= in[j][C2][t1][0] * exp(-M * dt);
+    r[0][0] *= M;
+
+    r[0][1] = -ZA * ZA * in[j][VV][t1][1] + ZV * ZV * in[j][AA][t1][1];
+    r[0][1] /= in[j][C2][t1][0] * exp(-M * dt);
+    r[0][1] *= M;
+
+    // if ((mu == 1 && nu == 2) || (mu == 2 && nu == 1)) {
+    if (mu != nu && mu > 0 && nu > 0) {
+
+        r[0][0] = ZV * ZA * (in[j][VA][t1][0] - in[j][AV][t1][0]);
+        r[0][0] /= in[j][C2][t1][0] * exp(-M * dt);
+        r[0][0] *= M;
+
+        r[0][1] = ZV * ZA * (in[j][VA][t1][1] - in[j][AV][t1][1]);
+        r[0][1] /= in[j][C2][t1][0] * exp(-M * dt);
+        r[0][1] *= M;
+    }
+
+    return r;
+}
 
 
 double** compute_Y1(int j, double**** in, int t, struct fit_type fit_info) {
