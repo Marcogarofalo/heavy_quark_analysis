@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
     // head.print_header();
 
     //////////////////////////////////// confs
-    int ncorr_max = head.ncorr + 56;
+    int ncorr_max = head.ncorr + 81;
     double**** data = calloc_corr(confs, head.ncorr, head.T);
     double**** data_4pt = calloc_corr(confs, ncorr_max, head.T);
 
@@ -165,13 +165,14 @@ int main(int argc, char** argv) {
     line_read_param(option, "TDs", TDs, myerr, myseed, namefile_plateaux);
 
     int t0 = TJW;
+    
     for (int j = 0; j < confs;j++) {
         for (int t = 0; t < head.T;t++) {
-            for (int g1 = 0;g1 < 8;g1++) {
-                for (int g2 = 0;g2 < 8;g2++) {
+            for (int g1 = 0;g1 < head.gammas.size();g1++) {
+                for (int g2 = 0;g2 < head.gammas.size();g2++) {
                     int idg1 = 2 * head.gammas.size() + g1;
                     int idg2 = 3 * head.gammas.size() + g2;
-                    int id_final = 2 * head.gammas.size() + g1 + g2 * 8;
+                    int id_final = 4 * head.gammas.size() + g1 + g2 * head.gammas.size();
                     std::complex<double> cp(data[j][idg1][t][0], data[j][idg1][t][1]);
                     std::complex<double> cm(data[j][idg2][t0][0], data[j][idg2][t0][1]);
                     // std::complex<double> cm(data[j][idg2][(t+10)%head.T][0], data[j][idg2][(t+10)%head.T][1]);
@@ -408,14 +409,17 @@ int main(int argc, char** argv) {
             // }
 
 
-            //                  2pt_files      +   A_4pt              +  gamma=Vmu + insertions Vmu     
-            int id_VV = 2 * head.gammas.size() + (mu + 4) + (nu + 4) * 8;
-            //                   2pt_files       +  gamma=Amu + insertions Amu     
-            int id_AA = 2 * head.gammas.size() + (mu + 0) + (nu + 0) * 8;
-            //                  2pt_files      +A_4pt+  gamma=Vmu + insertions Vmu     
-            int id_VA = 2 * head.gammas.size() + (mu + 4) + (nu + 0) * 8;
-            //                  2pt_files      +   A_4pt                +  gamma=Amu + insertions Vmu     
-            int id_AV = 2 * head.gammas.size() + (mu + 0) + (nu + 4) * 8;
+            
+            // int id_VV = 2 * head.gammas.size() + (mu + 4) + (nu + 4) * 8;
+            // int id_AA = 2 * head.gammas.size() + (mu + 0) + (nu + 0) * 8;
+            // int id_VA = 2 * head.gammas.size() + (mu + 4) + (nu + 0) * 8;
+            // int id_AV = 2 * head.gammas.size() + (mu + 0) + (nu + 4) * 8;
+
+
+            int id_VV = 4 * head.gammas.size() + (mu + 5) + (nu + 5) * head.gammas.size();
+            int id_AA = 4 * head.gammas.size() + (mu + 1) + (nu + 1) * head.gammas.size();
+            int id_VA = 4 * head.gammas.size() + (mu + 5) + (nu + 1) * head.gammas.size();
+            int id_AV = 4 * head.gammas.size() + (mu + 1) + (nu + 5) * head.gammas.size();
             fit_info.corr_id = { id_VV, id_AA, id_VA, id_AV, id_Ds_ss_2pt };//diag{ ll, ss}
 
 
