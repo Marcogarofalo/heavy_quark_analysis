@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
     line_read_param(option, "TDs", TDs, myerr, myseed, namefile_plateaux);
 
     int t0 = TJW;
-    
+
     for (int j = 0; j < confs;j++) {
         for (int t = 0; t < head.T;t++) {
             for (int g1 = 0;g1 < head.gammas.size();g1++) {
@@ -178,7 +178,12 @@ int main(int argc, char** argv) {
                     // std::complex<double> cm(data[j][idg2][(t+10)%head.T][0], data[j][idg2][(t+10)%head.T][1]);
                     // we put a minus sign because respect to the connected 
                     // part there is a sign change due to the fermion loops
-                    std::complex<double>  c4 = - cp * std::conj(cm); 
+
+                    double sign = -1; // two fermions loops
+                    sign *= -1; // [gmu,g5]
+                    if (g2 > 0 && g2 < 5) sign *= -1;
+
+                    std::complex<double>  c4 = sign * cp * std::conj(cm);
                     data_4pt[j][id_final][t][0] = c4.real();
                     data_4pt[j][id_final][t][1] = c4.imag();
                 }
@@ -186,6 +191,12 @@ int main(int argc, char** argv) {
 
         }
     }
+    // for (int t = 0; t < head.T;t++) {
+    //     // printf("%.12g  %.12g\n",data_4pt[0][2 * head.gammas.size() + 1 ][t][0], data_4pt[0][2 * head.gammas.size() + 1 ][t][1] );
+    //     // printf("%d %.12g  %.12g\n",t,data_4pt[0][ 3 * head.gammas.size() + 1 ][t][0], data_4pt[0][ 3 * head.gammas.size() + 1 ][t][1] );
+    //     printf("%.12g  %.12g\n",data_4pt[0][4 * head.gammas.size()+ 1 + 1 * head.gammas.size() ][t][0], data_4pt[0][4 * head.gammas.size()+ 1 + 1 * head.gammas.size() ][t][1] );
+
+    // }
 
     //////////////////////////////////////////////////////////////
     // binning
@@ -409,7 +420,7 @@ int main(int argc, char** argv) {
             // }
 
 
-            
+
             // int id_VV = 2 * head.gammas.size() + (mu + 4) + (nu + 4) * 8;
             // int id_AA = 2 * head.gammas.size() + (mu + 0) + (nu + 0) * 8;
             // int id_VA = 2 * head.gammas.size() + (mu + 4) + (nu + 0) * 8;
@@ -427,7 +438,7 @@ int main(int argc, char** argv) {
             fit_info.verbosity = 0;
             id_Mmunu[mu][nu] = ncorr_new;
             printf("C_%d,%d\n", mu, nu);
-            add_correlators(option, ncorr_new, conf_jack, compute_Mmunu_disc1, fit_info);
+            add_correlators(option, ncorr_new, conf_jack, compute_Mmunu, fit_info);
             printf(" ncorr after C_munu %d\n", ncorr_new);
             char name[NAMESIZE];
             mysprintf(name, NAMESIZE, "M_{%d,%d}", mu, nu);
