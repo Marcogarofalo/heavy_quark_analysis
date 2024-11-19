@@ -175,7 +175,7 @@ int main(int argc, char** argv) {
                     int id_final = 4 * head.gammas.size() + g1 + g2 * head.gammas.size();
                     std::complex<double> cp(data[j][idg1][t][0], data[j][idg1][t][1]);
                     std::complex<double> cm(data[j][idg2][t0][0], data[j][idg2][t0][1]);
-                    // std::complex<double> cm(data[j][idg2][(t+10)%head.T][0], data[j][idg2][(t+10)%head.T][1]);
+                    // std::complex<double> cm(data[j][idg2][(t+head.T-4)%head.T][0], data[j][idg2][(t+head.T-4)%head.T][1]);
                     // we put a minus sign because respect to the connected 
                     // part there is a sign change due to the fermion loops
 
@@ -241,7 +241,7 @@ int main(int argc, char** argv) {
     fit_info_silent.chi2_gap_jackboot = 1e+6;
     fit_info_silent.guess_per_jack = 0;
 
-    for (int icorr = 0; icorr < head.ncorr; icorr++) {
+    for (int icorr = 0; icorr < ncorr_max; icorr++) {
         // log effective mass
         double* tmp_meff_corr = plateau_correlator_function(
             option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
@@ -274,6 +274,11 @@ int main(int argc, char** argv) {
             M_eff_log_shift, dev_null, fit_info_silent);
         free(tmp_meff_corr);
     }
+    
+    int id = 4 * head.gammas.size() + (1 + 5) + (1 + 5) * head.gammas.size();
+    int V=  head.L*head.L*head.L;
+    printf("%g %g \n", conf_jack[Njack-1][id][1][0]*V , conf_jack[Njack-1][id][1][1]*V);
+    
     fit_info_silent.restore_default();
     sprintf(option[1], "%s", save_option); // restore option
     corr_counter = -1;
