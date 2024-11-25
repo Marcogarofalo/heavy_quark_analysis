@@ -505,6 +505,164 @@ cB211.072.64_th2_t48_ss1_rm.dat  M_{Z_0}   10 30 1
 cB211.072.64_th2_t48_ss1_rm.dat  M_{Z_1}   10 30 1
 cB211.072.64_th2_t48_ss1_rm.dat  M_{Z_2}   10 30 1
 
+cB211.072.64_th0_t48_ss1.dat  a   0.07957 0.00013  3
+cB211.072.64_th0_t48_ss1.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th0_t48_ss1.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th0_t48_ss1.dat  M_{K}_sl   16 48 1
+cB211.072.64_th0_t48_ss1.dat  M_{K}_ss   16 48 1
+cB211.072.64_th0_t48_ss1.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th0_t48_ss1.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th0_t48_ss1.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th0_t48_ss1.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th0_t48_ss1.dat  TJW           36 0 1
+cB211.072.64_th0_t48_ss1.dat  TDs           48 0 1
+cB211.072.64_th0_t48_ss1.dat  E0_HLT           0.05 0 1
+cB211.072.64_th0_t48_ss1.dat  sigma1           0.12 0 1
+cB211.072.64_th0_t48_ss1.dat  HLT_tmax         33 0 1
+cB211.072.64_th0_t48_ss1.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th0_t48_ss1.dat  M_{Z_0}   10 30 1
+cB211.072.64_th0_t48_ss1.dat  M_{Z_1}   10 30 1
+cB211.072.64_th0_t48_ss1.dat  M_{Z_2}   10 30 1
+
+
+cB211.072.64_th0_t48_ss1_r.dat  a   0.07957 0.00013  3
+cB211.072.64_th0_t48_ss1_r.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th0_t48_ss1_r.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th0_t48_ss1_r.dat  M_{K}_sl   16 48 1
+cB211.072.64_th0_t48_ss1_r.dat  M_{K}_ss   16 48 1
+cB211.072.64_th0_t48_ss1_r.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th0_t48_ss1_r.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th0_t48_ss1_r.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th0_t48_ss1_r.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th0_t48_ss1_r.dat  TJW           36 0 1
+cB211.072.64_th0_t48_ss1_r.dat  TDs           48 0 1
+cB211.072.64_th0_t48_ss1_r.dat  E0_HLT           0.05 0 1
+cB211.072.64_th0_t48_ss1_r.dat  sigma1           0.12 0 1
+cB211.072.64_th0_t48_ss1_r.dat  HLT_tmax         33 0 1
+cB211.072.64_th0_t48_ss1_r.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th0_t48_ss1_r.dat  M_{Z_0}   10 30 1
+cB211.072.64_th0_t48_ss1_r.dat  M_{Z_1}   10 30 1
+cB211.072.64_th0_t48_ss1_r.dat  M_{Z_2}   10 30 1
+
+
+cB211.072.64_th0_t24_ss1.dat  a   0.07957 0.00013  3
+cB211.072.64_th0_t24_ss1.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th0_t24_ss1.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th0_t24_ss1.dat  M_{K}_sl   16 48 1
+cB211.072.64_th0_t24_ss1.dat  M_{K}_ss   16 48 1
+cB211.072.64_th0_t24_ss1.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th0_t24_ss1.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th0_t24_ss1.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th0_t24_ss1.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th0_t24_ss1.dat  TJW           18 0 1
+cB211.072.64_th0_t24_ss1.dat  TDs           24 0 1
+cB211.072.64_th0_t24_ss1.dat  E0_HLT           0.05 0 1
+cB211.072.64_th0_t24_ss1.dat  sigma1           0.12 0 1
+cB211.072.64_th0_t24_ss1.dat  HLT_tmax         33 0 1
+cB211.072.64_th0_t24_ss1.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th0_t24_ss1.dat  M_{Z_0}   10 30 1
+cB211.072.64_th0_t24_ss1.dat  M_{Z_1}   10 30 1
+cB211.072.64_th0_t24_ss1.dat  M_{Z_2}   10 30 1
+
+cB211.072.64_th0_t24_ss1_r.dat  a   0.07957 0.00013  3
+cB211.072.64_th0_t24_ss1_r.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th0_t24_ss1_r.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th0_t24_ss1_r.dat  M_{K}_sl   16 48 1
+cB211.072.64_th0_t24_ss1_r.dat  M_{K}_ss   16 48 1
+cB211.072.64_th0_t24_ss1_r.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th0_t24_ss1_r.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th0_t24_ss1_r.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th0_t24_ss1_r.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th0_t24_ss1_r.dat  TJW           18 0 1
+cB211.072.64_th0_t24_ss1_r.dat  TDs           24 0 1
+cB211.072.64_th0_t24_ss1_r.dat  E0_HLT           0.05 0 1
+cB211.072.64_th0_t24_ss1_r.dat  sigma1           0.12 0 1
+cB211.072.64_th0_t24_ss1_r.dat  HLT_tmax         33 0 1
+cB211.072.64_th0_t24_ss1_r.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th0_t24_ss1_r.dat  M_{Z_0}   10 30 1
+cB211.072.64_th0_t24_ss1_r.dat  M_{Z_1}   10 30 1
+cB211.072.64_th0_t24_ss1_r.dat  M_{Z_2}   10 30 1
+
+
+cB211.072.64_th1_t24_ss1.dat  a   0.07957 0.00013  3
+cB211.072.64_th1_t24_ss1.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th1_t24_ss1.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1.dat  M_{K}_sl   16 48 1
+cB211.072.64_th1_t24_ss1.dat  M_{K}_ss   16 48 1
+cB211.072.64_th1_t24_ss1.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th1_t24_ss1.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th1_t24_ss1.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1.dat  TJW           18 0 1
+cB211.072.64_th1_t24_ss1.dat  TDs           24 0 1
+cB211.072.64_th1_t24_ss1.dat  E0_HLT           0.05 0 1
+cB211.072.64_th1_t24_ss1.dat  sigma1           0.12 0 1
+cB211.072.64_th1_t24_ss1.dat  HLT_tmax         33 0 1
+cB211.072.64_th1_t24_ss1.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th1_t24_ss1.dat  M_{Z_0}   10 30 1
+cB211.072.64_th1_t24_ss1.dat  M_{Z_1}   10 30 1
+cB211.072.64_th1_t24_ss1.dat  M_{Z_2}   10 30 1
+
+
+cB211.072.64_th1_t24_ss1_m.dat  a   0.07957 0.00013  3
+cB211.072.64_th1_t24_ss1_m.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th1_t24_ss1_m.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_m.dat  M_{K}_sl   16 48 1
+cB211.072.64_th1_t24_ss1_m.dat  M_{K}_ss   16 48 1
+cB211.072.64_th1_t24_ss1_m.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_m.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th1_t24_ss1_m.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th1_t24_ss1_m.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_m.dat  TJW           18 0 1
+cB211.072.64_th1_t24_ss1_m.dat  TDs           24 0 1
+cB211.072.64_th1_t24_ss1_m.dat  E0_HLT           0.05 0 1
+cB211.072.64_th1_t24_ss1_m.dat  sigma1           0.12 0 1
+cB211.072.64_th1_t24_ss1_m.dat  HLT_tmax         33 0 1
+cB211.072.64_th1_t24_ss1_m.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th1_t24_ss1_m.dat  M_{Z_0}   10 30 1
+cB211.072.64_th1_t24_ss1_m.dat  M_{Z_1}   10 30 1
+cB211.072.64_th1_t24_ss1_m.dat  M_{Z_2}   10 30 1
+
+cB211.072.64_th1_t24_ss1_r.dat  a   0.07957 0.00013  3
+cB211.072.64_th1_t24_ss1_r.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th1_t24_ss1_r.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_r.dat  M_{K}_sl   16 48 1
+cB211.072.64_th1_t24_ss1_r.dat  M_{K}_ss   16 48 1
+cB211.072.64_th1_t24_ss1_r.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_r.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th1_t24_ss1_r.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th1_t24_ss1_r.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_r.dat  TJW           18 0 1
+cB211.072.64_th1_t24_ss1_r.dat  TDs           24 0 1
+cB211.072.64_th1_t24_ss1_r.dat  E0_HLT           0.05 0 1
+cB211.072.64_th1_t24_ss1_r.dat  sigma1           0.12 0 1
+cB211.072.64_th1_t24_ss1_r.dat  HLT_tmax         33 0 1
+cB211.072.64_th1_t24_ss1_r.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th1_t24_ss1_r.dat  M_{Z_0}   10 30 1
+cB211.072.64_th1_t24_ss1_r.dat  M_{Z_1}   10 30 1
+cB211.072.64_th1_t24_ss1_r.dat  M_{Z_2}   10 30 1
+
+cB211.072.64_th1_t24_ss1_rm.dat  a   0.07957 0.00013  3
+cB211.072.64_th1_t24_ss1_rm.dat  M_{Ds}_sl  16 48 1
+cB211.072.64_th1_t24_ss1_rm.dat  M_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_rm.dat  M_{K}_sl   16 48 1
+cB211.072.64_th1_t24_ss1_rm.dat  M_{K}_ss   16 48 1
+cB211.072.64_th1_t24_ss1_rm.dat  Z_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_rm.dat  ZA     0.74294  0.00024   1
+cB211.072.64_th1_t24_ss1_rm.dat  ZV     0.706379 0.000024  2
+cB211.072.64_th1_t24_ss1_rm.dat  2parZ_{Ds}_ss  16 48 1
+cB211.072.64_th1_t24_ss1_rm.dat  TJW           18 0 1
+cB211.072.64_th1_t24_ss1_rm.dat  TDs           24 0 1
+cB211.072.64_th1_t24_ss1_rm.dat  E0_HLT           0.05 0 1
+cB211.072.64_th1_t24_ss1_rm.dat  sigma1           0.12 0 1
+cB211.072.64_th1_t24_ss1_rm.dat  HLT_tmax         33 0 1
+cB211.072.64_th1_t24_ss1_rm.dat  HLT_nlambda_max   21 0 1
+cB211.072.64_th1_t24_ss1_rm.dat  M_{Z_0}   10 30 1
+cB211.072.64_th1_t24_ss1_rm.dat  M_{Z_1}   10 30 1
+cB211.072.64_th1_t24_ss1_rm.dat  M_{Z_2}   10 30 1
+
+
+
 cB211.072.64_th2_t48_ss2.dat  a   0.07957 0.00013  3
 cB211.072.64_th2_t48_ss2.dat  M_{Ds}_sl  16 48 1
 cB211.072.64_th2_t48_ss2.dat  M_{Ds}_ss  16 48 1
