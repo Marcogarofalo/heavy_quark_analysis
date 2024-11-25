@@ -138,43 +138,53 @@ int main(int argc, char** argv) {
     // head.print_header();
 
     //////////////////////////////////// confs
-    int ncorr_max = head.ncorr + 81;
-    double**** data = calloc_corr(confs, head.ncorr, head.T);
-    double**** data_4pt = calloc_corr(confs, ncorr_max, head.T);
+    int ncorr_max = head.ncorr + 81 * 2;
+    // double**** data = calloc_corr(confs, head.ncorr, head.T);
+    double**** data_4pt = calloc_corr(Neff, ncorr_max, head.T);
 
     printf("confs=%d\n", confs);
     printf("ncorr=%d\n", head.ncorr);
     printf("kappa=%g\n", head.kappa);
-    for (int iconf = 0; iconf < confs; iconf++) {
-        read_twopt(infile, data[iconf], head);
-    }
+    // for (int iconf = 0; iconf < confs; iconf++) {
+    //     read_twopt(infile, data_4pt[iconf], head);
+    // }
     //////////////////////////////////////////////////////////////
     // build 4pt
     //////////////////////////////////////////////////////////////
-    for (int iconf = 0; iconf < confs; iconf++) {
-        for (int t = 0; t < head.T;t++) {
-            for (int n = 0; n < head.ncorr;n++) {
-                data_4pt[iconf][n][t][0] = data[iconf][n][t][0];
-                data_4pt[iconf][n][t][1] = data[iconf][n][t][1];
-            }
-        }
+    // for (int iconf = 0; iconf < confs; iconf++) {
+    //     for (int t = 0; t < head.T;t++) {
+    //         for (int n = 0; n < head.ncorr;n++) {
+    //             data_4pt[iconf][n][t][0] = data[iconf][n][t][0];
+    //             data_4pt[iconf][n][t][1] = data[iconf][n][t][1];
+    //         }
+    //     }
 
-    }
+    // }
     int TJW, TDs, myerr, myseed;
     line_read_param(option, "TJW", TJW, myerr, myseed, namefile_plateaux);
     line_read_param(option, "TDs", TDs, myerr, myseed, namefile_plateaux);
 
     int t0 = TJW;
 
-    for (int j = 0; j < confs;j++) {
+    // we need to read and bin on the fly
+    double*** tmp = malloc_3<double>(head.ncorr, head.T, 2);
+    int l = 0;
+    for (int j = 0; j < (confs / bin) * bin;j++) {
+        read_twopt(infile, tmp, head);
+        if (j != 0) if (j % bin == 0) l++;
         for (int t = 0; t < head.T;t++) {
+            for (int n = 0; n < head.ncorr;n++) {
+                data_4pt[l][n][t][0] += tmp[n][t][0];
+                data_4pt[l][n][t][1] += tmp[n][t][1];
+            }
+
             for (int g1 = 0;g1 < head.gammas.size();g1++) {
                 for (int g2 = 0;g2 < head.gammas.size();g2++) {
                     int idg1 = 2 * head.gammas.size() + g1;
                     int idg2 = 3 * head.gammas.size() + g2;
                     int id_final = 4 * head.gammas.size() + g1 + g2 * head.gammas.size();
-                    std::complex<double> cp(data[j][idg1][t][0], data[j][idg1][t][1]);
-                    std::complex<double> cm(data[j][idg2][t0][0], data[j][idg2][t0][1]);
+                    std::complex<double> cp(tmp[idg1][t][0], tmp[idg1][t][1]);
+                    std::complex<double> cm(tmp[idg2][t0][0], tmp[idg2][t0][1]);
                     // std::complex<double> cm(data[j][idg2][(t+head.T-4)%head.T][0], data[j][idg2][(t+head.T-4)%head.T][1]);
                     // we put a minus sign because respect to the connected 
                     // part there is a sign change due to the fermion loops
@@ -184,13 +194,22 @@ int main(int argc, char** argv) {
                     if (g2 > 0 && g2 < 5) sign *= -1;
 
                     std::complex<double>  c4 = sign * cp * std::conj(cm);
-                    data_4pt[j][id_final][t][0] = c4.real();
-                    data_4pt[j][id_final][t][1] = c4.imag();
+                    data_4pt[l][id_final][t][0] += c4.real();
+                    data_4pt[l][id_final][t][1] += c4.imag();
                 }
             }
 
         }
     }
+    for (int j = 0; j < Neff; j++) {
+        for (int n = 0; n < ncorr_max;n++) {
+            for (int t = 0; t < head.T;t++) {
+                data_4pt[j][n][t][0] /= ((double)bin);
+                data_4pt[j][n][t][1] /= ((double)bin);
+            }
+        }
+    }
+
     // for (int t = 0; t < head.T;t++) {
     //     // printf("%.12g  %.12g\n",data_4pt[0][2 * head.gammas.size() + 1 ][t][0], data_4pt[0][2 * head.gammas.size() + 1 ][t][1] );
     //     // printf("%d %.12g  %.12g\n",t,data_4pt[0][ 3 * head.gammas.size() + 1 ][t][0], data_4pt[0][ 3 * head.gammas.size() + 1 ][t][1] );
@@ -201,12 +220,39 @@ int main(int argc, char** argv) {
     //////////////////////////////////////////////////////////////
     // binning
     //////////////////////////////////////////////////////////////
-    double**** data_bin = binning(confs, ncorr_max, head.T, data_4pt, bin);
-    double**** conf_jack = myres->create(Neff, ncorr_max, head.T, data_bin);
-    free_corr(Neff, ncorr_max, head.T, data_bin);
-    free_corr(confs, head.ncorr, head.T, data);
+    // double**** data_bin = binning(confs, ncorr_max, head.T, data_4pt, bin);
+    double**** conf_jack = myres->create(Neff, ncorr_max, head.T, data_4pt);
     free_corr(confs, ncorr_max, head.T, data_4pt);
+    // free_corr(Neff, ncorr_max, head.T, data_bin);
+    // free_corr(confs, head.ncorr, head.T, data);
 
+    // vev subtraction
+    for (int j = 0; j < Njack;j++) {
+        for (int t = 0; t < head.T;t++) {
+            for (int g1 = 0;g1 < head.gammas.size();g1++) {
+                for (int g2 = 0;g2 < head.gammas.size();g2++) {
+                    int idg1 = 2 * head.gammas.size() + g1;
+                    int idg2 = 3 * head.gammas.size() + g2;
+                    int id_final = 4 * head.gammas.size() + g1 + g2 * head.gammas.size();
+                    int id_final_vev = 4 * head.gammas.size() + g1 + g2 * head.gammas.size() + head.gammas.size() * head.gammas.size();
+                    std::complex<double> cp(conf_jack[j][idg1][t][0], conf_jack[j][idg1][t][1]);
+                    std::complex<double> cm(conf_jack[j][idg2][t0][0], conf_jack[j][idg2][t0][1]);
+                    // std::complex<double> cm(data[j][idg2][(t+head.T-4)%head.T][0], data[j][idg2][(t+head.T-4)%head.T][1]);
+                    // we put a minus sign because respect to the connected 
+                    // part there is a sign change due to the fermion loops
+
+                    double sign = -1; // two fermions loops
+                    sign *= -1; // [gmu,g5]
+                    if (g2 > 0 && g2 < 5) sign *= -1;
+
+                    std::complex<double>  c4 = sign * cp * std::conj(cm);
+                    conf_jack[j][id_final_vev][t][0] = conf_jack[j][id_final][t][0] - c4.real();
+                    conf_jack[j][id_final_vev][t][1] = conf_jack[j][id_final][t][1] - c4.imag();
+                }
+            }
+
+        }
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // print all the effective masses correlators
     // set the option to not read for a plateaux
@@ -274,11 +320,11 @@ int main(int argc, char** argv) {
             M_eff_log_shift, dev_null, fit_info_silent);
         free(tmp_meff_corr);
     }
-    
+
     int id = 4 * head.gammas.size() + (1 + 5) + (1 + 5) * head.gammas.size();
-    int V=  head.L*head.L*head.L;
-    printf("%g %g \n", conf_jack[Njack-1][id][1][0]*V , conf_jack[Njack-1][id][1][1]*V);
-    
+    int V = head.L * head.L * head.L;
+    printf("%g %g \n", conf_jack[Njack - 1][id][1][0] * V, conf_jack[Njack - 1][id][1][1] * V);
+
     fit_info_silent.restore_default();
     sprintf(option[1], "%s", save_option); // restore option
     corr_counter = -1;
