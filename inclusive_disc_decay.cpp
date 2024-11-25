@@ -222,7 +222,7 @@ int main(int argc, char** argv) {
     //////////////////////////////////////////////////////////////
     // double**** data_bin = binning(confs, ncorr_max, head.T, data_4pt, bin);
     double**** conf_jack = myres->create(Neff, ncorr_max, head.T, data_4pt);
-    free_corr(confs, ncorr_max, head.T, data_4pt);
+    free_corr(Neff, ncorr_max, head.T, data_4pt);
     // free_corr(Neff, ncorr_max, head.T, data_bin);
     // free_corr(confs, head.ncorr, head.T, data);
 
