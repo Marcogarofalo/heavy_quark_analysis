@@ -56,11 +56,13 @@ target_link_libraries(heavy_quarks PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
 add_executable(inclusive_decay inclusive_decay.cpp)
 add_executable(test_Emax_HLT test_Emax_HLT.cpp)
 add_executable(inclusive_disc_decay inclusive_disc_decay.cpp)
+add_executable(inclusive_disc_DDd_JJd_decay inclusive_disc_DDd_JJd_decay.cpp)
 
 IF(WITH_ARB)
   set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${CXXFLAGS} -DWITH_ARB   ")
   target_link_libraries(inclusive_decay PUBLIC flint-arb flint)
   target_link_libraries(inclusive_disc_decay PUBLIC flint-arb flint)
+  target_link_libraries(inclusive_disc_DDd_JJd_decay PUBLIC flint-arb flint)
   target_link_libraries(test_Emax_HLT PUBLIC flint-arb flint)
 ENDIF()
 
@@ -74,6 +76,8 @@ target_link_libraries(inclusive_disc_decay PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
 target_link_libraries(test_Emax_HLT PUBLIC functions_heavy_quarks)
 target_link_libraries(test_Emax_HLT PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
 
+target_link_libraries(inclusive_disc_DDd_JJd_decay PUBLIC functions_heavy_quarks)
+target_link_libraries(inclusive_disc_DDd_JJd_decay PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
 
 ### fit all
 
