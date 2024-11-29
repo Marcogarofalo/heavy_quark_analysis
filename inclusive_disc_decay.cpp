@@ -169,6 +169,7 @@ int main(int argc, char** argv) {
     // we need to read and bin on the fly
     double*** tmp = malloc_3<double>(head.ncorr, head.T, 2);
     int l = 0;
+    double Vol = ((double)head.L * head.L * head.L);
     for (int j = 0; j < (confs / bin) * bin;j++) {
         read_twopt(infile, tmp, head);
         if (j != 0) if (j % bin == 0) l++;
@@ -189,11 +190,11 @@ int main(int argc, char** argv) {
                     // we put a minus sign because respect to the connected 
                     // part there is a sign change due to the fermion loops
 
-                    double sign = -1; // two fermions loops
+                    double sign = -1; // two fermions loops give a minus sign respect to the connected part
                     sign *= -1; // [gmu,g5]
-                    if (g2 > 0 && g2 < 5) sign *= -1;
+                    if (g2 > 0 && g2 < 5) sign *= -1;// change sign in the axial part
 
-                    std::complex<double>  c4 = sign * cp * std::conj(cm);
+                    std::complex<double>  c4 = sign * cp * std::conj(cm) * Vol;
                     data_4pt[l][id_final][t][0] += c4.real();
                     data_4pt[l][id_final][t][1] += c4.imag();
                 }
@@ -241,9 +242,9 @@ int main(int argc, char** argv) {
                     // we put a minus sign because respect to the connected 
                     // part there is a sign change due to the fermion loops
 
-                    double sign = -1; // two fermions loops
+                    double sign = -1; // two fermions loops give a minus sign respect to the connected part
                     sign *= -1; // [gmu,g5]
-                    if (g2 > 0 && g2 < 5) sign *= -1;
+                    if (g2 > 0 && g2 < 5) sign *= -1;// change sign in the axial part
 
                     std::complex<double>  c4 = sign * cp * std::conj(cm);
                     conf_jack[j][id_final_vev][t][0] = conf_jack[j][id_final][t][0] - c4.real();
