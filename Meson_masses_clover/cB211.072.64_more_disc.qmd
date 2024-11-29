@@ -1,0 +1,573 @@
+#  cB211.072.64 disc high stat
+
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+require(tikzDevice)
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x, y)) +
+    geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir = parent.frame())
+  # ggp
+  df # NOT returning a plot
+}
+res1 <- f1(df)
+ggp # Let knit handle the plot
+myplotly(ggplot())
+```
+
+
+
+## meff
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df <- NULL
+df1 <- NULL
+# file1 <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_disc_th2_t56_cs_r.dat_meff_correlators")
+file1 <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_rm.dat_meff_correlators")
+mt11 <- read_df(file1)
+all_obs1 <- get_all_corr(mt11)
+# df1 <- add_corr_to_df(
+#   all_obs = all_obs1, mt = mt11, df = df,
+#   log = FALSE, number = 1 + (9 * 3 + 0), nudge = 0,
+#   print_res = FALSE, logx = 0, rename = "V1P5(56,t)th2"
+# )
+#
+# df1 <- add_corr_to_df(
+#   all_obs = all_obs1, mt = mt11, df = df1,
+#   log = FALSE, number = 1 + (9 * 2 + 0), nudge = 0,
+#   print_res = FALSE, logx = 0, rename = "V1P5(0,t)th2"
+# )
+# df1 <- add_corr_to_df(
+#   all_obs = all_obs1, mt = mt11, df = df1,
+#   log = FALSE, number = 1 + (9 * 1 + 0), nudge = 0,
+#   print_res = FALSE, logx = 0, rename = "P5P5(56,t)th0"
+# )
+df1 <- add_corr_to_df(
+  all_obs = all_obs1, mt = mt11, df = df1,
+  log = FALSE, number = 1 + (9 * 0 + 0), nudge = 0,
+  print_res = FALSE, logx = 0, rename = "P5P5(t)th0"
+)
+df1 <- add_corr_to_df(
+  all_obs = all_obs1, mt = mt11, df = df1,
+  log = FALSE, number = 1 + (9 * 2 + 0), nudge = 0,
+  print_res = FALSE, logx = 0, rename = "P5P5(t)th1"
+)
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 5 + 5 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V0V0(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 6 + 6 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V1V1(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 7 + 7 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V2V2(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 8 + 8 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V3V3(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 1 + 1 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A0A0(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 2 + 2 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A1A1(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 3 + 3 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A2A2(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  (9 * 4 + 4 + 4 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A3A3(48,t)th1-h75"
+  )
+gg <- plot_df_corr_ggplot(df1)
+# gg<- gg +scale_y_continuous(sec.axis = dup_axis())
+
+fig <- myplotly(gg, "", "t", "meff", to_print = TRUE)
+```
+
+
+## corr
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df <- NULL
+df1 <- NULL
+# file1 <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_disc_th2_t56_cs_r.dat_meff_correlators")
+file1 <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_rm.dat_raw_correlators")
+mt11 <- read_df(file1)
+all_obs1 <- get_all_corr(mt11)
+# df1 <- add_corr_to_df(
+#   all_obs = all_obs1, mt = mt11, df = df,
+#   log = FALSE, number = 1 + (9 * 3 + 0), nudge = 0,
+#   print_res = FALSE, logx = 0, rename = "V1P5(56,t)th2"
+# )
+#
+# df1 <- add_corr_to_df(
+#   all_obs = all_obs1, mt = mt11, df = df1,
+#   log = FALSE, number = 1 + (9 * 2 + 0), nudge = 0,
+#   print_res = FALSE, logx = 0, rename = "V1P5(0,t)th2"
+# )
+# df1 <- add_corr_to_df(
+#   all_obs = all_obs1, mt = mt11, df = df1,
+#   log = FALSE, number = 1 + (9 * 1 + 0), nudge = 0,
+#   print_res = FALSE, logx = 0, rename = "P5P5(56,t)th0"
+# )
+df1 <- add_corr_to_df(
+  all_obs = all_obs1, mt = mt11, df = df1,
+  log = FALSE, number = 1 + 2*(9 * 0 + 0), nudge = 0,
+  print_res = FALSE, logx = 0, rename = "P5P5(t)th0"
+)
+df1 <- add_corr_to_df(
+  all_obs = all_obs1, mt = mt11, df = df1,
+  log = FALSE, number = 1 + 2*(9 * 2 + 0), nudge = 0,
+  print_res = FALSE, logx = 0, rename = "P5P5(t)th1"
+)
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 + 2* (9 * 4 + 5 + 5 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V0V0(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  2*(9 * 4 + 6 + 6 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V1V1(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  2*(9 * 4 + 7 + 7 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V2V2(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  2*(9 * 4 + 8 + 8 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V3V3(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  2*(9 * 4 + 1 + 1 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A0A0(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  2*(9 * 4 + 2 + 2 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A1A1(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  2*(9 * 4 + 3 + 3 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A2A2(48,t)th1-h75"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 +  2*(9 * 4 + 4 + 4 * 9), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A3A3(48,t)th1-h75"
+  )
+ cat("nomalizing the correlator to 1 at t=1\n")
+ t1 <- which(df1$x == 1)
+ rept1 <- length(df1$x) / length(t1)
+ t1s <- rep(t1, each = rept1)
+ s <- sign(df1$y)
+ df1$err <- (df1$err / abs(df1$y[t1s]))
+ df1$y <- (df1$y / abs(df1$y[t1s]))
+
+  gg <- plot_df_corr_ggplot(df1)
+  # gg<- gg +scale_y_continuous(sec.axis = dup_axis())
+  fig <- myplotly(gg, "", "t", "corr", to_print = TRUE)
+
+  df1$y <- log10(df1$y)
+  # df1$y<-log10((df1$y/abs(df1$y[t1s])))
+
+  gg <- plot_df_corr_ggplot(df1)
+  # gg <- gg + scale_y_continuous(trans = "log10")
+  fig <- myplotly(gg, "", "t", "log-corr", to_print = TRUE)
+```
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df<-NULL
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_r.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+# df <- add_corr_to_df(
+#   string = paste0("M_{0,0}"),
+#   all_obs = all_obs, mt = mt, df = df,
+#   log = FALSE, number = NULL, nudge = 0,
+#   print_res = FALSE, logx = 0, rename = "M_{0,0} disc -r"
+# )
+df <- add_corr_to_df(
+  string = paste0("Y_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "Y_{2} disc -r"
+)
+
+df <- add_corr_to_df(
+  string = paste0("Y_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "Y_{2} disc -r"
+)
+df <- add_corr_to_df(
+  string = paste0("Y_{3}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "Y_{2} disc -r"
+)
+
+
+gg <- plot_df_corr_ggplot(df)
+#gg <- gg + scale_y_continuous(transform = "log10")
+fig <- myplotly(gg, "", "t", "", to_print = TRUE)
+```
+
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df<-NULL
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_r.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -r"
+)
+
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_rm.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -rp"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "M_{0,0} disc -r"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_m.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -p"
+)
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th2_t56_44.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -th2 connected"
+)
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th3_t56_44.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -th3 connected"
+)
+
+# df$y[a]<-df$y[a]* 64^3
+# df$err[a]<-df$err[a]* 64^3
+gg <- plot_df_corr_ggplot(df)
+#gg <- gg + scale_y_continuous(transform = "log10")
+fig <- myplotly(gg, "", "t", "", to_print = TRUE)
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df<-NULL
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_r.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -r"
+)
+
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_rm.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -rp"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "M_{0,0} disc -r"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_m.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -p"
+)
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th2_t56_44.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -th2 connected"
+)
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th3_t56_44.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -th3 connected"
+)
+
+# df$y[a]<-df$y[a]* 64^3
+# df$err[a]<-df$err[a]* 64^3
+gg <- plot_df_corr_ggplot(df)
+#gg <- gg + scale_y_continuous(transform = "log10")
+fig <- myplotly(gg, "", "t", "", to_print = TRUE)
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df<-NULL
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_r.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -r"
+)
+
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_rm.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -rp"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "M_{0,0} disc -r"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_m.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -p"
+)
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th2_t56_44.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -th2 connected"
+)
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th3_t56_44.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -th3 connected"
+)
+
+# df$y[a]<-df$y[a]* 64^3
+# df$err[a]<-df$err[a]* 64^3
+gg <- plot_df_corr_ggplot(df)
+#gg <- gg + scale_y_continuous(transform = "log10")
+fig <- myplotly(gg, "", "t", "", to_print = TRUE)
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+df<-NULL
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_r.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -r"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -r"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -r"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_rm.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -rp"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -rp"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -rp"
+)
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "M_{0,0} disc -r"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "Y_{2} disc -r"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  #, rename = "Y_{2} disc -r"
+)
+
+file <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75_m.dat_output")
+mt <- read_df(file)
+all_obs <- get_all_corr(mt)
+df <- add_corr_to_df(
+  string = paste0("Z_{0}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{0} -p"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{1}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{1} -p"
+)
+df <- add_corr_to_df(
+  string = paste0("Z_{2}"),
+  all_obs = all_obs, mt = mt, df = df,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 0
+  , rename = "Z_{2} -p"
+)
+
+df$y<-df$y* 64^3
+df$err<-df$err* 64^3
+gg <- plot_df_corr_ggplot(df)
+#gg <- gg + scale_y_continuous(transform = "log10")
+fig <- myplotly(gg, "", "t", "", to_print = TRUE)
+```
