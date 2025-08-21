@@ -2,6 +2,8 @@
 #define functions_heavy_quarks_H
 #include "non_linear_fit.hpp"
 #include "arb_calc.h"
+#include "arb.h"
+#include "acb.h"
 
 double lhs_function_heavy_quarks_eg(int j, double**** in, int t, struct fit_type fit_info);
 

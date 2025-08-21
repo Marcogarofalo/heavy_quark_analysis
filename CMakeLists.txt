@@ -37,6 +37,22 @@ endif()
 
 include_directories(SYSTEM ${OpenMP_INCLUDE_PATH})
 
+IF(WITH_ARB)
+  if(NOT DEFINED ARB_ROOT)
+    message(FATAL_ERROR "WITH_ARB=ON but ARB_ROOT is not specified. Use -DARB_ROOT=/path/to/flint")
+  endif()
+  set(CMAKE_CXX_FLAGS  " ${CMAKE_CXX_FLAGS} ${CXXFLAGS} -DWITH_ARB  ")#-larb -lflint -lgmp -lmpfr 
+
+  # Include directories
+  include_directories(
+    ${ARB_ROOT}/include
+    ${ARB_ROOT}/include/flint
+  )
+  
+  # Library directories
+  link_directories(${ARB_ROOT}/lib)
+  set(ARB_LIBS flint)
+ENDIF()
 # ############################################
 # add a local library for this project
 # ############################################
@@ -47,7 +63,6 @@ add_library(
 )
 target_link_libraries(functions_heavy_quarks PUBLIC ${ANALYSIS_PROGRAM_LIBRARIES})
 target_include_directories(functions_heavy_quarks PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-target_link_libraries(functions_heavy_quarks PUBLIC flint-arb flint)
 
 add_executable(heavy_quarks heavy_quarks.cpp)
 target_link_libraries(heavy_quarks PUBLIC functions_heavy_quarks)
@@ -58,12 +73,13 @@ add_executable(test_Emax_HLT test_Emax_HLT.cpp)
 add_executable(inclusive_disc_decay inclusive_disc_decay.cpp)
 add_executable(inclusive_disc_DDd_JJd_decay inclusive_disc_DDd_JJd_decay.cpp)
 
+
 IF(WITH_ARB)
-  set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${CXXFLAGS} -DWITH_ARB   ")
-  target_link_libraries(inclusive_decay PUBLIC flint-arb flint)
-  target_link_libraries(inclusive_disc_decay PUBLIC flint-arb flint)
-  target_link_libraries(inclusive_disc_DDd_JJd_decay PUBLIC flint-arb flint)
-  target_link_libraries(test_Emax_HLT PUBLIC flint-arb flint)
+  target_link_libraries(functions_heavy_quarks PUBLIC  ${ARB_LIBS})
+  target_link_libraries(inclusive_decay PUBLIC  ${ARB_LIBS})
+  target_link_libraries(inclusive_disc_decay PUBLIC  ${ARB_LIBS})
+  target_link_libraries(inclusive_disc_DDd_JJd_decay PUBLIC  ${ARB_LIBS})
+  target_link_libraries(test_Emax_HLT PUBLIC  ${ARB_LIBS})
 ENDIF()
 
 target_link_libraries(inclusive_decay PUBLIC functions_heavy_quarks)
