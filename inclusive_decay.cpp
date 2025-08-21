@@ -531,11 +531,14 @@ int main(int argc, char** argv) {
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
     HLT_info.type_b = HLT_EXP_b;
-    HLT_info.prec = 50 * 3.33;
+    HLT_info.prec = 70 * 3.33;
     HLT_info.integration_deg_limit = 1e+6;//1e+3;
     HLT_info.integration_eval_limit = 1e+9;//1e+6;
     HLT_info.integration_depth_limit = 1e+9;//1e+6;
     double omega = head.thetas[0] * M_PI / (head.L * M_Ds[Njack - 1]);
+    printf("theta = %g\n", head.thetas[0] );
+    printf("omega = %g\n",omega );
+    
     double sigma1, dsigma1, E0_HLT;
     line_read_param(option, "sigma1", sigma1, dsigma1, myseed, namefile_plateaux);
     line_read_param(option, "E0_HLT", E0_HLT, dsigma1, myseed, namefile_plateaux);
@@ -1034,7 +1037,7 @@ int main(int argc, char** argv) {
     HLT_info;
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
-    HLT_info.prec = 50 * 3.33;
+    HLT_info.prec = 70 * 3.33;
     HLT_info.integration_deg_limit = 1e+6;//1e+3;
     HLT_info.integration_eval_limit = 1e+9;//1e+6;
     HLT_info.integration_depth_limit = 1e+9;//1e+6;
@@ -1220,7 +1223,7 @@ int main(int argc, char** argv) {
     }
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
-    HLT_info.prec = 50 * 3.33;
+    HLT_info.prec = 70 * 3.33;
     HLT_info.integration_deg_limit = 1e+6;//1e+3;
     HLT_info.integration_eval_limit = 1e+9;//1e+6;
     HLT_info.integration_depth_limit = 1e+9;//1e+6;
@@ -1381,7 +1384,7 @@ int main(int argc, char** argv) {
     }
     HLT_info.tmin = 1;
     HLT_info.T = head.T;
-    HLT_info.prec = 50 * 3.33;
+    HLT_info.prec = 70 * 3.33;
     HLT_info.integration_deg_limit = 1e+6;//1e+3;
     HLT_info.integration_eval_limit = 1e+9;//1e+6;
     HLT_info.integration_depth_limit = 1e+9;//1e+6;
@@ -1656,5 +1659,16 @@ int main(int argc, char** argv) {
     write_jack(dGammadq, Njack, jack_file);
     check_correlatro_counter(71);
 
+    char nameY[NAMESIZE];
+    for (int i = 1;i < 6;i++) {
+        mysprintf(nameY, NAMESIZE, "M_Y_%d", i);
+        double* M_Y = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Y[i], nameY, M_eff_log, jack_file);
+        check_correlatro_counter(72 + i-1);
+        free(M_Y);
+
+
+    }
 
 }

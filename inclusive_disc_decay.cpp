@@ -1765,4 +1765,16 @@ int main(int argc, char** argv) {
     check_correlatro_counter(71);
 
 
+    char nameY[NAMESIZE];
+    for (int i = 1;i < 6;i++) {
+        mysprintf(nameY, NAMESIZE, "M_Y_%d", i);
+        double* M_Y = plateau_correlator_function(
+            option, kinematic_2pt, (char*)"P5P5", conf_jack, Njack,
+            namefile_plateaux, outfile, id_Y[i], nameY, M_eff_log, jack_file);
+        check_correlatro_counter(72 + i - 1);
+        free(M_Y);
+
+
+    }
+
 }

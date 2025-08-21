@@ -166,35 +166,56 @@ ths <- c("2")
 for (i in seq_along(ths)) {
   df <- NULL
 
-  file1 <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_disc_th2_t56_cs_r.dat_raw_correlators")
+  file1 <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_r-r.dat_raw_correlators")
   mt11 <- read_df(file1)
   all_obs1 <- get_all_corr(mt11)
   df1 <- add_corr_to_df(
     all_obs = all_obs1, mt = mt11, df = df,
-    log = FALSE, number = 1 + 2 * (9 * 3 + 0), nudge = 0,
-    print_res = FALSE, logx = 0, rename = "P5P5(56,t)th2"
+    log = FALSE, number = 1 + 2 * ( 0), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "P5P5"
   )
 
   df1 <- add_corr_to_df(
     all_obs = all_obs1, mt = mt11, df = df1,
-    log = FALSE, number = 1 + 2 * (9 * 2 + 0), nudge = 0,
-    print_res = FALSE, logx = 0, rename = "P5P5(0,t)th2"
+    log = FALSE, number = 1 + 2 * ( 1), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A0P5"
   )
   df1 <- add_corr_to_df(
     all_obs = all_obs1, mt = mt11, df = df1,
-    log = FALSE, number = 1 + 2 * (9 * 1 + 0), nudge = 0,
-    print_res = FALSE, logx = 0, rename = "P5P5(56,t)th0"
+    log = FALSE, number = 1 + 2 * ( 2), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A1P5"
   )
   df1 <- add_corr_to_df(
     all_obs = all_obs1, mt = mt11, df = df1,
-    log = FALSE, number = 1 + 2 * (9 * 0 + 0), nudge = 0,
-    print_res = FALSE, logx = 0, rename = "P5P5(0,t)th0"
+    log = FALSE, number = 1 + 2 * ( 3), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A2P5"
   )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 + 2 * ( 4), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "A3P5"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 + 2 * ( 5), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V0P5"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 + 2 * ( 6), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V1P5"
+  )
+  df1 <- add_corr_to_df(
+    all_obs = all_obs1, mt = mt11, df = df1,
+    log = FALSE, number = 1 + 2 * ( 7), nudge = 0,
+    print_res = FALSE, logx = 0, rename = "V2P5"
+  )
+  # df1$y<-sign(df1$y) *log(abs(df1$y))
   gg <- plot_df_corr_ggplot(df1)
   # gg<- gg +scale_y_continuous(sec.axis = dup_axis())
 
   fig <- myplotly(gg, "", "t", "corr", to_print = TRUE)
-  gg <- gg + scale_y_continuous(trans = "log10")
+  # gg <- gg + scale_y_continuous(trans = "log10")
   fig <- myplotly(gg, "", "t", "log-corr", to_print = TRUE)
 }
 ```

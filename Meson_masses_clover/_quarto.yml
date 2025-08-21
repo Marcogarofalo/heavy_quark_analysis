@@ -14,7 +14,9 @@ book:
     # - cB211.072.64_HLT.qmd
     - cB211.072.64_dGamma.qmd
     - cB211.072.64_disc.qmd
+    - cB211.072.64_disc_HLT.qmd
     - cB211.072.64_more_disc.qmd
+    - cB211.072.64_disc_vs_conn.qmd
     - cB211.072.64_bounding.qmd
     - cB211.072.96_dGamma.qmd
     - cD211.054.96_dGamma.qmd

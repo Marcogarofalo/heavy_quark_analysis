@@ -1,0 +1,120 @@
+#  cB211.072.64 disc HLT
+
+```{r ,include=FALSE}
+library(Rose)
+library(ggplot2)
+library(plotly)
+library(knitr)
+require(tikzDevice)
+df <- data.frame(x = 1:5, y = 1:5)
+f1 <- function(df) {
+  gg <- ggplot(df, aes(x, y)) +
+    geom_point()
+  assign("ggp", plotly::ggplotly(gg), envir = parent.frame())
+  # ggp
+  df # NOT returning a plot
+}
+res1 <- f1(df)
+ggp # Let knit handle the plot
+myplotly(ggplot())
+```
+
+the disconnected run has momentum $q = 2\pi/L$ while the disconnected runs 
+have momentum $q_i=\theta_i\pi/L$ with  $\theta_1=1.534509$ and 
+$\theta_2=2.301764$
+
+::: {.panel-tabset}
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+Zs<- c("Z0","Z1","Z2")
+for (Z in Zs){
+cat("\n## ",Z,"\n\n")
+
+s <- "0.130000"
+th <- 2
+fileA <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th", th, "_t48_36_cs.dat_HLT_AoverB")
+mtA <- read_df(fileA)
+all_obsA <- get_all_corr(mtA)
+dfA<-NULL
+dfA <- get_block(
+  string = paste0("HLT_", Z, "-sig", s, "-alpha0.00"),
+  all_obs = all_obsA, mt = mtA, df = dfA,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 10, ix = 11,
+  iy = 6, ierr = 7, ifit = 9, ierrfit = 10,
+  iplateau = 1,
+  rename = paste0("HLT_", Z, "-sig", s, "-alpha0.00-th", th)
+)
+th<-3
+fileA <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th", th, "_t48_36_cs.dat_HLT_AoverB")
+mtA <- read_df(fileA)
+all_obsA <- get_all_corr(mtA)
+dfA <- get_block(
+  string = paste0("HLT_", Z, "-sig", s, "-alpha0.00"),
+  all_obs = all_obsA, mt = mtA, df = dfA,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 10, ix = 11,
+  iy = 6, ierr = 7, ifit = 9, ierrfit = 10,
+  iplateau = 1,
+  rename = paste0("HLT_", Z, "-sig", s, "-alpha0.00-th", th)
+)
+fileA <- paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75.dat_HLT_AoverB")
+mtA <- read_df(fileA)
+all_obsA <- get_all_corr(mtA)
+dfA <- get_block(
+  string = paste0("HLT_", Z, "-sig", s, "-alpha0.00"),
+  all_obs = all_obsA, mt = mtA, df = dfA,
+  log = FALSE, number = NULL, nudge = 0,
+  print_res = FALSE, logx = 10, ix = 11,
+  iy = 6, ierr = 7, ifit = 9, ierrfit = 10,
+  iplateau = 1,
+  rename = paste0("HLT_", Z, "-sig", s, "-alpha0.00-th1-disc")
+)
+
+
+dfA$x <- dfA$x - log10(dfA[, 12]) # A/A0_ref
+dfA$xfit <- dfA$xfit - log10(dfA[, 12]) # A/A0_ref
+dfA$tmin <- dfA$tmin - log10(dfA[, 12]) # A/A0_ref
+dfA$tmax <- dfA$tmax - log10(dfA[, 12]) # A/A0_ref
+gg <- plot_df_corr_ggplot(dfA, width = 0.01, stroke = 1, alpha = 0.2, size_error = 0.6)
+
+avep <- (max(dfA$fit) + min(dfA$fit)) / 2.0
+sdp <- max(dfA$fit + dfA$errfit) - min(dfA$fit - dfA$errfit)
+fig <- myplotly(gg, paste0("rho-", Z), "log10(A/A0)_ref", "",
+  to_print = TRUE,
+  output = "HTML", to_webgl = FALSE,
+  # yrange=c(avep-2*sdp,avep+2*sdp),
+  legend_position = c(0.2, 1)
+)
+}
+```
+
+:::
+
+::: {.panel-tabset}
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+Zs<- c("Z0","Z1","Z2")
+for (Z in Zs){
+cat("\n## ",Z,"\n\n")
+  
+  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th2_t48_36_cs.dat_fit_HLT_",Z,"-sigma4")
+  gg<-plot_fit(file,"sigma", "conn-th2" ,width = 0.002)
+  
+  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th3_t48_36_cs.dat_fit_HLT_",Z,"-sigma4")
+  gg<-plot_fit(file,"sigma", "conn-th3" ,width = 0.002,gg)
+  
+  file<-paste0("/home/garofalo/analysis/heavy_quarks/data_Inc/out/cB211.072.64_th1_t48_h75.dat_fit_HLT_",Z,"-sigma4")
+  gg<-plot_fit(file,"sigma", "disc" ,width = 0.002,gg)
+  
+  fig<- myplotly(gg,title,"$\\sigma$", paste0(Z,"-th",th),
+                         to_print = TRUE, output="HTML", legend_position = c(0.8,0.9),
+               legend_title = "alpha") 
+  
+  
+}
+```
+
+:::
